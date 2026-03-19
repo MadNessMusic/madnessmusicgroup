@@ -3,15 +3,22 @@ import { translations } from "../i18n/translations";
 function applyTranslations() {
   const lang = localStorage.getItem("lang") || "es";
 
-  // TEXTOS normales
+  // 🔥 TEXTOS
   document.querySelectorAll("[data-i18n]").forEach((el) => {
     const key = el.dataset.i18n;
     const template = translations[key]?.[lang];
+
     if (!template) return;
-    el.textContent = template;
+
+    // ⚠️ SOLO reemplaza si está vacío o es placeholder
+    if (!el.innerHTML.trim() || el.innerHTML === key) {
+      el.innerHTML = template;
+    } else {
+      el.innerHTML = template; // forzar reemplazo
+    }
   });
 
-  // PLACEHOLDERS 🔥
+  // 🔥 PLACEHOLDERS
   document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
     const key = el.dataset.i18nPlaceholder;
     const template = translations[key]?.[lang];
@@ -19,13 +26,16 @@ function applyTranslations() {
     el.placeholder = template;
   });
 
-  // LABEL botón idioma
+  // 🔥 BOTÓN LABEL
   const label = document.getElementById("lang-label");
-  if (label) label.textContent = lang.toUpperCase();
+  if (label) {
+    label.textContent = lang.toUpperCase();
+  }
 }
 
+// 🚀 INIT
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("I18N OK");
+  console.log("I18N RUNNING");
 
   applyTranslations();
 
@@ -37,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const next = current === "es" ? "en" : "es";
 
       localStorage.setItem("lang", next);
+
       location.reload();
     });
   }
