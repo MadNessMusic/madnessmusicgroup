@@ -41,23 +41,24 @@ async function getPlaylistData(item: Playlist): Promise<Playlist> {
   }
 }
 
-// filtros
 const featuredRaw = playlists.filter(p => p.status === "featured");
 const evergreenRaw = playlists.filter(p => p.status === "evergreen");
 
-// fetch
 const featured = await Promise.all(featuredRaw.map(getPlaylistData));
 const evergreen = await Promise.all(evergreenRaw.map(getPlaylistData));
 
 const evergreenLimited = evergreen.slice(0, 4);
 ---
 
-<div class="mx-auto px-6 mb-20">
+<!-- HEADER LINE -->
+<div class="mx-auto px-6 mb-20 reveal">
   <div class="flex items-center gap-10">
     <span class="block w-30 h-px bg-white/10"></span>
+
     <span class="text-2xl tracking-[0.7em] uppercase opacity-20">
       {t("section.playlists", lang)}
     </span>
+
     <span class="flex-1 h-px bg-white/10"></span>
   </div>
 </div>
@@ -65,7 +66,7 @@ const evergreenLimited = evergreen.slice(0, 4);
 <section id="playlists" class="py-10">
 
   <!-- HEADER -->
-  <div class="max-w-3xl mb-24">
+  <div class="max-w-3xl mb-24 reveal">
     <h2 class="text-5xl font-anton mb-8">
       {t("playlists.title", lang)}
     </h2>
@@ -75,75 +76,113 @@ const evergreenLimited = evergreen.slice(0, 4);
     </p>
   </div>
 
-  <!-- FEATURED -->
+  <!-- FEATURED (MISMO DISEÑO) -->
   <div class="space-y-20 md:space-y-28 mb-40">
-    {featured.map((item, i) => (
+    {featured.map((item, i) => {
+      const isEven = i % 2 === 1;
+
+      return (
+        <a
+          href={`/playlists/${item.id}`}
+          class={`block group reveal delay-${(i + 1) * 100}`}
+        >
+          <div class="grid grid-cols-12 gap-6 md:gap-12 items-start md:items-center">
+
+            <!-- IMG -->
+            <div
+              class={`col-span-12 md:col-span-4 overflow-hidden rounded-xl ${
+                isEven ? "md:col-start-9" : ""
+              }`}
+            >
+              <img
+                src={item.image}
+                alt={item.title}
+                class="w-full aspect-4/5 md:aspect-square object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+              />
+            </div>
+
+            <!-- TEXT -->
+            <div
+              class={`col-span-12 md:col-span-8 ${
+                isEven ? "md:col-start-1 md:row-start-1" : ""
+              }`}
+            >
+              <h4 class="font-anton text-xl xl:text-2xl leading-1.1 mt-4">
+                {item.title}
+              </h4>
+
+              <span class="block w-16 h-px bg-white/20 mb-6"></span>
+
+              <p class="opacity-55 text-base md:text-lg max-w-md mb-8 md:mb-10">
+                {item.description}
+              </p>
+
+              <p class="opacity-40 text-xs tracking-widest uppercase mt-2">
+                • {(item.followers ?? 0).toLocaleString()}{" "}
+                {t("playlist.saves", lang)}
+              </p>
+
+              <span
+                class="
+                  inline-flex items-center gap-4
+                  tracking-widest uppercase
+                  opacity-40
+                  group-hover:opacity-100
+                  transition
+                "
+              >
+                {t("playlist.view", lang)}
+              </span>
+            </div>
+          </div>
+        </a>
+      );
+    })}
+  </div>
+
+  <!-- GRID (MISMO DISEÑO + HOVER) -->
+  <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-14 xl:gap-16">
+
+    {evergreenLimited.map((item, i) => (
       <a
         href={`/playlists/${item.id}`}
-        class={`block group`}
+        class={`group reveal delay-${(i + 1) * 100}`}
       >
-        <div class="grid grid-cols-12 gap-6 md:gap-12 items-center">
+        <div class="relative w-full aspect-square overflow-hidden rounded-2xl bg-neutral-900">
 
-          <div class={`col-span-12 md:col-span-4 ${i % 2 === 1 ? "md:col-start-9" : ""}`}>
-            <img
-              src={item.image}
-              alt={item.title}
-              class="w-full rounded-xl"
-            />
-          </div>
+          <img
+            src={item.image}
+            alt={item.title}
+            class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+          />
 
-          <div class={`col-span-12 md:col-span-8 ${i % 2 === 1 ? "md:col-start-1 md:row-start-1" : ""}`}>
-            <h4 class="font-anton text-xl mt-4">
-              {item.title}
-            </h4>
-
-            <p class="opacity-55">
-              {item.description}
-            </p>
-
-            <p class="opacity-40 text-xs mt-2">
-              • {(item.followers ?? 0).toLocaleString()} {t("playlist.saves", lang)}
-            </p>
-
-            <span class="text-xs uppercase opacity-40">
+          <!-- OVERLAY -->
+          <div class="absolute inset-0 bg-black/45 opacity-0 group-hover:opacity-100 transition flex items-end p-6">
+            <span class="tracking-widest uppercase opacity-40 group-hover:opacity-100 transition">
               {t("playlist.view", lang)}
             </span>
           </div>
-
         </div>
-      </a>
-    ))}
-  </div>
 
-  <!-- GRID -->
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-10">
-    {evergreenLimited.map((item) => (
-      <a href={`/playlists/${item.id}`} class="group">
-
-        <img
-          src={item.image}
-          alt={item.title}
-          class="rounded-xl"
-        />
-
-        <h4 class="font-anton mt-3">
+        <h4 class="font-anton text-xl xl:text-2xl leading-1.1 mt-4">
           {item.title}
         </h4>
 
-        <p class="opacity-50 text-sm">
+        <p class="opacity-50 text-sm mt-2 leading-relaxed max-w-xs">
           {item.description}
         </p>
 
-        <p class="text-xs opacity-40">
-          • {(item.followers ?? 0).toLocaleString()} {t("playlist.saves", lang)}
+        <p class="opacity-40 text-xs tracking-widest uppercase mt-2">
+          • {(item.followers ?? 0).toLocaleString()}{" "}
+          {t("playlist.saves", lang)}
         </p>
-
       </a>
     ))}
+
   </div>
 
   <!-- CTA -->
-  <div class="text-center mt-20">
+  <div class="text-center mt-32 reveal mb-30">
     <a href="/playlists" class="btn-tactical px-12 py-4">
       {t("playlists.cta", lang)}
     </a>
