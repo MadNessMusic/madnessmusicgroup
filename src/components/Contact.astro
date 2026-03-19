@@ -1,6 +1,5 @@
 ---
-import { t } from "../i18n/utils";
-const lang = "es";
+
 ---
 
 <div class="mx-auto px-6 mb-20 reveal">
@@ -8,7 +7,7 @@ const lang = "es";
     <span class="block w-30 h-px bg-white/10"></span>
 
     <span class="text-2xl tracking-[0.7em] uppercase opacity-20">
-      {t("section.contact", lang)}
+      CONTACTO
     </span>
 
     <span class="flex-1 h-px bg-white/10"></span>
@@ -22,11 +21,11 @@ const lang = "es";
     <!-- Columna editorial -->
     <div>
       <h2 class="font-heading text-5xl md:text-6xl mb-6">
-        {t("contact.title", lang)}
+        Conectemos
       </h2>
 
       <p class="opacity-70 leading-relaxed mb-6">
-        {t("contact.text", lang)}
+        Colaboraciones, propuestas editoriales, prensa o proyectos especiales. Cuéntanos qué tienes en mente.
       </p>
 
       <!-- Métodos -->
@@ -36,7 +35,7 @@ const lang = "es";
           target="_blank"
           class="btn-tactical"
         >
-          {t("contact.mail.button", lang)}
+          Correo
         </a>
 
         <a
@@ -44,7 +43,7 @@ const lang = "es";
           target="_blank"
           class="btn-tactical"
         >
-          {t("contact.whatsapp", lang)}
+          WhatsApp
         </a>
       </div>
     </div>
@@ -70,14 +69,14 @@ const lang = "es";
         for="name"
         class="text-xs uppercase tracking-widest opacity-50"
       >
-        {t("contact.name.label", lang)}
+        ¿Cuál es tu nombre?
       </label>
 
       <input
         id="name"
         name="name"
         type="text"
-        placeholder={t("contact.name", lang)}
+        placeholder="Nombre"
         required
         class="bg-transparent border-b border-white/20 py-2 mb-10 focus:outline-none focus:border-white transition-colors duration-300"
       />
@@ -87,14 +86,14 @@ const lang = "es";
         for="email"
         class="text-xs uppercase tracking-widest opacity-50"
       >
-        {t("contact.mail.label", lang)}
+        ¿Cuál es tu correo?
       </label>
 
       <input
         id="email"
         name="email"
         type="email"
-        placeholder={t("contact.mail", lang)}
+        placeholder="Correo"
         required
         class="bg-transparent border-b border-white/20 py-2 mb-10 focus:outline-none focus:border-white transition-colors duration-300"
       />
@@ -104,14 +103,14 @@ const lang = "es";
         for="message"
         class="text-xs uppercase tracking-widest opacity-50"
       >
-        {t("contact.message.label", lang)}
+        Cuéntanos en qué podemos ayudarte
       </label>
 
       <textarea
         id="message"
         name="message"
         rows="4"
-        placeholder={t("contact.message", lang)}
+        placeholder="Mensaje"
         class="bg-transparent border-b border-white/20 py-2 focus:outline-none resize-none"
       ></textarea>
 
@@ -123,7 +122,7 @@ const lang = "es";
         class="btn-tactical self-start flex items-center gap-3 hover:cursor-pointer mt-5"
       >
         <span class="btn-text">
-          {t("contact.send", lang)}
+          Enviar mensaje
         </span>
 
         <span

@@ -10,6 +10,7 @@ import { siteConfig } from "../data/siteConfig";
   <div
     class="max-w-325 mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 mb-12 sm:mb-20"
   >
+    <!-- BRAND -->
     <div class="col-span-1 sm:col-span-2">
       <div class="flex items-center gap-4 mb-6">
         <img
@@ -19,31 +20,25 @@ import { siteConfig } from "../data/siteConfig";
         />
         <h2 class="text-3xl tracking-tighter">{siteConfig.siteName}</h2>
       </div>
-      <p
-        data-i18n="footer.desc"
-        class="text-sm opacity-60 leading-relaxed max-w-md"
-      >
+
+      <p class="text-sm opacity-60 leading-relaxed max-w-md">
         {siteConfig.siteDescription}
       </p>
     </div>
 
+    <!-- NAV -->
     <div>
-      <h3
-        data-i18n="footer.nav"
-        class="text-xs uppercase font-bold tracking-widest mb-6 text-accent"
-      >
-        Navigation
+      <h3 class="text-xs uppercase font-bold tracking-widest mb-6 text-accent">
+        Navegación
       </h3>
-      <ul
-        class="space-y-4 text-sm opacity-80 uppercase tracking-widest text-[10px] font-bold"
-      >
+
+      <ul class="space-y-4 text-sm opacity-80 uppercase tracking-widest text-[10px] font-bold">
         {
           siteConfig.navLinks.map((link) => (
             <li>
               <a
                 href={link.href}
                 class="hover:text-accent transition-colors"
-                data-i18n={link.i18nKey}
               >
                 {link.label}
               </a>
@@ -53,13 +48,12 @@ import { siteConfig } from "../data/siteConfig";
       </ul>
     </div>
 
+    <!-- HQ -->
     <div>
-      <h3
-        data-i18n="footer.hq"
-        class="text-xs uppercase font-bold tracking-widest mb-6 text-accent"
-      >
-        Headquarters
+      <h3 class="text-xs uppercase font-bold tracking-widest mb-6 text-accent">
+        Dirección
       </h3>
+
       <ul class="space-y-4 text-sm opacity-60">
         <li class="flex items-start gap-3">
           <svg
@@ -73,23 +67,28 @@ import { siteConfig } from "../data/siteConfig";
             stroke-linecap="round"
             stroke-linejoin="round"
             class="mt-1 shrink-0"
-            ><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
-            ></path><circle cx="12" cy="10" r="3"></circle></svg
           >
-          {siteConfig.address.line1}<br />{siteConfig.address.line2}
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+
+          {siteConfig.address.line1}
+          <br />
+          {siteConfig.address.line2}
         </li>
       </ul>
     </div>
   </div>
 
+  <!-- BOTTOM -->
   <div
     class="max-w-325 mx-auto px-4 sm:px-6 pt-8 sm:pt-10 border-t border-primary/10 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] uppercase font-bold tracking-widest opacity-40"
   >
-    <div data-i18n="footer.copyright">{siteConfig.copyright}</div>
-    <div
-      data-i18n="footer.disclaimer"
-      class="text-center md:text-right max-w-md"
-    >
+    <div>
+      {siteConfig.copyright}
+    </div>
+
+    <div class="text-center md:text-right max-w-md">
       {siteConfig.disclaimer}
     </div>
   </div>
