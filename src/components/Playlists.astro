@@ -53,14 +53,23 @@ const evergreenRaw: Playlist[] = playlists.filter(p => p.status === "evergreen")
 const archiveRaw: Playlist[] = playlists.filter(p => p.status === "archive");
 
 // enriquecemos
-const featured: Playlist[] = await Promise.all(featuredRaw.map(getPlaylistData));
+const featured = await Promise.all(
+  featuredRaw.map(async (item) => {
+    try {
+      return await getPlaylistData(item);
+    } catch {
+      return item;
+    }
+  })
+);
 const evergreen: Playlist[] = await Promise.all(evergreenRaw.map(getPlaylistData));
 const archive: Playlist[] = await Promise.all(archiveRaw.map(getPlaylistData));
 
 const evergreenLimited = evergreen.slice(0, 4);
 
 ---
-
+<p>Total featured: {featured.length}</p>
+<p>Total evergreen: {evergreen.length}</p>
 
 <div class="mx-auto px-6 mb-20 reveal">
   <div class="flex items-center gap-10">
