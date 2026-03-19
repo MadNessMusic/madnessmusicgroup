@@ -20,3 +20,28 @@ function applyTranslations() {
 }
 
 document.addEventListener("DOMContentLoaded", applyTranslations);
+
+document.addEventListener("DOMContentLoaded", () => {
+  const button = document.getElementById("lang-toggle");
+  const label = document.getElementById("lang-label");
+
+  console.log("button:", button);
+
+  if (!button) return;
+
+  // idioma actual
+  let current = localStorage.getItem("lang") || "es";
+
+  // actualizar label
+  if (label) {
+    label.textContent = current.toUpperCase();
+  }
+
+  button.addEventListener("click", () => {
+    const next = current === "es" ? "en" : "es";
+
+    localStorage.setItem("lang", next);
+
+    location.reload(); // 🔥 simple y funciona siempre
+  });
+});
