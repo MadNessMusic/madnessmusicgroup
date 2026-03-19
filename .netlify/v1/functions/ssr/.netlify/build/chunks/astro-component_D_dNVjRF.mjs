@@ -1,4 +1,4 @@
-import { A as AstroError, k as InvalidComponentArgs } from './ssr-function_BIp3FfZD.mjs';
+import { A as AstroError, k as InvalidComponentArgs } from './ssr-function_DryQiteE.mjs';
 
 function validateArgs(args) {
   if (args.length !== 3) return false;

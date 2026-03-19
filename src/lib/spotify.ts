@@ -22,9 +22,9 @@ async function getAccessToken(): Promise<string> {
     return cachedToken;
   }
 
-  const auth = Buffer.from(
-    `${import.meta.env.SPOTIFY_CLIENT_ID}:${import.meta.env.SPOTIFY_CLIENT_SECRET}`
-  ).toString("base64");
+const auth = Buffer.from(
+  `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`
+).toString("base64");
 
   const res = await fetch(TOKEN_URL, {
     method: "POST",

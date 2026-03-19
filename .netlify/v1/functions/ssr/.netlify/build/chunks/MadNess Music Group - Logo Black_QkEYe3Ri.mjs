@@ -1,6 +1,6 @@
-import { c as createComponent } from './astro-component_DJxKiPnQ.mjs';
+import { c as createComponent } from './astro-component_D_dNVjRF.mjs';
 import 'piccolore';
-import { r as renderTemplate, i as renderSlot, j as renderHead, e as addAttribute, m as maybeRenderHead } from './ssr-function_BIp3FfZD.mjs';
+import { r as renderTemplate, i as renderSlot, j as renderHead, e as addAttribute, m as maybeRenderHead } from './ssr-function_DryQiteE.mjs';
 import 'clsx';
 
 const siteConfig = {

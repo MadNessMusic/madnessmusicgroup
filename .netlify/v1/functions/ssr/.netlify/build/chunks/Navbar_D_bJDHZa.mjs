@@ -1,7 +1,7 @@
-import { c as createComponent } from './astro-component_DJxKiPnQ.mjs';
+import { c as createComponent } from './astro-component_D_dNVjRF.mjs';
 import 'piccolore';
-import { r as renderTemplate, e as addAttribute, h as renderComponent, m as maybeRenderHead } from './ssr-function_BIp3FfZD.mjs';
-import { s as siteConfig, b as $$DarkModeToggle, a as $$LangToggle, l as logoDark, L as LogoLight } from './MadNess Music Group - Logo Black_CJMpTH22.mjs';
+import { r as renderTemplate, e as addAttribute, h as renderComponent, m as maybeRenderHead } from './ssr-function_DryQiteE.mjs';
+import { s as siteConfig, b as $$DarkModeToggle, a as $$LangToggle, l as logoDark, L as LogoLight } from './MadNess Music Group - Logo Black_QkEYe3Ri.mjs';
 
 var __freeze = Object.freeze;
 var __defProp = Object.defineProperty;

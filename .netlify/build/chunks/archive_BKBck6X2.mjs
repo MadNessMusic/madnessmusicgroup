@@ -1,10 +1,10 @@
-import { c as createComponent } from './astro-component_DJxKiPnQ.mjs';
+import { c as createComponent } from './astro-component_D_dNVjRF.mjs';
 import 'piccolore';
-import { r as renderTemplate, g as defineScriptVars, m as maybeRenderHead, h as renderComponent } from './ssr-function_BIp3FfZD.mjs';
+import { r as renderTemplate, g as defineScriptVars, m as maybeRenderHead, h as renderComponent } from './ssr-function_DryQiteE.mjs';
 import { r as releases } from './releases_BOo6sket.mjs';
-import { g as getSpotifyAlbum } from './spotify_MfsF6F_A.mjs';
-import { $ as $$Layout } from './MadNess Music Group - Logo Black_CJMpTH22.mjs';
-import { $ as $$Navbar } from './Navbar_Ca3mckvh.mjs';
+import { g as getSpotifyAlbum } from './spotify_CyIkTtMW.mjs';
+import { $ as $$Layout } from './MadNess Music Group - Logo Black_QkEYe3Ri.mjs';
+import { $ as $$Navbar } from './Navbar_D_bJDHZa.mjs';
 
 var __freeze = Object.freeze;
 var __defProp = Object.defineProperty;

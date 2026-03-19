@@ -14,7 +14,7 @@ async function getAccessToken() {
     return cachedToken;
   }
   const auth = Buffer.from(
-    `${"db618ce6a8b443f7b0c6a3543845b250"}:${"ae29d8b75fc74d36b7b0a64670b66f8b"}`
+    `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`
   ).toString("base64");
   const res = await fetch(TOKEN_URL, {
     method: "POST",

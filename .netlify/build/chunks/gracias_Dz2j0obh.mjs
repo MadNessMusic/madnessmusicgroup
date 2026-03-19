@@ -1,8 +1,8 @@
-import { c as createComponent } from './astro-component_DJxKiPnQ.mjs';
+import { c as createComponent } from './astro-component_D_dNVjRF.mjs';
 import 'piccolore';
-import { h as renderComponent, m as maybeRenderHead, r as renderTemplate } from './ssr-function_BIp3FfZD.mjs';
-import { $ as $$Layout } from './MadNess Music Group - Logo Black_CJMpTH22.mjs';
-import { $ as $$SlugNavbar } from './SlugNavbar_BTisHLoE.mjs';
+import { h as renderComponent, m as maybeRenderHead, r as renderTemplate } from './ssr-function_DryQiteE.mjs';
+import { $ as $$Layout } from './MadNess Music Group - Logo Black_QkEYe3Ri.mjs';
+import { $ as $$SlugNavbar } from './SlugNavbar_D-MMeBb6.mjs';
 
 const $$Gracias = createComponent(($$result, $$props, $$slots) => {
   return renderTemplate`${renderComponent($$result, "SlugNavbar", $$SlugNavbar, {})} ${maybeRenderHead()}<section class="min-h-screen flex items-center justify-center text-center px-6"> <div class="max-w-xl"> <h1 class="font-heading text-5xl md:text-6xl mb-6" data-i18n="thanks.title">

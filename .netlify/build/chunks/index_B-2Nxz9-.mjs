@@ -1,12 +1,12 @@
-import { c as createComponent } from './astro-component_DJxKiPnQ.mjs';
+import { c as createComponent } from './astro-component_D_dNVjRF.mjs';
 import 'piccolore';
-import { m as maybeRenderHead, e as addAttribute, r as renderTemplate, h as renderComponent } from './ssr-function_BIp3FfZD.mjs';
-import { l as logoDark, L as LogoLight, s as siteConfig, $ as $$Layout } from './MadNess Music Group - Logo Black_CJMpTH22.mjs';
-import { $ as $$Navbar } from './Navbar_Ca3mckvh.mjs';
+import { m as maybeRenderHead, e as addAttribute, r as renderTemplate, h as renderComponent } from './ssr-function_DryQiteE.mjs';
+import { l as logoDark, L as LogoLight, s as siteConfig, $ as $$Layout } from './MadNess Music Group - Logo Black_QkEYe3Ri.mjs';
+import { $ as $$Navbar } from './Navbar_D_bJDHZa.mjs';
 import 'clsx';
 import { p as playlists } from './playlists_C2DElisW.mjs';
 import { r as releases } from './releases_BOo6sket.mjs';
-import { g as getSpotifyAlbum, a as getSpotifyPlaylist } from './spotify_MfsF6F_A.mjs';
+import { g as getSpotifyAlbum, a as getSpotifyPlaylist } from './spotify_CyIkTtMW.mjs';
 
 const $$Hero = createComponent(($$result, $$props, $$slots) => {
   return renderTemplate`${maybeRenderHead()}<section id="hero" class="relative min-h-screen flex items-center"> <div class="hero-content"> <div class="grid grid-cols-12 items-center"> <!-- Bloque Hero --> <div class="col-span-12 md:col-span-6 md:col-start-3"> <!-- Logo --> <div class="hero-logo-wrap"> <img${addAttribute(logoDark.src, "src")} alt="Madness Music Group" class="hero-logo hero-logo-light"> <img${addAttribute(LogoLight.src, "src")} alt="Madness Music Group" class="hero-logo hero-logo-dark"> </div> <!-- Background word --> <span class="absolute right-0.5 top-2/6 -translate-y-1/2 text-[25vw] font-anton opacity-[0.02] select-none" aria-hidden="true">
