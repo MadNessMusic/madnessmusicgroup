@@ -102,71 +102,30 @@ class="opacity-60 text-1xl leading-relaxed">
 
 <!-- FEATURED -->
 <div class="space-y-20 md:space-y-28 mb-40">
-  {featured.map((item, i) => {
-    const isEven = i % 2 === 1;
+  {featured.map((item, i) => (
+  <a
+    href={`/playlists/${item.id}`}
+    class={`block group reveal delay-${(i + 1) * 100}`}
+  >
+    <div class="grid grid-cols-12 gap-6 md:gap-12 items-start md:items-center">
 
-    return (
-      <a
-        href={`/playlists/${item.id}`}
-        class={`block group reveal delay-${(i + 1) * 100}`}
-      >
-        <div class="grid grid-cols-12 gap-6 md:gap-12 items-start md:items-center">
+      <div class={`col-span-12 md:col-span-4 overflow-hidden rounded-xl ${i % 2 === 1 ? "md:col-start-9" : ""}`}>
+        <img
+          src={item.image}
+          alt={item.title}
+          class="w-full aspect-4/5 md:aspect-square object-cover"
+        />
+      </div>
 
-          <!-- IMAGEN -->
-          <div
-            class={`
-              col-span-12 md:col-span-4
-              overflow-hidden rounded-xl
-              ${isEven ? "md:col-start-9" : ""}
-            `}
-          >
-            <img
-  src={item.image}
-  alt={item.title}
-  class="w-full aspect-4/5 md:aspect-square object-cover transition-transform duration-700 group-hover:scale-[1.05]"
-/>
-          </div>
+      <div class={`col-span-12 md:col-span-8 ${i % 2 === 1 ? "md:col-start-1 md:row-start-1" : ""}`}>
+        <h4 class="font-anton text-xl mt-4">{item.title}</h4>
 
-          <!-- TEXTO -->
-          <div
-            class={`
-              col-span-12 md:col-span-8
-              ${isEven ? "md:col-start-1 md:row-start-1" : ""}
-            `}
-          >
-           <h4 class="font-anton text-xl xl:text-2xl leading-1.1 mt-4">
-              {item.title}
-          </h4>
+        <p class="opacity-55">{item.description}</p>
+      </div>
 
-          
-
-            <span class="block w-16 h-px bg-white/20 mb-6"></span>
-
-            <p class="opacity-55 text-base md:text-lg max-w-md mb-8 md:mb-10">
-              {item.description}
-            </p>
-
-            <p class="opacity-40 text-xs tracking-widest uppercase mt-2">
-  • {(item.followers ?? 0).toLocaleString()} <span data-i18n="playlist.saves"></span>
-</p>
-
-            <span
-              data-i18n="playlist.view"
-              class="
-                inline-flex items-center gap-4
-                tracking-widest uppercase
-                opacity-40
-                group-hover:opacity-100
-                transition
-              "
-            ></span>
-          </div>
-
-        </div>
-      </a>
-    );
-  })}
-</div>
+    </div>
+  </a>
+))}
 
   <!-- BLOQUE EXPLORAR -->
   <div
