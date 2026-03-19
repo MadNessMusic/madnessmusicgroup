@@ -1,0 +1,179 @@
+---
+import DarkModeToggle from "./DarkModeToggle.astro";
+import LangToggle from "./LangToggle.astro";
+import logoDark from "../assets/MadNess Music Group - Logo White.png";
+import logoLight from "../assets/MadNess Music Group - Logo Black.png";
+import { siteConfig } from "../data/siteConfig";
+
+const pathname = Astro.url.pathname;
+
+const minimalNavbar =
+  pathname.startsWith("/archive") ||
+  pathname.startsWith("/playlists");
+
+const navLinks = minimalNavbar
+  ? siteConfig.navLinks.filter((l) => l.href === "/")
+  : siteConfig.navLinks;
+---
+
+<header class="glass-nav w-full">
+
+  <div class="max-w-350 mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+
+    <!-- LEFT -->
+    <div class="flex items-center gap-5">
+
+      <a href="/" class="flex items-center gap-5 group">
+
+        <!-- LOGO -->
+        <div class="logo-nav-wrap">
+
+          <img
+            src={logoDark.src}
+            alt="MadNess Music Group logo"
+            class="logo-nav logo-nav-dark"
+            loading="eager"
+          />
+
+          <img
+            src={logoLight.src}
+            alt="MadNess Music Group logo"
+            class="logo-nav logo-nav-light"
+            loading="eager"
+          />
+
+        </div>
+
+        <!-- TEXTO -->
+        <div class="flex flex-col justify-center">
+
+          <span class="font-heading text-2xl sm:text-3xl leading-none tracking-tight">
+            {siteConfig.siteName}
+          </span>
+
+        </div>
+
+      </a>
+
+    </div>
+
+    <!-- DESKTOP NAV -->
+    <nav class="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-widest">
+
+      {navLinks.map((link) => (
+
+        <a
+          href={link.href}
+          class="hover:text-primary transition-colors"
+          data-i18n={link.i18nKey}
+        >
+          {link.label}
+        </a>
+
+      ))}
+
+    </nav>
+
+    <!-- RIGHT CONTROLS -->
+    <div class="flex items-center gap-3">
+
+      <LangToggle />
+
+      <DarkModeToggle />
+
+      <button
+        id="mobile-menu-btn"
+        class="md:hidden p-2 hover:bg-base-200 transition-colors rounded-lg"
+        aria-label="Open menu"
+        aria-expanded="false"
+      >
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-6 h-6"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- MOBILE MENU -->
+  <div
+    id="mobile-menu"
+    class="md:hidden overflow-hidden border-t border-base-content/10 bg-base-100/95 backdrop-blur-md transition-all duration-300 max-h-0"
+  >
+
+    <nav class="flex flex-col py-4 px-4 sm:px-6 space-y-3 text-xs font-bold uppercase tracking-widest">
+
+      {navLinks.map((link) => (
+
+        <a
+          href={link.href}
+          class="hover:text-primary transition-colors py-2"
+          data-i18n={link.i18nKey}
+        >
+          {link.label}
+        </a>
+
+      ))}
+
+    </nav>
+
+  </div>
+
+</header>
+
+<script is:inline>
+
+  const menuBtn = document.getElementById("mobile-menu-btn");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  if(menuBtn && mobileMenu){
+
+    let open = false;
+
+    menuBtn.addEventListener("click", () => {
+
+      open = !open;
+
+      menuBtn.setAttribute("aria-expanded", open);
+
+      if(open){
+
+        mobileMenu.style.maxHeight = mobileMenu.scrollHeight + "px";
+
+      }else{
+
+        mobileMenu.style.maxHeight = "0px";
+
+      }
+
+    });
+
+    mobileMenu.querySelectorAll("a").forEach(link => {
+
+      link.addEventListener("click", () => {
+
+        open = false;
+        mobileMenu.style.maxHeight = "0px";
+        menuBtn.setAttribute("aria-expanded", "false");
+
+      });
+
+    });
+
+  }
+
+</script>

@@ -1,0 +1,124 @@
+import fs from 'fs/promises';
+import path from 'path';
+
+const CACHE_DIR = "./.cache";
+const TOKEN_URL = "https://accounts.spotify.com/api/token";
+const API_URL = "https://api.spotify.com/v1";
+const playlistCache = /* @__PURE__ */ new Map();
+const albumCache = /* @__PURE__ */ new Map();
+let cachedToken = null;
+let tokenExpiresAt = 0;
+async function getAccessToken() {
+  const now = Date.now();
+  if (cachedToken && now < tokenExpiresAt) {
+    return cachedToken;
+  }
+  const auth = Buffer.from(
+    `${"db618ce6a8b443f7b0c6a3543845b250"}:${"ae29d8b75fc74d36b7b0a64670b66f8b"}`
+  ).toString("base64");
+  const res = await fetch(TOKEN_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${auth}`,
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: "grant_type=client_credentials"
+  });
+  if (!res.ok) {
+    throw new Error("Spotify: error obteniendo access token");
+  }
+  const data = await res.json();
+  cachedToken = data.access_token;
+  tokenExpiresAt = now + data.expires_in * 1e3 - 6e4;
+  return cachedToken;
+}
+async function getCached(key) {
+  const file = path.join(CACHE_DIR, key + ".json");
+  try {
+    const raw = await fs.readFile(file, "utf8");
+    const parsed = JSON.parse(raw);
+    const age = Date.now() - parsed.timestamp;
+    const MAX_AGE = 1e3 * 60 * 60 * 12;
+    if (age > MAX_AGE) return null;
+    return parsed.data;
+  } catch {
+    return null;
+  }
+}
+async function setCached(key, data) {
+  await fs.mkdir(CACHE_DIR, { recursive: true });
+  const file = path.join(CACHE_DIR, key + ".json");
+  const payload = {
+    timestamp: Date.now(),
+    data
+  };
+  await fs.writeFile(file, JSON.stringify(payload));
+}
+async function getSpotifyPlaylist(playlistId) {
+  const cacheKey = `playlist-${playlistId}`;
+  const fileCache = await getCached(cacheKey);
+  if (fileCache) return fileCache;
+  if (playlistCache.has(playlistId)) {
+    return playlistCache.get(playlistId);
+  }
+  const token = await getAccessToken();
+  const res = await fetch(`${API_URL}/playlists/${playlistId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  if (!res.ok) {
+    throw new Error(`Spotify playlist ${playlistId} failed`);
+  }
+  const data = await res.json();
+  const normalized = {
+    name: data.name,
+    description: data.description,
+    images: data.images ?? [],
+    external_urls: data.external_urls ?? {},
+    // 🔥 IMPORTANTE
+    tracks: {
+      total: data.tracks?.total ?? 0
+    },
+    followers: {
+      total: data.followers?.total ?? 0
+    }
+  };
+  playlistCache.set(playlistId, normalized);
+  await setCached(cacheKey, normalized);
+  return normalized;
+}
+async function getSpotifyAlbum(albumId) {
+  if (albumCache.has(albumId)) {
+    return albumCache.get(albumId);
+  }
+  const token = await getAccessToken();
+  const res = await fetch(`${API_URL}/albums/${albumId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  if (!res.ok) {
+    throw new Error("Spotify album error");
+  }
+  const data = await res.json();
+  const normalized = {
+    id: data.id,
+    title: data.name,
+    artist: data.artists?.map((a) => a.name).join(", "),
+    releaseDate: data.release_date,
+    releasePrecision: data.release_date_precision,
+    type: data.album_type === "album" ? "album" : "single",
+    image: data.images?.[0]?.url ?? null,
+    url: data.external_urls?.spotify ?? "#",
+    tracks: data.tracks?.items?.map((t) => ({
+      id: t.id,
+      title: t.name,
+      preview: t.preview_url
+    })) ?? []
+  };
+  albumCache.set(albumId, normalized);
+  return normalized;
+}
+
+export { getSpotifyPlaylist as a, getSpotifyAlbum as g };

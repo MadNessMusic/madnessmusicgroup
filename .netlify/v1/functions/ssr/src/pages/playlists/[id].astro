@@ -1,0 +1,111 @@
+---
+export const prerender = false;
+
+import Layout from "../../layouts/Layout.astro";
+import SlugNavbar from "../../components/SlugNavbar.astro";
+import { getSpotifyPlaylist } from "../../lib/spotify";
+import { playlists } from "../../data/playlists";
+
+const { id } = Astro.params;
+
+const playlist = playlists.find(p => p.id === id);
+if (!playlist) throw new Error("Playlist no encontrada");
+
+// Spotify data (opcional pero inteligente)
+let spotifyData = null;
+
+if (playlist.spotifyId) {
+  try {
+    spotifyData = await getSpotifyPlaylist(playlist.spotifyId);
+  } catch (err) {
+    console.error("Spotify error:", err);
+  }
+}
+
+// Fallbacks editoriales
+const title = spotifyData?.name ?? playlist.title;
+const description = spotifyData?.description || playlist.description;
+const spotifyUrl =
+  spotifyData?.externalUrl ??
+  `https://open.spotify.com/playlist/${playlist.spotifyId}`;
+
+const seoTitle =
+  playlist.seo?.title ?? `${title} | MadNess Music Group`;
+
+const seoDescription =
+  playlist.seo?.description ?? description;
+
+const seoUrl = `https://www.madnessmusicgroup.com/playlists/${playlist.id}`;
+---
+
+<Layout
+  title={seoTitle}
+  description={seoDescription}
+  image={playlist.cover}
+  url={seoUrl}
+>
+  <SlugNavbar />
+
+<section class="py-10 max-w-5xl mx-auto">
+
+  <!-- BACK -->
+  <div class="mb-8">
+    <button
+      onclick="history.back()"
+      class="text-xs uppercase tracking-[0.4em] opacity-40 hover:opacity-70 transition hover:cursor-pointer"
+      data-i18n="common.back"
+    >
+      ← Volver
+    </button>
+  </div>
+
+  <!-- HEADER -->
+  <header class="mb-14">
+
+    <span class="block text-x1 uppercase tracking-[0.5em] opacity-70 mb-4" data-i18n="playlist.curated.slug">
+      Curated Playlist
+    </span>
+
+    <h1 class="font-anton text-5xl md:text-6xl leading-[1.05] mb-6">
+      {title}
+    </h1>
+
+    <p class="max-w-2xl text-lg opacity-60 leading-relaxed mb-10">
+      {description}
+    </p>
+    <a
+      href={`https://open.spotify.com/playlist/${playlist.spotifyId}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center px-8 py-4
+             border border-white/40
+             text-xs uppercase tracking-[0.4em]
+             hover:border-white hover:bg-white/5
+             transition-all"
+      data-i18n="playlist.listen"
+    >
+      Escuchar en Spotify →
+    </a>
+
+  </header>
+  <!-- SPOTIFY PLAYER -->
+<div class="rounded-4xl overflow-hidden border border-white/10 bg-black ring-3 ring-white/10">
+<iframe
+    src={`https://open.spotify.com/embed/playlist/${playlist.spotifyId}`}
+    class="w-full h-160 rounded-3xl"
+    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+    loading="lazy" 
+  />
+  
+</div>
+
+<div class="mt-16 max-w-2xl opacity-30 text-sm leading-relaxed">
+  <p data-i18n="playlist.context">
+    Esta playlist forma parte del archivo curatorial de MadNess Music Group.
+    Un registro vivo de sonidos, escenas y movimientos que definen el presente.
+  </p>
+</div>
+
+</section>
+
+</Layout>
