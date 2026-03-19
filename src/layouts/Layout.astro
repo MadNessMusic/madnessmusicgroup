@@ -33,32 +33,21 @@ const ogImage = image
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    />
-    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
-    <meta name="generator" content={Astro.generator} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+
     <meta name="description" content={description} />
     <title>{fullTitle}</title>
 
-   <!-- Canonical -->
-<link rel="canonical" href={canonicalUrl.toString()} />
+    <!-- SEO -->
+    <link rel="canonical" href={canonicalUrl.toString()} />
 
-<!-- Open Graph -->
-<meta property="og:title" content={fullTitle} />
-<meta property="og:description" content={description} />
-<meta property="og:url" content={canonicalUrl.toString()} />
-<meta property="og:image" content={ogImage} />
-<meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl.toString()} />
+    <meta property="og:image" content={ogImage} />
 
-<!-- Twitter / X -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={fullTitle} />
-<meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={ogImage} />
-
-    <!-- Google Fonts -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -66,84 +55,27 @@ const ogImage = image
       rel="stylesheet"
     />
 
-    <!-- Dark mode (before paint) -->
+    <!-- Dark mode -->
     <script is:inline>
-      const theme = (() => {
-        if (localStorage.getItem("theme")) {
-          return localStorage.getItem("theme");
-        }
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-          return "dark";
-        }
-        return "light";
-      })();
+      const theme = localStorage.getItem("theme") ||
+        (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 
       document.documentElement.classList.toggle("dark", theme === "dark");
       localStorage.setItem("theme", theme);
     </script>
+
   </head>
 
   <body class="bg-base-100 text-base-content">
+
     <slot />
 
-    <!-- i18n + Scroll Reveal -->
-    <script type="module">
-      import { translations } from "/src/i18n/translations.js";
-
-      function applyLanguage(lang) {
-        document.querySelectorAll("[data-i18n]").forEach((el) => {
-          const key = el.getAttribute("data-i18n");
-          if (key && translations[key]) {
-            el.textContent =
-              translations[key][lang] || translations[key]["es"];
-          }
-
-          // Placeholders (inputs / textarea)
-document
-  .querySelectorAll("[data-i18n-placeholder]")
-  .forEach((el) => {
-    const key = el.getAttribute("data-i18n-placeholder");
-    if (key && translations[key]) {
-      el.setAttribute(
-        "placeholder",
-        translations[key][lang] || translations[key]["es"]
-      );
-    }
-  });
-        });
-
-        document.querySelectorAll("[data-i18n-html]").forEach((el) => {
-          const key = el.getAttribute("data-i18n-html");
-          if (key && translations[key]) {
-            el.innerHTML =
-              translations[key][lang] || translations[key]["es"];
-          }
-        });
-
-        document.documentElement.lang = lang;
-        const label = document.getElementById("lang-label");
-        if (label) label.textContent = lang.toUpperCase();
-
-        localStorage.setItem("lang", lang);
-      }
-
+    <!-- Scroll Reveal ONLY -->
+    <script>
       document.addEventListener("DOMContentLoaded", () => {
-        const savedLang = localStorage.getItem("lang") || "es";
-        applyLanguage(savedLang);
-
-        const toggle = document.getElementById("lang-toggle");
-        if (toggle) {
-          toggle.addEventListener("click", () => {
-            const next =
-              (localStorage.getItem("lang") || "es") === "es"
-                ? "en"
-                : "es";
-            applyLanguage(next);
-          });
-        }
 
         const revealElements = document.querySelectorAll(
-          ".reveal, .reveal-left, .reveal-right, .reveal-scale",
+          ".reveal, .reveal-left, .reveal-right, .reveal-scale"
         );
 
         const observer = new IntersectionObserver(
@@ -154,11 +86,13 @@ document
               }
             });
           },
-          { threshold: 0.15, rootMargin: "0px 0px -60px 0px" },
+          { threshold: 0.15, rootMargin: "0px 0px -60px 0px" }
         );
 
         revealElements.forEach((el) => observer.observe(el));
+
       });
     </script>
+
   </body>
 </html>
