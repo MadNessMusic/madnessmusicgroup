@@ -1,6 +1,5 @@
 ---
 import DarkModeToggle from "./DarkModeToggle.astro";
-import LangToggle from "./LangToggle.astro";
 import logoDark from "../assets/MadNess Music Group - Logo White.png";
 import logoLight from "../assets/MadNess Music Group - Logo Black.png";
 import { siteConfig } from "../data/siteConfig";
@@ -46,11 +45,9 @@ const navLinks = minimalNavbar
 
         <!-- TEXTO -->
         <div class="flex flex-col justify-center">
-
           <span class="font-heading text-2xl sm:text-3xl leading-none tracking-tight">
             {siteConfig.siteName}
           </span>
-
         </div>
 
       </a>
@@ -61,15 +58,12 @@ const navLinks = minimalNavbar
     <nav class="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-widest">
 
       {navLinks.map((link) => (
-
         <a
           href={link.href}
           class="hover:text-primary transition-colors"
-          data-i18n={link.i18nKey}
         >
           {link.label}
         </a>
-
       ))}
 
     </nav>
@@ -77,7 +71,8 @@ const navLinks = minimalNavbar
     <!-- RIGHT CONTROLS -->
     <div class="flex items-center gap-3">
 
-      <LangToggle />
+      <!-- ❌ quitamos LangToggle porque ya no hay i18n -->
+      <!-- <LangToggle /> -->
 
       <DarkModeToggle />
 
@@ -118,15 +113,12 @@ const navLinks = minimalNavbar
     <nav class="flex flex-col py-4 px-4 sm:px-6 space-y-3 text-xs font-bold uppercase tracking-widest">
 
       {navLinks.map((link) => (
-
         <a
           href={link.href}
           class="hover:text-primary transition-colors py-2"
-          data-i18n={link.i18nKey}
         >
           {link.label}
         </a>
-
       ))}
 
     </nav>
@@ -151,27 +143,19 @@ const navLinks = minimalNavbar
       menuBtn.setAttribute("aria-expanded", open);
 
       if(open){
-
         mobileMenu.style.maxHeight = mobileMenu.scrollHeight + "px";
-
-      }else{
-
+      } else {
         mobileMenu.style.maxHeight = "0px";
-
       }
 
     });
 
     mobileMenu.querySelectorAll("a").forEach(link => {
-
       link.addEventListener("click", () => {
-
         open = false;
         mobileMenu.style.maxHeight = "0px";
         menuBtn.setAttribute("aria-expanded", "false");
-
       });
-
     });
 
   }
