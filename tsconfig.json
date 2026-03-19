@@ -9,6 +9,6 @@
   "include": [
     "src",
     ".astro/types.d.ts"
-, "public/scripts", "scripts"  ],
+, "src/scripts", "scripts"  ],
   "exclude": ["dist", "node_modules"]
 }
