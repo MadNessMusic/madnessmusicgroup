@@ -150,18 +150,16 @@ const featuredPlaylist = featured[0];
 
 
 ---
-
+<!-- HEADER LINE -->
 <div class="mx-auto px-6 mb-20 reveal">
   <div class="flex items-center gap-10">
     <span class="block w-30 h-px bg-white/10"></span>
-    <span class="text-2xl tracking-[0.7em] uppercase opacity-20"
-      data-i18n="section.highlights">
-      highlights
+    <span class="text-2xl tracking-[0.7em] uppercase opacity-20">
+      DESTACADOS
     </span>
     <span class="flex-1 h-px bg-white/10"></span>
   </div>
 </div>
-
 
 <section id="highlights" class="py-20">  
 
@@ -169,224 +167,181 @@ const featuredPlaylist = featured[0];
 
     <!-- HEADER -->
     <div class="max-w-3xl mb-24 reveal">
-<h2
-  class="text-5xl font-anton mb-8"
-  data-i18n="highlights.title">
-</h2>
+      <h2 class="text-5xl font-anton mb-8">
+        Destacados: lo nuevo en el archivo
+      </h2>
 
-<p
-  class="opacity-60 text-1xl leading-relaxed"
-  data-i18n="highlights.subtitle">
-</p>
+      <p class="opacity-60 text-1xl leading-relaxed">
+        Publicaciones destacadas
+      </p>
     </div>
 
-   <!-- ROW 1 · LANZAMIENTOS (DINÁMICOS DESDE SPOTIFY) -->
-<div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-  {releasesData.map((release, index) => (
-    <div class="group">
-      <a
-        href={release.url}
-        target="_blank"
-        class="relative block rounded-2xl overflow-hidden aspect-4/3"
-      >
-        <img
-          src={release.image}
-          alt={release.title}
-          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-        />
-
-        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end gap-3 p-6">
-          <div class="spotify-btn play">▶</div>
-          <span
-            data-i18n="playlist.listen"
-            class="text-[11px] tracking-widest uppercase opacity-80"
+    <!-- ROW 1 · RELEASES -->
+    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+      {releasesData.map((release, index) => (
+        <div class="group">
+          <a
+            href={release.url}
+            target="_blank"
+            class="relative block rounded-2xl overflow-hidden aspect-4/3"
           >
-            Listen on Spotify
-          </span>
+            <img
+              src={release.image}
+              alt={release.title}
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+
+            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end gap-3 p-6">
+              <div class="spotify-btn play">▶</div>
+              <span class="text-[11px] tracking-widest uppercase opacity-80">
+                Escuchar en Spotify
+              </span>
+            </div>
+          </a>
+
+          <div class="mt-4">
+            <p class="font-anton text-lg font-black">
+              {release.title}
+            </p>
+
+            <p class="text-sm opacity-60">
+              {release.artist}
+            </p>
+
+            <div class="mt-2 flex items-center gap-3">
+
+              <!-- TYPE -->
+              <span class="text-[10px] tracking-widest uppercase opacity-50">
+                {release.type}
+              </span>
+
+              <span
+                class={`w-1.5 h-1.5 rounded-full ${
+                  release.type === "single"
+                    ? "bg-green-400"
+                    : release.type === "ep"
+                    ? "bg-purple-400"
+                    : "bg-blue-400"
+                }`}
+              ></span>
+
+              <!-- MÁS RECIENTE -->
+              {index === 0 && (
+                <span class="text-[10px] uppercase tracking-widest text-green-400">
+                  Más reciente
+                </span>
+              )}
+            </div>
+
+            <p class="text-[10px] tracking-widest uppercase opacity-30 mt-1">
+              {formatReleaseDate(release.releaseDate, release.releasePrecision)}
+            </p>
+          </div>
         </div>
+      ))}
+    </div>
+
+    <div class="relative my-24">
+      <div class="h-px w-full bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
+    </div>
+
+    <!-- ROW 2 -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mt-16 mb-30">
+
+      <!-- PRÓXIMAMENTE -->
+      <a href="https://presave.link/aqui" target="_blank" class="group">
+        <div class="relative aspect-square rounded-xl overflow-hidden">
+          <img
+            src="/images/releases/coming-soon.png"
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+
+          <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end gap-3 p-6">
+            <div class="spotify-btn play">+</div>
+            <span class="text-[11px] tracking-widest uppercase opacity-80">
+              Pre-save
+            </span>
+          </div>
+        </div>
+
+        <h4 class="font-anton text-base mt-4">
+          Próximamente
+        </h4>
+
+        <p class="text-xs opacity-60 mb-2">
+          Nuevos lanzamientos en camino.
+        </p>
+
+        <span class="text-[10px] tracking-widest uppercase opacity-40">
+          Pre-save
+        </span>
       </a>
 
-      <div class="mt-4">
-        <p class="font-anton text-lg font-black">
-          {release.title}
-        </p>
+      <!-- PLAYLIST FEATURED -->
+      {featuredPlaylist && (
+        <a
+          href={`https://open.spotify.com/playlist/${featuredPlaylist.spotifyId}`}
+          class="group"
+        >
+          <div class="relative aspect-square rounded-xl overflow-hidden">
+            <img
+              src={featuredPlaylist.image}
+              alt={featuredPlaylist.title}
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
 
-        <p class="text-sm opacity-60">
-          {release.artist}
-        </p>
+            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end gap-3 p-6">
+              <div class="spotify-btn play">▶</div>
+              <span class="text-[11px] tracking-widest uppercase opacity-80">
+                Escuchar
+              </span>
+            </div>
+          </div>
 
-        <div class="mt-2 flex flex-wrap items-center gap-3">
-          {/* TYPE */}
-<span
-  class="text-[10px] tracking-widest uppercase opacity-50"
-  data-i18n={`release.type.${release.type}`}>
-</span>
+          <h4 class="font-anton text-base mt-4">
+            {featuredPlaylist.title}
+          </h4>
 
-          <span
-            class={`w-1.5 h-1.5 rounded-full ${
-              release.type === "single"
-  ? "bg-green-400"
-  : release.type === "ep"
-  ? "bg-purple-400"
-  : "bg-blue-400"
-            }`}
-          ></span>
+          <p class="text-xs opacity-60 mb-2">
+            {featuredPlaylist.description}
+          </p>
 
-          {/* MÁS RECIENTE */}
-          {index === 0 && (
-<span
-  class="text-[10px] uppercase tracking-widest text-green-400"
-  data-i18n="release.latest">
-</span>
-          )}
+          <span class="text-[10px] tracking-widest uppercase opacity-40">
+            Escuchar playlist →
+          </span>
+        </a>
+      )}
+
+      <!-- ARCHIVO -->
+      <a href="/archive" class="group">
+        <div class="relative aspect-square rounded-xl overflow-hidden bg-neutral-900">
+          <img
+            src="/images/archive/archive-cover.png"
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+
+          <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end gap-3 p-6">
+            <div class="spotify-btn search">⌕</div>
+            <span class="text-[11px] tracking-widest uppercase opacity-80">
+              Explorar catálogo
+            </span>
+          </div>
         </div>
 
-        <p class="text-[10px] tracking-widest uppercase opacity-30 mt-1">
-          {formatReleaseDate(release.releaseDate, release.releasePrecision)}
+        <h4 class="font-anton text-base mt-4">
+          Del archivo
+        </h4>
+
+        <p class="text-xs opacity-60 mb-2">
+          Joyas pasadas que siguen vigentes.
         </p>
-      </div>
+
+        <span class="text-[10px] tracking-widest uppercase opacity-40">
+          Explorar catálogo →
+        </span>
+      </a>
+
     </div>
-  ))}
-</div>
 
-
-<div class="relative my-24">
-  <div class="h-px w-full bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
-</div>
-
-   <!-- ROW 2 · 3 BLOQUES -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mt-16 mb-30">
-
-  <!-- PRÓXIMAMENTE -->
-  <a href="https://presave.link/aqui" target="_blank" class="group">
-    <div class="relative aspect-square rounded-xl overflow-hidden">
-
-      <img
-        src="/images/releases/coming-soon.png"
-        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-      />
-
-      <!-- Overlay -->
-        <div
-  class="absolute inset-0 bg-black/50
-         opacity-0 group-hover:opacity-100
-         transition
-         flex flex-col justify-end gap-3 p-6"
->
-  <div class="spotify-btn play">
-    +
   </div>
-
-  <span
-    class="text-[11px] tracking-widest uppercase opacity-80"
-    data-i18n="cta.presave"
-  ></span>
-</div>
-    </div>
-
-    <h4
-  class="font-anton text-base mt-4"
-  data-i18n="highlights.upcoming.title">
-</h4>
-
-<p
-  class="text-xs opacity-60 mb-2"
-  data-i18n="highlights.upcoming.desc">
-</p>
-
-<span
-  class="text-[10px] tracking-widest uppercase opacity-40"
-  data-i18n="cta.presave">
-</span>
-  </a>
-  
-  <!-- PLAYLIST · FEATURED DINÁMICA -->
-{featuredPlaylist && (
-  <a
-    href={`https://open.spotify.com/playlist/${featuredPlaylist.spotifyId}`}
-    class="group"
-  >
-    <div class="relative aspect-square rounded-xl overflow-hidden">
-
-      <img
-        src={featuredPlaylist.image}
-        alt={featuredPlaylist.title}
-        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-      />
-
-      <div
-        class="absolute inset-0 bg-black/50
-               opacity-0 group-hover:opacity-100
-               transition
-               flex flex-col justify-end gap-3 p-6"
-      >
-        <div class="spotify-btn play">
-          ▶
-        </div>
-
-        <span
-          class="text-[11px] tracking-widest uppercase opacity-80"
-          data-i18n="cta.listen"
-        ></span>
-      </div>
-    </div>
-
-    <h4 class="font-anton text-base mt-4">
-      {featuredPlaylist.title}
-    </h4>
-
-    <p class="text-xs opacity-60 mb-2">
-      {featuredPlaylist.description}
-    </p>
-
-    <span
-      class="text-[10px] tracking-widest uppercase opacity-40"
-      data-i18n="cta.playlist"
-    ></span>
-  </a>
-)}
-
-  <!-- ARCHIVO -->
-  <a href="/archive" class="group">
-    <div class="relative aspect-square rounded-xl overflow-hidden bg-neutral-900 flex items-center justify-center">
-
-      <img
-        src="/images/archive/archive-cover.png"
-        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-      />
-
-        <div
-  class="absolute inset-0 bg-black/50
-         opacity-0 group-hover:opacity-100
-         transition
-         flex flex-col justify-end gap-3 p-6"
->
-  <div class="spotify-btn search">
-    ⌕
-  </div>
-
-  <span
-    class="text-[11px] tracking-widest uppercase opacity-80"
-    data-i18n="cta.archive"
-  ></span>
-</div>
-    </div>
-
-    <h4
-  class="font-anton text-base mt-4"
-  data-i18n="highlights.archive.title">
-</h4>
-
-<p
-  class="text-xs opacity-60 mb-2"
-  data-i18n="highlights.archive.desc">
-</p>
-
-<span
-  class="text-[10px] tracking-widest uppercase opacity-40"
-  data-i18n="cta.archive">
-</span>
-  </a>
-
-</div>
 </section>

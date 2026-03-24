@@ -1,15 +1,9 @@
 ---
 import LogoLight from "../assets/MadNess Music Group - Logo White.png";
 import LogoDark from "../assets/MadNess Music Group - Logo Black.png";
-
-const lang = "es";
-
-// HERO = primera playlist
-
 ---
 
 <section id="hero" class="relative min-h-screen flex items-center">
- 
 
   <div class="hero-content">
     <div class="grid grid-cols-12 items-center">
@@ -20,15 +14,16 @@ const lang = "es";
         <!-- Logo -->
         <div class="hero-logo-wrap">
           <img 
-          src={LogoDark.src} 
-          alt="Madness Music Group" 
-          class="hero-logo hero-logo-light" />
+            src={LogoDark.src} 
+            alt="Madness Music Group" 
+            class="hero-logo hero-logo-light" 
+          />
           
           <img 
-          src={LogoLight.src} 
-          alt="Madness Music Group" 
-          class="hero-logo hero-logo-dark" /> 
-        
+            src={LogoLight.src} 
+            alt="Madness Music Group" 
+            class="hero-logo hero-logo-dark" 
+          /> 
         </div>
 
         <!-- Background word -->
@@ -42,43 +37,36 @@ const lang = "es";
         <div class="pt-20 sm:pt-28 md:pt-32">
 
           <!-- Eyebrow -->
-          <span
-            class="block text-2xl tracking-wider uppercase opacity-60 mb-8"
-            data-i18n="hero.eyebrow"
-          >
+          <span class="block text-2xl tracking-wider uppercase opacity-60 mb-8">
             Colectivo cultural · Música · Editorial
           </span>
 
           <!-- Texto -->
-          <p
-            class="text-sm md:text-base opacity-70 leading-relaxed max-w-100px mb-15"
-            data-i18n="hero.text"
-          >
-            Plataforma editorial y colectiva dedicada a curar,
-            documentar y amplificar expresiones musicales contemporáneas.
+          <p class="text-sm md:text-base opacity-70 leading-relaxed max-w-100px mb-15">
+            Plataforma editorial y colectiva dedicada a curar, documentar y amplificar expresiones musicales contemporáneas.
           </p>
 
           <!-- CTA -->
- <a
-  href="#playlists"
-  data-i18n="hero.cta"
-  class="
-    inline-flex items-center justify-center
-    px-9 py-4
-    border border-white/30
-    rounded-full
-    text-[11px]
-    tracking-[0.45em]
-    uppercase
-    opacity-70
-    transition-all duration-300 ease-out
-    hover:opacity-100
-    hover:border-white
-    hover:-translate-y-0.5
-    hover:shadow-[0_12px_40px_rgba(255,255,255,0.15)]
-  "
->
-</a>
+          <a
+            href="#playlists"
+            class="
+              inline-flex items-center justify-center
+              px-9 py-4
+              border border-white/30
+              rounded-full
+              text-[11px]
+              tracking-[0.45em]
+              uppercase
+              opacity-70
+              transition-all duration-300 ease-out
+              hover:opacity-100
+              hover:border-white
+              hover:-translate-y-0.5
+              hover:shadow-[0_12px_40px_rgba(255,255,255,0.15)]
+            "
+          >
+            EXPLORAR ↓
+          </a>
 
         </div>
         
@@ -89,6 +77,3 @@ const lang = "es";
   </div>
   
 </section>
-
-
-

@@ -1,10 +1,15 @@
+---
+
+---
+
 <div class="mx-auto px-6 mb-20 reveal">
   <div class="flex items-center gap-10">
     <span class="block w-30 h-px bg-white/10"></span>
-    <span class="text-2xl tracking-[0.7em] uppercase opacity-20"
-    data-i18n="section.contact">
-      contact
+
+    <span class="text-2xl tracking-[0.7em] uppercase opacity-20">
+      CONTACTO
     </span>
+
     <span class="flex-1 h-px bg-white/10"></span>
   </div>
 </div>
@@ -15,141 +20,117 @@
 
     <!-- Columna editorial -->
     <div>
-      <h2
-        class="font-heading text-5xl md:text-6xl mb-6"
-        data-i18n="contact.title"
-      >
-        Hablemos
+      <h2 class="font-heading text-5xl md:text-6xl mb-6">
+        Conectemos
       </h2>
 
-      <p
-        class="opacity-70 leading-relaxed mb-6"
-        data-i18n="contact.text"
-      >
-        Escríbenos para colaboraciones, propuestas editoriales o prensa.
+      <p class="opacity-70 leading-relaxed mb-6">
+        Colaboraciones, propuestas editoriales, prensa o proyectos especiales. Cuéntanos qué tienes en mente.
       </p>
 
-      <!-- Métodos alternativos -->
-        <div class="flex gap-4 mt-2">
-          <a
-            href="https://mail.google.com/mail/?view=cm&to=contact@madnessmusicgroup.com"
-            target="_blank"
-            class="btn-tactical"
-            data-i18n="contact.mail.button"
-          >
-            Correo
-          </a>
+      <!-- Métodos -->
+      <div class="flex gap-4 mt-2">
+        <a
+          href="https://mail.google.com/mail/?view=cm&to=contact@madnessmusicgroup.com"
+          target="_blank"
+          class="btn-tactical"
+        >
+          Correo
+        </a>
 
-          <a
-            href="https://wa.me/528442564688?text=Hola%20MadNess%20Music%20Group"
-            target="_blank"
-            class="btn-tactical"
-            data-i18n="contact.whatsapp"
-          >
-            WhatsApp
-          </a>
-        </div>
+        <a
+          href="https://wa.me/528442564688?text=Hola%20MadNess%20Music%20Group"
+          target="_blank"
+          class="btn-tactical"
+        >
+          WhatsApp
+        </a>
+      </div>
     </div>
 
-    <!-- Formulario -->
-<!--form
-  name="contact"
-  method="POST"
-  data-netlify="true"
-  netlify-honeypot="bot-field"
-  class="flex flex-col gap-2"
--->
-  <form
-  action="https://formspree.io/f/xnjbypyv"
-  method="POST"
-  class="flex flex-col gap-2"
->
-  <!-- Netlify required -->
-  <input type="hidden" name="form-name" value="contact" />
+    <!-- FORM -->
+    <form
+      action="https://formspree.io/f/xnjbypyv"
+      method="POST"
+      class="flex flex-col gap-2"
+    >
 
-  <!-- Honeypot -->
-  <p class="hidden">
-    <label>
-      Don’t fill this out:
-      <input name="bot-field" />
-    </label>
-  </p>
+      <input type="hidden" name="form-name" value="contact" />
 
-  <!-- Nombre -->
-  <label
-    for="name"
-    class="text-xs uppercase tracking-widest opacity-50"
-    data-i18n="contact.name.label"
-  >
-    Nombre
-  </label>
-  <input
-    id="name"
-    name="name"
-    type="text"
-    placeholder="Nombre"
-    required
-    class="bg-transparent border-b border-white/20 py-2 mb-10
-           focus:outline-none focus:border-white
-           transition-colors duration-300"
-    data-i18n-placeholder="contact.name"
-  />
+      <p class="hidden">
+        <label>
+          Don’t fill this out:
+          <input name="bot-field" />
+        </label>
+      </p>
 
-  <!-- Correo -->
-  <label
-    for="email"
-    class="text-xs uppercase tracking-widest opacity-50"
-    data-i18n="contact.mail.label"
-  >
-    Correo
-  </label>
-  <input
-    id="email"
-    name="email"
-    type="email"
-    placeholder="Mail"
-    required
-    class="bg-transparent border-b border-white/20 py-2 mb-10
-           focus:outline-none focus:border-white
-           transition-colors duration-300"
-    data-i18n-placeholder="contact.mail"
-  />
+      <!-- Nombre -->
+      <label
+        for="name"
+        class="text-xs uppercase tracking-widest opacity-50"
+      >
+        ¿Cuál es tu nombre?
+      </label>
 
-  <!-- Mensaje -->
-  <label
-    for="message"
-    class="text-xs uppercase tracking-widest opacity-50"
-    data-i18n="contact.message.label"
-  >
-    Cuéntanos en qué podemos ayudarte
-  </label>
-  <textarea
-    id="message"
-    name="message"
-    rows="4"
-    placeholder="Mensaje"
-    class="bg-transparent border-b border-white/20 py-2
-           focus:outline-none resize-none"
-    data-i18n-placeholder="contact.message"
-  ></textarea>
+      <input
+        id="name"
+        name="name"
+        type="text"
+        placeholder="Nombre"
+        required
+        class="bg-transparent border-b border-white/20 py-2 mb-10 focus:outline-none focus:border-white transition-colors duration-300"
+      />
 
-  <!-- Redirect -->
-  <input type="hidden" name="redirect" value="/gracias" />
+      <!-- Email -->
+      <label
+        for="email"
+        class="text-xs uppercase tracking-widest opacity-50"
+      >
+        ¿Cuál es tu correo?
+      </label>
 
-  <!-- Submit -->
-  <button
-    type="submit"
-    class="btn-tactical self-start flex items-center gap-3 hover:cursor-pointer mt-5"
-  >
-    <span class="btn-text" data-i18n="contact.send">Enviar mensaje</span>
-    <span
-      class="btn-loader hidden w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"
-    ></span>
-  </button>
-</form>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        placeholder="Correo"
+        required
+        class="bg-transparent border-b border-white/20 py-2 mb-10 focus:outline-none focus:border-white transition-colors duration-300"
+      />
+
+      <!-- Message -->
+      <label
+        for="message"
+        class="text-xs uppercase tracking-widest opacity-50"
+      >
+        Cuéntanos en qué podemos ayudarte
+      </label>
+
+      <textarea
+        id="message"
+        name="message"
+        rows="4"
+        placeholder="Mensaje"
+        class="bg-transparent border-b border-white/20 py-2 focus:outline-none resize-none"
+      ></textarea>
+
+      <input type="hidden" name="redirect" value="/gracias" />
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="btn-tactical self-start flex items-center gap-3 hover:cursor-pointer mt-5"
+      >
+        <span class="btn-text">
+          Enviar mensaje
+        </span>
+
+        <span
+          class="btn-loader hidden w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"
+        ></span>
+      </button>
+
+    </form>
 
   </div>
-  
 </section>
-
-<script src="/scripts/contact-form.js" defer></script>
