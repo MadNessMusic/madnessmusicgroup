@@ -204,14 +204,36 @@ const allReleases: ReleaseView[] = (
 
       pageItems.forEach((release) => {
         const el = document.createElement("div");
+el.innerHTML = `
+  <div class="group relative overflow-hidden rounded-xl">
 
-        el.innerHTML = `
-          <a href="${release.url}" target="_blank" rel="noopener noreferrer">
-            <img src="${release.image}" class="w-full aspect-square object-cover rounded-xl"/>
-            <p class="mt-2 font-bold">${release.title}</p>
-            <p class="text-sm opacity-60">${release.artist}</p>
-          </a>
-        `;
+    <img 
+      src="${release.image}" 
+      class="w-full aspect-square object-cover transition duration-700 group-hover:scale-105"
+    />
+
+    <!-- OVERLAY -->
+    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-4 gap-2">
+
+      <button class="listenBtn text-xs uppercase tracking-widest">
+        ▶ Escuchar
+      </button>
+
+      <button class="shareBtn text-xs uppercase tracking-widest">
+        ⤴ Compartir
+      </button>
+
+      <button class="downloadBtn text-xs uppercase tracking-widest">
+        ⬇ Descargar
+      </button>
+
+    </div>
+
+  </div>
+
+  <p class="mt-2 font-bold">${release.title}</p>
+  <p class="text-sm opacity-60">${release.artist}</p>
+`;
 
         grid.appendChild(el);
       });
@@ -291,36 +313,5 @@ const allReleases: ReleaseView[] = (
     };
   });
 }
-
-const modal = document.getElementById("shareModal");
-const shareImg = document.getElementById("shareImage");
-const downloadBtn = document.getElementById("downloadImage");
-const spotifyBtn = document.getElementById("openSpotify");
-
-document.addEventListener("click", async (e) => {
-  const btn = e.target.closest(".shareBtn");
-  if (!btn) return;
-
-  const card = btn.closest("div");
-  const index = [...grid.children].indexOf(card.parentElement);
-  const release = filtered[index];
-
-  const imgData = await generateShareImage(release);
-
-  shareImg.src = imgData;
-  spotifyBtn.href = release.url;
-
-  modal.classList.remove("hidden");
-});
-
-downloadBtn.addEventListener("click", () => {
-  const link = document.createElement("a");
-  link.href = shareImg.src;
-  link.download = "madness-share.png";
-  link.click();
-});
-document.getElementById("closeModal").onclick = () => {
-  modal.classList.add("hidden");
-};
   </script>
 </Layout>
