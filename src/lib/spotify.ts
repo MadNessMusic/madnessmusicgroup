@@ -87,7 +87,7 @@ function clearTokenCache() {
 }
 
 async function getAccessToken(forceRefresh = false): Promise<string> {
-  clearTokenCache();
+  
   const now = Date.now();
 
   if (!forceRefresh && cachedToken && now < tokenExpiresAt) {
