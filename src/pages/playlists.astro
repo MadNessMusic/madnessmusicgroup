@@ -34,7 +34,28 @@ async function enrich(playlist: Playlist): Promise<Playlist> {
   }
 }
 
-const enriched = await Promise.all(playlists.map(enrich));
+async function enrichInBatches(items: Playlist[], batchSize = 3) {
+  const results: Playlist[] = [];
+
+  for (let i = 0; i < items.length; i += batchSize) {
+    const batch = items.slice(i, i + batchSize);
+
+    const res = await Promise.allSettled(batch.map(enrich));
+
+    for (const r of res) {
+      if (r.status === "fulfilled") {
+        results.push(r.value);
+      }
+    }
+
+    // pequeño delay para evitar rate limit
+    await new Promise((r) => setTimeout(r, 200));
+  }
+
+  return results;
+}
+
+const enriched = await enrichInBatches(playlists, 3);
 ---
 
 <Layout>

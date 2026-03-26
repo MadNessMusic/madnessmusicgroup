@@ -27,50 +27,78 @@ function detectReleaseType(albumType?: string, tracks?: number) {
   return "Single";
 }
 
-const allReleases: ReleaseView[] = (
-  await Promise.all(
-    releases.map(async (item) => {
-      try {
-        const album = await getSpotifyAlbum(item.spotifyAlbumId);
-        const year = album.releaseDate
-          ? new Date(album.releaseDate).getFullYear()
-          : 0;
+async function fetchReleasesInBatches(batchSize = 5) {
+  const results: ReleaseView[] = [];
 
-        return {
-          id: album.id,
-          title: album.title || "Sin titulo",
-          artist: album.artist || "Artista no disponible",
-          image: album.image || item.cover || "/images/releases/coming-soon.png",
-          url: album.url || "#",
-          type: detectReleaseType(album.type, album.tracks?.length),
-          releaseDate: album.releaseDate || "",
-          year,
-          tracks: album.tracks.map((track) => ({
-            id: track.id,
-            title: track.title,
-          })),
-        };
-      } catch (error) {
-        console.error("Spotify album fallback:", item.spotifyAlbumId, error);
+  for (let i = 0; i < releases.length; i += batchSize) {
+    const batch = releases.slice(i, i + batchSize);
 
-        return {
-          id: item.id,
-          title: item.id,
-          artist: "Artista no disponible",
-          image: item.cover || "/images/releases/coming-soon.png",
-          url: "#",
-          type: "Single",
-          releaseDate: "",
-          year: 0,
-          tracks: [],
-        };
+    const res = await Promise.allSettled(
+      batch.map(async (item) => {
+        try {
+          const album = await getSpotifyAlbum(item.spotifyAlbumId);
+
+          const year = album.releaseDate
+            ? new Date(album.releaseDate).getFullYear()
+            : 0;
+
+          return {
+            id: album.id,
+            title: album.title || "Sin titulo",
+            artist: album.artist || "Artista no disponible",
+            image:
+              album.image ||
+              item.cover ||
+              "/images/releases/coming-soon.png",
+            url: album.url || "#",
+            type: detectReleaseType(album.type, album.tracks?.length),
+            releaseDate: album.releaseDate || "",
+            year,
+            tracks: album.tracks?.map((track) => ({
+              id: track.id,
+              title: track.title,
+            })) ?? [],
+          };
+        } catch (error) {
+          console.error(
+            "Spotify album fallback:",
+            item.spotifyAlbumId,
+            error
+          );
+
+          return {
+            id: item.id,
+            title: item.id,
+            artist: "Artista no disponible",
+            image:
+              item.cover || "/images/releases/coming-soon.png",
+            url: "#",
+            type: "Single",
+            releaseDate: "",
+            year: 0,
+            tracks: [],
+          };
+        }
+      })
+    );
+
+    for (const r of res) {
+      if (r.status === "fulfilled") {
+        results.push(r.value);
       }
-    }),
-  )
-).sort(
+    }
+
+    // pequeño delay anti-rate-limit
+    await new Promise((r) => setTimeout(r, 200));
+  }
+
+  return results;
+}
+
+const allReleases: ReleaseView[] = (await fetchReleasesInBatches()).sort(
   (a, b) =>
     new Date(b.releaseDate || 0).getTime() -
-    new Date(a.releaseDate || 0).getTime(),
+    new Date(a.releaseDate || 0).getTime()
 );
 ---
 

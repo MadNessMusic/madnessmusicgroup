@@ -98,22 +98,38 @@ async function getReleaseData(item: {
 
 
 
-const allReleases: ReleaseView[] = (
-  await Promise.all(
-    releases.map((item) =>
-      getReleaseData({
-        spotifyAlbumId: item.spotifyAlbumId,
-        fallbackCover: item.cover,
-      })
-    )
-  )
-).sort((a, b) => {
+async function fetchReleasesInBatches() {
+  const batchSize = 5;
+  const results: ReleaseView[] = [];
 
-  const dateA = normalizeDate(a.releaseDate, a.releasePrecision);
-  const dateB = normalizeDate(b.releaseDate, b.releasePrecision);
+  for (let i = 0; i < releases.length; i += batchSize) {
+    const batch = releases.slice(i, i + batchSize);
 
-  return dateB.getTime() - dateA.getTime();
-});
+    const res = await Promise.allSettled(
+      batch.map((item) =>
+        getReleaseData({
+          spotifyAlbumId: item.spotifyAlbumId,
+          fallbackCover: item.cover,
+        })
+      )
+    );
+
+    for (const r of res) {
+      if (r.status === "fulfilled") {
+        results.push(r.value);
+      }
+    }
+  }
+
+  return results;
+}
+
+const allReleases: ReleaseView[] = (await fetchReleasesInBatches())
+  .sort((a, b) => {
+    const dateA = normalizeDate(a.releaseDate, a.releasePrecision);
+    const dateB = normalizeDate(b.releaseDate, b.releasePrecision);
+    return dateB.getTime() - dateA.getTime();
+  });
 
 const releasesData = allReleases.slice(0, 8);
 

@@ -5,6 +5,29 @@ import type { Playlist } from "../data/playlists";
 import { playlists } from "../data/playlists";
 import { getSpotifyPlaylist } from "../lib/spotify";
 
+async function fetchPlaylistsInBatches(items: Playlist[], batchSize = 3) {
+  const results: Playlist[] = [];
+
+  for (let i = 0; i < items.length; i += batchSize) {
+    const batch = items.slice(i, i + batchSize);
+
+    const res = await Promise.allSettled(
+      batch.map(getPlaylistData)
+    );
+
+    for (const r of res) {
+      if (r.status === "fulfilled") {
+        results.push(r.value);
+      }
+    }
+
+    // pequeño delay para evitar rate limit
+    await new Promise((r) => setTimeout(r, 200));
+  }
+
+  return results;
+}
+
 async function getPlaylistData(item: Playlist): Promise<Playlist> {
   if (!item.spotifyId) {
     return {
@@ -44,8 +67,9 @@ async function getPlaylistData(item: Playlist): Promise<Playlist> {
 const featuredRaw: Playlist[] = playlists.filter((p) => p.status === "featured");
 const evergreenRaw: Playlist[] = playlists.filter((p) => p.status === "evergreen");
 
-const featured: Playlist[] = await Promise.all(featuredRaw.map(getPlaylistData));
-const evergreen: Playlist[] = await Promise.all(evergreenRaw.map(getPlaylistData));
+const featured: Playlist[] = await fetchPlaylistsInBatches(featuredRaw, 3);
+const evergreen: Playlist[] = await fetchPlaylistsInBatches(evergreenRaw, 3);
+
 const evergreenLimited = evergreen.slice(0, 4);
 ---
 
