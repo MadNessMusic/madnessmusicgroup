@@ -53,7 +53,13 @@ function getSpotifyCredentials() {
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 
+  console.log("ENV CHECK:", {
+  id: process.env.SPOTIFY_CLIENT_ID,
+  secret: process.env.SPOTIFY_CLIENT_SECRET ? "OK" : "MISSING"
+});
+
   return { clientId, clientSecret };
+  
 }
 
 async function parseSpotifyError(response: Response) {
