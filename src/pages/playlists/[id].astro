@@ -1,15 +1,17 @@
 ---
-export const prerender = false;
-
 import Layout from "../../layouts/Layout.astro";
 import SlugNavbar from "../../components/SlugNavbar.astro";
 import { getSpotifyPlaylist } from "../../lib/spotify";
 import { playlists } from "../../data/playlists";
 
-const { id } = Astro.params;
+export function getStaticPaths() {
+  return playlists.map((playlist) => ({
+    params: { id: playlist.id },
+    props: { playlist },
+  }));
+}
 
-const playlist = playlists.find((item) => item.id === id);
-if (!playlist) throw new Error("Playlist no encontrada");
+const { playlist } = Astro.props;
 
 let spotifyData = null;
 
