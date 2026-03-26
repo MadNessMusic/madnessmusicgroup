@@ -1,0 +1,14 @@
+import { e as createComponent, m as maybeRenderHead, g as addAttribute, r as renderTemplate } from './astro/server_D_1a7wqE.mjs';
+import 'piccolore';
+import 'clsx';
+import { s as siteConfig, a as LogoDark } from './MadNess Music Group - Logo Black_emOj480m.mjs';
+
+const $$Footer = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`${maybeRenderHead()}<footer class="bg-secondary text-primary-content pt-12 sm:pt-20 pb-8 sm:pb-10 border-t border-primary/20"> <div class="max-w-325 mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 mb-12 sm:mb-20"> <div class="col-span-1 sm:col-span-2"> <div class="flex items-center gap-4 mb-6"> <img${addAttribute(LogoDark.src, "src")}${addAttribute(`${siteConfig.siteName} Logo`, "alt")} class="w-14 h-14 object-contain"> <h2 class="text-3xl tracking-tighter">${siteConfig.siteName}</h2> </div> <p class="text-sm opacity-60 leading-relaxed max-w-md"> ${siteConfig.siteDescription} </p> </div> <div> <h3 class="text-xs uppercase font-bold tracking-widest mb-6 text-accent">
+Navegacion
+</h3> <ul class="space-y-4 text-sm opacity-80 uppercase tracking-widest text-[10px] font-bold"> ${siteConfig.navLinks.map((link) => renderTemplate`<li> <a${addAttribute(link.href, "href")} class="hover:text-accent transition-colors"> ${link.label} </a> </li>`)} </ul> </div> <div> <h3 class="text-xs uppercase font-bold tracking-widest mb-6 text-accent">
+Direccion
+</h3> <ul class="space-y-4 text-sm opacity-60"> <li class="flex items-start gap-3"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-1 shrink-0"> <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path> <circle cx="12" cy="10" r="3"></circle> </svg> ${siteConfig.address.line1} <br> ${siteConfig.address.line2} </li> </ul> </div> </div> <div class="max-w-325 mx-auto px-4 sm:px-6 pt-8 sm:pt-10 border-t border-primary/10 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] uppercase font-bold tracking-widest opacity-40"> <div> ${siteConfig.copyright} </div> <div class="text-center md:text-right max-w-md"> ${siteConfig.disclaimer} </div> </div> </footer>`;
+}, "C:/Users/mikel/OneDrive/Documentos/MadNessHauz/madness-music-group-page/src/components/Footer.astro", void 0);
+
+export { $$Footer as $ };

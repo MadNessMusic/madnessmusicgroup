@@ -28,27 +28,47 @@ function detectReleaseType(albumType?: string, tracks?: number) {
 const allReleases: ReleaseView[] = (
   await Promise.all(
     releases.map(async (item) => {
-      const album = await getSpotifyAlbum(item.spotifyAlbumId);
+      try {
+        const album = await getSpotifyAlbum(item.spotifyAlbumId);
+        const year = album.releaseDate
+          ? new Date(album.releaseDate).getFullYear()
+          : 0;
 
-      const year = new Date(album.releaseDate).getFullYear();
+        return {
+          id: album.id,
+          title: album.title || "Sin titulo",
+          artist: album.artist || "Artista no disponible",
+          image: album.image || item.cover || "/images/releases/coming-soon.png",
+          url: album.url || "#",
+          type: detectReleaseType(album.type, album.tracks?.length),
+          releaseDate: album.releaseDate || "",
+          year,
+          tracks: album.tracks.map((track) => ({
+            id: track.id,
+            title: track.title,
+          })),
+        };
+      } catch (error) {
+        console.error("Spotify album fallback:", item.spotifyAlbumId, error);
 
-      return {
-        id: album.id,
-        title: album.title,
-        artist: album.artist,
-        image: album.image,
-        url: album.url,
-        type: detectReleaseType(album.type, album.tracks?.length),
-        releaseDate: album.releaseDate,
-        year,
-        tracks: album.tracks,
-      };
-    })
+        return {
+          id: item.id,
+          title: item.id,
+          artist: "Artista no disponible",
+          image: item.cover || "/images/releases/coming-soon.png",
+          url: "#",
+          type: "Single",
+          releaseDate: "",
+          year: 0,
+          tracks: [],
+        };
+      }
+    }),
   )
 ).sort(
   (a, b) =>
-    new Date(b.releaseDate).getTime() -
-    new Date(a.releaseDate).getTime()
+    new Date(b.releaseDate || 0).getTime() -
+    new Date(a.releaseDate || 0).getTime(),
 );
 ---
 
@@ -56,41 +76,35 @@ const allReleases: ReleaseView[] = (
   <Navbar />
 
   <section class="max-w-7xl mx-auto px-6 py-24">
-
     <h1 class="font-anton text-6xl mb-16">
       Archivo
     </h1>
 
-    <!-- CONTROLES -->
     <div class="flex flex-wrap items-center gap-6 mb-14 w-full">
-
       <input
         id="searchInput"
-        placeholder="Buscar artista, canción o lanzamiento..."
+        placeholder="Buscar artista, cancion o lanzamiento..."
         class="flex-2 min-w-70 bg-neutral-900 px-4 py-3 rounded-xl outline-none"
       />
 
       <select id="yearFilter" class="bg-neutral-900 px-4 py-3 rounded-xl">
-        <option value="">Todos los años</option>
+        <option value="">Todos los anos</option>
       </select>
 
       <select id="typeFilter" class="bg-neutral-900 px-4 py-3 rounded-xl">
         <option value="">Todos los tipos</option>
         <option value="Single">Single</option>
         <option value="EP">EP</option>
-        <option value="Album">Álbum</option>
+        <option value="Album">Album</option>
       </select>
-
     </div>
 
-    <!-- GRID -->
     <div id="releaseGrid" class="grid grid-cols-2 md:grid-cols-4 gap-10"></div>
 
     <p id="noResults" class="opacity-50 mt-10 hidden text-lg font-medium">
       Sin resultados
     </p>
 
-    <!-- PAGINACION -->
     <div class="flex items-center justify-center gap-4 mt-20">
       <button id="prevPage" class="px-4 py-2 border border-neutral-700">
         ← Anterior
@@ -102,102 +116,108 @@ const allReleases: ReleaseView[] = (
         Siguiente →
       </button>
     </div>
-
   </section>
 
-<script define:vars={{ allReleases }}>
+  <script define:vars={{ allReleases }}>
+    const releasesData = allReleases;
 
-const releasesData = allReleases
+    const grid = document.getElementById("releaseGrid");
+    const noResults = document.getElementById("noResults");
+    const searchInput = document.getElementById("searchInput");
+    const yearFilter = document.getElementById("yearFilter");
+    const typeFilter = document.getElementById("typeFilter");
+    const prevBtn = document.getElementById("prevPage");
+    const nextBtn = document.getElementById("nextPage");
+    const pageIndicator = document.getElementById("pageIndicator");
 
-const grid = document.getElementById("releaseGrid")
+    let filtered = [...releasesData];
+    let page = 1;
+    const perPage = 12;
 
-const searchInput = document.getElementById("searchInput")
-const yearFilter = document.getElementById("yearFilter")
-const typeFilter = document.getElementById("typeFilter")
+    const years = [...new Set(releasesData.map((r) => r.year).filter(Boolean))].sort(
+      (a, b) => b - a,
+    );
 
-const prevBtn = document.getElementById("prevPage")
-const nextBtn = document.getElementById("nextPage")
-const pageIndicator = document.getElementById("pageIndicator")
+    years.forEach((year) => {
+      const option = document.createElement("option");
+      option.value = String(year);
+      option.textContent = String(year);
+      yearFilter.appendChild(option);
+    });
 
-let filtered = [...releasesData]
+    function applyFilters() {
+      const query = searchInput.value.toLowerCase();
+      const year = yearFilter.value;
+      const type = typeFilter.value;
 
-let page = 1
-const perPage = 12
+      filtered = releasesData.filter((release) => {
+        const trackMatch = release.tracks.some((track) =>
+          track.title.toLowerCase().includes(query),
+        );
 
-// años
-const years = [...new Set(releasesData.map(r => r.year))].sort((a,b)=>b-a)
+        const matchSearch =
+          release.title.toLowerCase().includes(query) ||
+          release.artist.toLowerCase().includes(query) ||
+          trackMatch;
 
-years.forEach(y=>{
-  const opt = document.createElement("option")
-  opt.value = y
-  opt.textContent = y
-  yearFilter.appendChild(opt)
-})
+        const matchYear = !year || String(release.year) === year;
+        const matchType = !type || release.type === type;
 
-function applyFilters(){
+        return matchSearch && matchYear && matchType;
+      });
 
-  const q = searchInput.value.toLowerCase()
-  const year = yearFilter.value
-  const type = typeFilter.value
+      page = 1;
+      render();
+    }
 
-  filtered = releasesData.filter(r=>{
+    function render() {
+      grid.innerHTML = "";
 
-    const trackMatch = r.tracks.some(t =>
-      t.title.toLowerCase().includes(q)
-    )
+      const start = (page - 1) * perPage;
+      const end = start + perPage;
+      const pageItems = filtered.slice(start, end);
+      const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
 
-    const matchSearch =
-      r.title.toLowerCase().includes(q) ||
-      r.artist.toLowerCase().includes(q) ||
-      trackMatch
+      noResults.classList.toggle("hidden", filtered.length > 0);
 
-    const matchYear = !year || r.year == year
-    const matchType = !type || r.type === type
+      pageItems.forEach((release) => {
+        const el = document.createElement("div");
 
-    return matchSearch && matchYear && matchType
-  })
+        el.innerHTML = `
+          <a href="${release.url}" target="_blank" rel="noopener noreferrer">
+            <img src="${release.image}" class="w-full aspect-square object-cover rounded-xl"/>
+            <p class="mt-2 font-bold">${release.title}</p>
+            <p class="text-sm opacity-60">${release.artist}</p>
+          </a>
+        `;
 
-  page = 1
-  render()
-}
+        grid.appendChild(el);
+      });
 
-function render(){
+      pageIndicator.textContent = `${page} / ${totalPages}`;
+      prevBtn.disabled = page <= 1;
+      nextBtn.disabled = page >= totalPages;
+    }
 
-  grid.innerHTML = ""
+    searchInput.addEventListener("input", applyFilters);
+    yearFilter.addEventListener("change", applyFilters);
+    typeFilter.addEventListener("change", applyFilters);
 
-  const start = (page - 1) * perPage
-  const end = start + perPage
+    prevBtn.onclick = () => {
+      if (page > 1) {
+        page--;
+        render();
+      }
+    };
 
-  const pageItems = filtered.slice(start, end)
+    nextBtn.onclick = () => {
+      const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+      if (page < totalPages) {
+        page++;
+        render();
+      }
+    };
 
-  pageItems.forEach(r => {
-
-    const el = document.createElement("div")
-
-    el.innerHTML = `
-      <a href="${r.url}" target="_blank">
-        <img src="${r.image}" class="w-full aspect-square object-cover rounded-xl"/>
-        <p class="mt-2 font-bold">${r.title}</p>
-        <p class="text-sm opacity-60">${r.artist}</p>
-      </a>
-    `
-
-    grid.appendChild(el)
-
-  })
-
-  pageIndicator.textContent = page
-}
-
-searchInput.addEventListener("input",applyFilters)
-yearFilter.addEventListener("change",applyFilters)
-typeFilter.addEventListener("change",applyFilters)
-
-prevBtn.onclick=()=>{ if(page>1){page--;render()} }
-nextBtn.onclick=()=>{ page++;render() }
-
-render()
-
-</script>
-
+    render();
+  </script>
 </Layout>

@@ -1,31 +1,20 @@
-// src/data/playlists.ts
-
 export type PlaylistStatus = "featured" | "evergreen" | "archive";
 
 export interface Playlist {
-[x: string]: any;
+  [x: string]: any;
   id: string;
-
-  // Editorial
   title: string;
   description: string;
-  cover: string;        // fallback local
-  image?: string;       // imagen Spotify (runtime)
-
-  // Spotify
+  cover: string;
+  image?: string;
   spotifyId?: string;
   spotifyUrl?: string;
-
-  // Clasificación
   status: PlaylistStatus;
   genre?: string[];
-  // SEO
   seo?: {
     title?: string;
     description?: string;
   };
-
-  // Metadata
   updatedAt?: string;
   trackCount?: number;
   followers?: number;
@@ -36,19 +25,18 @@ export const playlists: Playlist[] = [
     id: "madness-discover",
     spotifyId: "2bbJiLQ8OfjNetvTYRk2T6",
     status: "featured",
-    genre: ["Pop","Latin","Reggaeton"],
+    genre: ["Pop", "Latin", "Reggaeton"],
     title: "MadNess Discover",
     description:
-      "Descubre nuevos talentos del urbano latino. Reggaetón, trap latino y sonidos comerciales emergentes. Curaduría editorial por MadNess Music Group. Updated weekly.",
+      "Descubre nuevos talentos del urbano latino. Reggaeton, trap latino y sonidos comerciales emergentes. Curaduria editorial por MadNess Music Group. Updated weekly.",
     seo: {
-      title: "MadNess Discover – Nuevos sonidos latinos | MadNess Music Group",
+      title: "MadNess Discover - Nuevos sonidos latinos | MadNess Music Group",
       description:
-        "Descubre nuevos talentos del urbano latino. Reggaetón, trap latino y sonidos comerciales emergentes. Curaduría editorial por MadNess Music Group.",
+        "Descubre nuevos talentos del urbano latino. Reggaeton, trap latino y sonidos comerciales emergentes. Curaduria editorial por MadNess Music Group.",
     },
     cover: "/images/playlists/madness-discover.png",
     updatedAt: "2026-02-26",
   },
-
   {
     id: "madness-day-vibes",
     spotifyId: "0ZPWB2WnEdSPhpn2Or5uVc",
@@ -57,25 +45,23 @@ export const playlists: Playlist[] = [
     description:
       "Radar semanal de nuevos sonidos latinoamericanos y globales curados por MadNess Music Group.",
     seo: {
-      title: "Latin Future – Nuevos sonidos latinos | MadNess Music Group",
+      title: "Latin Future - Nuevos sonidos latinos | MadNess Music Group",
       description:
         "Radar semanal de nuevos sonidos latinoamericanos y globales curados por MadNess Music Group.",
     },
     cover: "/images/playlists/madness-day-vibes.png",
     updatedAt: "2026-02-27",
   },
-
   {
     id: "madness-late-night",
     spotifyId: "5AlzpdhoRY5IJHigfhuRAQ",
     status: "evergreen",
     title: "MadNess Late Night",
     description:
-      "Una selección sin fronteras donde todo convive: banda, reggaetón, trap y R&B en distintos idiomas y estilos.",
+      "Una seleccion sin fronteras donde todo convive: banda, reggaeton, trap y R&B en distintos idiomas y estilos.",
     cover: "/images/playlists/madness-late-night.png",
     updatedAt: "2026-02-28",
   },
-
   {
     id: "madness-radar",
     spotifyId: "3nyYLtmr7B44Cu469610fF",
@@ -86,7 +72,6 @@ export const playlists: Playlist[] = [
     cover: "/images/playlists/madness-radar.png",
     updatedAt: "2026-02-28",
   },
-
   {
     id: "madness-pop-codes",
     spotifyId: "3Ay7ZskUw3ktEOe4tHtx9O",
@@ -98,13 +83,12 @@ export const playlists: Playlist[] = [
     cover: "/images/playlists/madness-pop-codes.png",
     updatedAt: "2026-02-28",
   },
-   {
+  {
     id: "madness-summer-vibes",
     spotifyId: "6OLCGm1tdPIRd76dmTKs7L",
     status: "evergreen",
-    title: "Summer vibes",
-    description:
-      "",
+    title: "Summer Vibes",
+    description: "",
     cover: "/images/playlists/madness-summer-vibes.png",
     updatedAt: "2026-02-28",
   },
@@ -113,8 +97,7 @@ export const playlists: Playlist[] = [
     spotifyId: "6aNbiLrTlKpWBViFL8drPr",
     status: "evergreen",
     title: "Residencia Estudio Records",
-    description:
-      "",
+    description: "",
     cover: "",
     updatedAt: "2026-02-28",
   },
@@ -122,9 +105,8 @@ export const playlists: Playlist[] = [
     id: "las-mas-virales-matt-lasong",
     spotifyId: "4mck2BYnn3o4pXcwQknOlV",
     status: "evergreen",
-    title: "Las Más Virales | Matt Lasong",
-    description:
-      "",
+    title: "Las Mas Virales | Matt Lasong",
+    description: "",
     cover: "",
     updatedAt: "2026-02-28",
   },

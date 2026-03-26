@@ -1,27 +1,105 @@
-// src/lib/spotify.ts
-
 const TOKEN_URL = "https://accounts.spotify.com/api/token";
 const API_URL = "https://api.spotify.com/v1";
+const TOKEN_SAFETY_WINDOW_MS = 60_000;
 
-// cache en memoria (perfecto para Vercel)
-const playlistCache = new Map<string, any>();
-const albumCache = new Map<string, any>();
+const playlistCache = new Map<string, SpotifyPlaylist>();
+const albumCache = new Map<string, SpotifyAlbum>();
 
 let cachedToken: string | null = null;
 let tokenExpiresAt = 0;
 
-async function getAccessToken(): Promise<string> {
+type SpotifyPlaylist = {
+  name: string;
+  description: string;
+  images: { url: string }[];
+  external_urls: { spotify?: string };
+  tracks: { total: number };
+  followers: { total: number };
+};
+
+type SpotifyAlbum = {
+  id: string;
+  title: string;
+  artist: string;
+  releaseDate: string;
+  releasePrecision: string;
+  type: "single" | "album";
+  image: string | null;
+  url: string;
+  tracks: {
+    id: string;
+    title: string;
+    preview: string | null;
+  }[];
+};
+
+type SpotifyTrack = {
+  title: string;
+  artists: string;
+  releaseDate: string;
+  releaseDatePrecision: string;
+  image: string | null;
+  url: string;
+  type: "single" | "album";
+  preview: string | null;
+};
+
+type TokenResponse = {
+  access_token: string;
+  expires_in: number;
+};
+
+function getSpotifyCredentials() {
+  const clientId =
+    process.env.SPOTIFY_CLIENT_ID ?? import.meta.env.SPOTIFY_CLIENT_ID;
+  const clientSecret =
+    process.env.SPOTIFY_CLIENT_SECRET ?? import.meta.env.SPOTIFY_CLIENT_SECRET;
+
+  return { clientId, clientSecret };
+}
+
+async function parseSpotifyError(response: Response) {
+  try {
+    const data = await response.json();
+    if (typeof data?.error_description === "string") {
+      return data.error_description;
+    }
+    if (typeof data?.error?.message === "string") {
+      return data.error.message;
+    }
+    if (typeof data?.error === "string") {
+      return data.error;
+    }
+  } catch {
+    return `${response.status} ${response.statusText}`;
+  }
+
+  return `${response.status} ${response.statusText}`;
+}
+
+function clearTokenCache() {
+  cachedToken = null;
+  tokenExpiresAt = 0;
+}
+
+async function getAccessToken(forceRefresh = false): Promise<string> {
   const now = Date.now();
 
-  if (cachedToken && now < tokenExpiresAt) {
+  if (!forceRefresh && cachedToken && now < tokenExpiresAt) {
     return cachedToken;
   }
 
-  const auth = Buffer.from(
-    `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`
-  ).toString("base64");
+  const { clientId, clientSecret } = getSpotifyCredentials();
 
-  const res = await fetch(TOKEN_URL, {
+  if (!clientId || !clientSecret) {
+    throw new Error(
+      "Spotify credentials are missing. Set SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET in Vercel.",
+    );
+  }
+
+  const auth = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
+
+  const response = await fetch(TOKEN_URL, {
     method: "POST",
     headers: {
       Authorization: `Basic ${auth}`,
@@ -30,42 +108,55 @@ async function getAccessToken(): Promise<string> {
     body: "grant_type=client_credentials",
   });
 
-  if (!res.ok) {
-    throw new Error("Spotify: error obteniendo access token");
+  if (!response.ok) {
+    const message = await parseSpotifyError(response);
+    throw new Error(`Spotify token request failed: ${message}`);
   }
 
-  const data = await res.json();
+  const data = (await response.json()) as TokenResponse;
 
   cachedToken = data.access_token;
-  tokenExpiresAt = now + data.expires_in * 1000 - 60_000;
+  tokenExpiresAt =
+    Date.now() + data.expires_in * 1000 - TOKEN_SAFETY_WINDOW_MS;
 
-  return cachedToken!;
+  return cachedToken;
 }
 
-// 🔥 PLAYLIST
-export async function getSpotifyPlaylist(playlistId: string) {
-
-  if (playlistCache.has(playlistId)) {
-    return playlistCache.get(playlistId);
-  }
-
+async function spotifyFetch<T>(path: string, retry = true): Promise<T> {
   const token = await getAccessToken();
 
-  const res = await fetch(`${API_URL}/playlists/${playlistId}`, {
+  const response = await fetch(`${API_URL}${path}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
-  if (!res.ok) {
-    throw new Error(`Spotify playlist ${playlistId} failed`);
+  if (response.status === 401 && retry) {
+    clearTokenCache();
+    await getAccessToken(true);
+    return spotifyFetch<T>(path, false);
   }
 
-  const data = await res.json();
+  if (!response.ok) {
+    const message = await parseSpotifyError(response);
+    throw new Error(`Spotify API request failed for ${path}: ${message}`);
+  }
 
-  const normalized = {
-    name: data.name,
-    description: data.description,
+  return (await response.json()) as T;
+}
+
+export async function getSpotifyPlaylist(
+  playlistId: string,
+): Promise<SpotifyPlaylist> {
+  if (playlistCache.has(playlistId)) {
+    return playlistCache.get(playlistId)!;
+  }
+
+  const data = await spotifyFetch<any>(`/playlists/${playlistId}`);
+
+  const normalized: SpotifyPlaylist = {
+    name: data.name ?? "",
+    description: data.description ?? "",
     images: data.images ?? [],
     external_urls: data.external_urls ?? {},
     tracks: {
@@ -81,70 +172,43 @@ export async function getSpotifyPlaylist(playlistId: string) {
   return normalized;
 }
 
-// 🔥 TRACK
-export async function getSpotifyTrack(trackId: string) {
-
-  const token = await getAccessToken();
-
-  const res = await fetch(`${API_URL}/tracks/${trackId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!res.ok) {
-    throw new Error("Spotify: error obteniendo track");
-  }
-
-  const data = await res.json();
+export async function getSpotifyTrack(trackId: string): Promise<SpotifyTrack> {
+  const data = await spotifyFetch<any>(`/tracks/${trackId}`);
 
   return {
-    title: data.name,
-    artists: data.artists.map((a: any) => a.name).join(", "),
-    releaseDate: data.album.release_date,
-    releaseDatePrecision: data.album.release_date_precision,
-    image: data.album.images?.[0]?.url ?? null,
-    url: data.external_urls.spotify,
-    type: data.album.album_type === "single" ? "single" : "album",
-    preview: data.preview_url,
+    title: data.name ?? "",
+    artists: data.artists?.map((artist: { name: string }) => artist.name).join(", ") ?? "",
+    releaseDate: data.album?.release_date ?? "",
+    releaseDatePrecision: data.album?.release_date_precision ?? "day",
+    image: data.album?.images?.[0]?.url ?? null,
+    url: data.external_urls?.spotify ?? "#",
+    type: data.album?.album_type === "single" ? "single" : "album",
+    preview: data.preview_url ?? null,
   };
 }
 
-// 🔥 ALBUM
-export async function getSpotifyAlbum(albumId: string) {
-
+export async function getSpotifyAlbum(albumId: string): Promise<SpotifyAlbum> {
   if (albumCache.has(albumId)) {
-    return albumCache.get(albumId);
+    return albumCache.get(albumId)!;
   }
 
-  const token = await getAccessToken();
+  const data = await spotifyFetch<any>(`/albums/${albumId}`);
 
-  const res = await fetch(`${API_URL}/albums/${albumId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!res.ok) {
-    throw new Error(`Spotify album ${albumId} error`);
-  }
-
-  const data = await res.json();
-
-  const normalized = {
-    id: data.id,
-    title: data.name,
-    artist: data.artists?.map((a: any) => a.name).join(", "),
-    releaseDate: data.release_date,
-    releasePrecision: data.release_date_precision,
+  const normalized: SpotifyAlbum = {
+    id: data.id ?? albumId,
+    title: data.name ?? "",
+    artist:
+      data.artists?.map((artist: { name: string }) => artist.name).join(", ") ?? "",
+    releaseDate: data.release_date ?? "",
+    releasePrecision: data.release_date_precision ?? "day",
     type: data.album_type === "album" ? "album" : "single",
     image: data.images?.[0]?.url ?? null,
     url: data.external_urls?.spotify ?? "#",
     tracks:
-      data.tracks?.items?.map((t: any) => ({
-        id: t.id,
-        title: t.name,
-        preview: t.preview_url,
+      data.tracks?.items?.map((track: any) => ({
+        id: track.id,
+        title: track.name,
+        preview: track.preview_url ?? null,
       })) ?? [],
   };
 

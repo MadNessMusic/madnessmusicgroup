@@ -11,7 +11,7 @@ export interface Props {
 
 const {
   title = "MadNess Music Group",
-  description = "Archivo curatorial de playlists y sonidos contemporáneos",
+  description = "Archivo curatorial de playlists y sonidos contemporaneos",
   image,
   url,
 } = Astro.props;
@@ -29,8 +29,6 @@ const ogImage = image
   : `${siteConfig.siteUrl}${siteConfig.ogImage}`;
 ---
 
-
-
 <!doctype html>
 <html lang="es">
   <head>
@@ -44,23 +42,19 @@ const ogImage = image
     <meta name="description" content={description} />
     <title>{fullTitle}</title>
 
-   <!-- Canonical -->
-<link rel="canonical" href={canonicalUrl.toString()} />
+    <link rel="canonical" href={canonicalUrl.toString()} />
 
-<!-- Open Graph -->
-<meta property="og:title" content={fullTitle} />
-<meta property="og:description" content={description} />
-<meta property="og:url" content={canonicalUrl.toString()} />
-<meta property="og:image" content={ogImage} />
-<meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl.toString()} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:type" content="website" />
 
-<!-- Twitter / X -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={fullTitle} />
-<meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -68,7 +62,6 @@ const ogImage = image
       rel="stylesheet"
     />
 
-    <!-- Dark mode (before paint) -->
     <script is:inline>
       const theme = (() => {
         if (localStorage.getItem("theme")) {
@@ -88,62 +81,8 @@ const ogImage = image
   <body class="bg-base-100 text-base-content">
     <slot />
 
-    <!-- i18n + Scroll Reveal -->
-    <script type="module">
-      import { translations } from "/src/i18n/translations.js";
-
-      function applyLanguage(lang) {
-        document.querySelectorAll("[data-i18n]").forEach((el) => {
-          const key = el.getAttribute("data-i18n");
-          if (key && translations[key]) {
-            el.textContent =
-              translations[key][lang] || translations[key]["es"];
-          }
-
-          // Placeholders (inputs / textarea)
-document
-  .querySelectorAll("[data-i18n-placeholder]")
-  .forEach((el) => {
-    const key = el.getAttribute("data-i18n-placeholder");
-    if (key && translations[key]) {
-      el.setAttribute(
-        "placeholder",
-        translations[key][lang] || translations[key]["es"]
-      );
-    }
-  });
-        });
-
-        document.querySelectorAll("[data-i18n-html]").forEach((el) => {
-          const key = el.getAttribute("data-i18n-html");
-          if (key && translations[key]) {
-            el.innerHTML =
-              translations[key][lang] || translations[key]["es"];
-          }
-        });
-
-        document.documentElement.lang = lang;
-        const label = document.getElementById("lang-label");
-        if (label) label.textContent = lang.toUpperCase();
-
-        localStorage.setItem("lang", lang);
-      }
-
+    <script is:inline>
       document.addEventListener("DOMContentLoaded", () => {
-        const savedLang = localStorage.getItem("lang") || "es";
-        applyLanguage(savedLang);
-
-        const toggle = document.getElementById("lang-toggle");
-        if (toggle) {
-          toggle.addEventListener("click", () => {
-            const next =
-              (localStorage.getItem("lang") || "es") === "es"
-                ? "en"
-                : "es";
-            applyLanguage(next);
-          });
-        }
-
         const revealElements = document.querySelectorAll(
           ".reveal, .reveal-left, .reveal-right, .reveal-scale",
         );

@@ -7,13 +7,12 @@
  */
 
 export const siteConfig = {
-
   /** Main brand name (navbar / hero / footer) */
   siteName: "MadNess Music Group",
 
   /** SEO description */
   siteDescription:
-    "MadNess Music Group es una disquera independiente con sede en Saltillo, Coahuila, México. Fundada en 2026, se dedica a descubrir y promover talento musical emergente en distintos géneros. Nuestra misión es apoyar a los artistas en su desarrollo creativo y llevar su música a audiencias globales, ofreciendo una plataforma moderna para la distribución y promoción musical.",
+    "MadNess Music Group es una disquera independiente con sede en Saltillo, Coahuila, Mexico. Fundada en 2026, se dedica a descubrir y promover talento musical emergente en distintos generos. Nuestra mision es apoyar a los artistas en su desarrollo creativo y llevar su musica a audiencias globales, ofreciendo una plataforma moderna para la distribucion y promocion musical.",
 
   /** Canonical site URL */
   siteUrl: "https://www.madnessmusicgroup.com",
@@ -24,22 +23,22 @@ export const siteConfig = {
   /** Headquarters / footer address */
   address: {
     line1: "Pavo Real",
-    line2: "Saltillo, Coahuila, México",
+    line2: "Saltillo, Coahuila, Mexico",
   },
 
   /** Footer copyright */
-  copyright: `© ${new Date().getFullYear()} MadNess Music Group`,
+  copyright: `(c) ${new Date().getFullYear()} MadNess Music Group`,
 
   /** Footer disclaimer */
   disclaimer:
-    "Este sitio funciona como una plataforma editorial y de promoción musical.",
+    "Este sitio funciona como una plataforma editorial y de promocion musical.",
 
   /** Navigation links */
   navLinks: [
-    { href: "/", label: "Inicio", i18nKey: "nav.home" },
-    { href: "#highlights", label: "Destacados", i18nKey: "nav.highlights" },
-    { href: "/archive", label: "Archivo", i18nKey: "nav.archive" },
-    { href: "/playlists", label: "Playlists", i18nKey: "nav.playlists" },
-    { href: "#contact", label: "Contacto", i18nKey: "nav.contact" },
+    { href: "/", label: "Inicio" },
+    { href: "#highlights", label: "Destacados" },
+    { href: "/archive", label: "Archivo" },
+    { href: "/playlists", label: "Playlists" },
+    { href: "#contact", label: "Contacto" },
   ],
 };

@@ -5,162 +5,118 @@ import type { Playlist } from "../data/playlists";
 import { getSpotifyPlaylist } from "../lib/spotify";
 import Navbar from "@/components/Navbar.astro";
 
-async function enrich(p: Playlist): Promise<Playlist> {
-
-  if (!p.spotifyId) {
+async function enrich(playlist: Playlist): Promise<Playlist> {
+  if (!playlist.spotifyId) {
     return {
-      ...p,
-      image: p.cover
+      ...playlist,
+      image: playlist.cover,
     };
   }
 
   try {
-
-    const s = await getSpotifyPlaylist(p.spotifyId);
-
-    return {
-      ...p,
-      title: s.name ?? p.title,
-      description: s.description ?? p.description,
-      image: s.images?.[0]?.url ?? p.cover
-    };
-
-  } catch {
+    const spotify = await getSpotifyPlaylist(playlist.spotifyId);
 
     return {
-      ...p,
-      image: p.cover
+      ...playlist,
+      title: spotify.name ?? playlist.title,
+      description: spotify.description ?? playlist.description,
+      image: spotify.images?.[0]?.url ?? playlist.cover,
     };
+  } catch (error) {
+    console.error("Spotify playlist fallback:", playlist.spotifyId, error);
 
+    return {
+      ...playlist,
+      image: playlist.cover,
+    };
   }
-
 }
 
 const enriched = await Promise.all(playlists.map(enrich));
 ---
-<Layout />
-<Navbar />
 
-<section class="max-w-7xl mx-auto px-6 py-24">
+<Layout>
+  <Navbar />
 
-<h1
-class="text-5xl font-anton mb-14"
-data-i18n="playlists.title">
-</h1>
+  <section class="max-w-7xl mx-auto px-6 py-24">
+    <h1 class="text-5xl font-anton mb-14">
+      Playlists curadas
+    </h1>
 
-<input
-id="search"
-placeholder="Search playlists..."
-data-i18n-placeholder="playlists.search"
-class="w-full md:w-96 bg-neutral-900 px-5 py-3 rounded-xl mb-10"
-/>
+    <input
+      id="search"
+      placeholder="Buscar playlists..."
+      class="w-full md:w-96 bg-neutral-900 px-5 py-3 rounded-xl mb-10"
+    />
 
-<select
-id="genreFilter"
-class="bg-neutral-900 px-4 py-3 rounded-xl mb-10"
->
-<option
-value=""
-data-i18n="playlists.genres.all">
-</option>
-</select>
+    <select id="genreFilter" class="bg-neutral-900 px-4 py-3 rounded-xl mb-10">
+      <option value="">Todos los generos</option>
+    </select>
 
-<div
-id="grid"
-class="grid grid-cols-2 md:grid-cols-4 gap-8"
-></div>
+    <div id="grid" class="grid grid-cols-2 md:grid-cols-4 gap-8"></div>
+  </section>
 
-</section>
+  <script define:vars={{ playlists: enriched }}>
+    const grid = document.getElementById("grid");
+    const search = document.getElementById("search");
+    const genreFilter = document.getElementById("genreFilter");
 
-<script define:vars={{ playlists: enriched }}>
+    let filtered = playlists;
 
-const grid = document.getElementById("grid")
-const search = document.getElementById("search")
-const genreFilter = document.getElementById("genreFilter")
+    const genres = [...new Set(playlists.flatMap((p) => p.genre ?? []))];
 
-let filtered = playlists
+    genres.forEach((genre) => {
+      const option = document.createElement("option");
+      option.value = genre;
+      option.textContent = genre;
+      genreFilter.appendChild(option);
+    });
 
-// detectar géneros
-const genres = [...new Set(
-playlists.flatMap(p => p.genre ?? [])
-)]
+    function render() {
+      grid.innerHTML = "";
 
-genres.forEach(g => {
+      filtered.forEach((playlist) => {
+        const el = document.createElement("a");
 
-const o = document.createElement("option")
+        el.href = `/playlists/${playlist.id}`;
+        el.className = "group";
 
-o.value = g
-o.textContent = g
+        el.innerHTML = `
+          <div class="aspect-square overflow-hidden rounded-xl">
+            <img
+              src="${playlist.image}"
+              class="w-full h-full object-cover group-hover:scale-105 transition"
+            />
+          </div>
 
-genreFilter.appendChild(o)
+          <h2 class="font-anton mt-4">${playlist.title}</h2>
+          <p class="text-sm opacity-60">${playlist.description}</p>
+        `;
 
-})
+        grid.appendChild(el);
+      });
+    }
 
-// render
-function render(){
+    function applyFilters() {
+      const query = search.value.toLowerCase();
+      const genre = genreFilter.value;
 
-grid.innerHTML = ""
+      filtered = playlists.filter((playlist) => {
+        const matchSearch =
+          playlist.title.toLowerCase().includes(query) ||
+          playlist.description.toLowerCase().includes(query);
 
-filtered.forEach(p => {
+        const matchGenre = !genre || (playlist.genre ?? []).includes(genre);
 
-const el = document.createElement("a")
+        return matchSearch && matchGenre;
+      });
 
-el.href = "/playlists/" + p.id
-el.className = "group"
+      render();
+    }
 
-el.innerHTML = `
+    search.addEventListener("input", applyFilters);
+    genreFilter.addEventListener("change", applyFilters);
 
-<div class="aspect-square overflow-hidden rounded-xl">
-
-<img
-src="${p.image}"
-class="w-full h-full object-cover group-hover:scale-105 transition"
-/>
-
-</div>
-
-<h2 class="font-anton mt-4">
-${p.title}
-</h2>
-
-<p class="text-sm opacity-60">
-${p.description}
-</p>
-
-`
-
-grid.appendChild(el)
-
-})
-
-}
-
-// filtros
-function applyFilters(){
-
-const q = search.value.toLowerCase()
-const g = genreFilter.value
-
-filtered = playlists.filter(p => {
-
-const matchSearch =
-p.title.toLowerCase().includes(q) ||
-p.description.toLowerCase().includes(q)
-
-const matchGenre =
-!g || (p.genre ?? []).includes(g)
-
-return matchSearch && matchGenre
-
-})
-
-render()
-
-}
-
-search.addEventListener("input", applyFilters)
-genreFilter.addEventListener("change", applyFilters)
-
-render()
-
-</script>
+    render();
+  </script>
+</Layout>

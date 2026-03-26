@@ -1,25 +1,15 @@
 ---
 import DarkModeToggle from "./DarkModeToggle.astro";
-import LangToggle from "./LangToggle.astro";
-
 import logoDark from "../assets/MadNess Music Group - Logo White.png";
 import logoLight from "../assets/MadNess Music Group - Logo Black.png";
-
 import { siteConfig } from "../data/siteConfig";
 ---
 
 <header class="glass-nav w-full">
-
   <div class="max-w-350 mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
-
-    <!-- LEFT -->
     <div class="flex items-center gap-4">
-
       <a href="/" class="flex items-center gap-4 group">
-
-        <!-- LOGO -->
         <div class="logo-nav-wrap">
-
           <img
             src={logoDark.src}
             alt="MadNess Music Group logo"
@@ -33,31 +23,18 @@ import { siteConfig } from "../data/siteConfig";
             class="logo-nav logo-nav-light"
             loading="eager"
           />
-
         </div>
 
-        <!-- TEXTO -->
         <div class="flex flex-col leading-none">
-
           <span class="font-heading text-lg sm:text-xl tracking-tight">
             {siteConfig.siteName}
           </span>
-
         </div>
-
       </a>
-
     </div>
 
-    <!-- RIGHT -->
     <div class="flex items-center gap-3">
-
-      <LangToggle />
-
       <DarkModeToggle />
-
     </div>
-
   </div>
-
 </header>

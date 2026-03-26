@@ -4,14 +4,13 @@ import { playlists } from "../data/playlists";
 import { getSpotifyPlaylist } from "../lib/spotify";
 
 async function getPlaylistData(item: Playlist): Promise<Playlist> {
-  
   if (!item.spotifyId) {
     return {
       ...item,
       image: item.cover,
       spotifyUrl: item.spotifyUrl ?? "#",
       trackCount: 0,
-      followers: 0
+      followers: 0,
     };
   }
 
@@ -24,192 +23,157 @@ async function getPlaylistData(item: Playlist): Promise<Playlist> {
       description: spotify.description || item.description,
       image: spotify.images?.[0]?.url || item.cover,
       spotifyUrl: spotify.external_urls?.spotify || item.spotifyUrl,
-
       trackCount: spotify.tracks?.total ?? 0,
-      followers: spotify.followers?.total ?? 0
+      followers: spotify.followers?.total ?? 0,
     };
-
-  } catch (e) {
-    console.error("Spotify error:", item.spotifyId);
-    
+  } catch (error) {
+    console.error("Spotify playlist fallback:", item.spotifyId, error);
 
     return {
       ...item,
       image: item.cover,
       spotifyUrl: item.spotifyUrl ?? "#",
       trackCount: 0,
-      followers: 0
+      followers: 0,
     };
-    
   }
-  
 }
 
+const featuredRaw: Playlist[] = playlists.filter((p) => p.status === "featured");
+const evergreenRaw: Playlist[] = playlists.filter((p) => p.status === "evergreen");
 
-
-// filtros
-const featuredRaw: Playlist[] = playlists.filter(p => p.status === "featured");
-const evergreenRaw: Playlist[] = playlists.filter(p => p.status === "evergreen");
-const archiveRaw: Playlist[] = playlists.filter(p => p.status === "archive");
-
-// enriquecemos
 const featured: Playlist[] = await Promise.all(featuredRaw.map(getPlaylistData));
 const evergreen: Playlist[] = await Promise.all(evergreenRaw.map(getPlaylistData));
-const archive: Playlist[] = await Promise.all(archiveRaw.map(getPlaylistData));
-
 const evergreenLimited = evergreen.slice(0, 4);
-
 ---
-
 
 <div class="mx-auto px-6 mb-20 reveal">
   <div class="flex items-center gap-10">
     <span class="block w-30 h-px bg-white/10"></span>
-    <span class="text-2xl tracking-[0.7em] uppercase opacity-20"
-    data-i18n="section.playlists">
-      playlists
+    <span class="text-2xl tracking-[0.7em] uppercase opacity-20">
+      PLAYLISTS
     </span>
     <span class="flex-1 h-px bg-white/10"></span>
   </div>
 </div>
 
-
 <section id="playlists" class="py-10">
-
-  <!-- HEADER EDITORIAL -->
   <div class="max-w-3xl mb-24">
-
-<h2
-class="text-5xl font-anton mb-8"
-data-i18n="playlists.title">
-</h2>
-<p
-data-i18n="playlists.intro"
-class="opacity-60 text-1xl leading-relaxed">
-</p>
-
-    
+    <h2 class="text-5xl font-anton mb-8">
+      Playlists curadas
+    </h2>
+    <p class="opacity-60 text-1xl leading-relaxed">
+      Explora nuestras playlists curadas, disenadas para acompanar cada momento
+      del dia con la mejor musica.
+    </p>
   </div>
 
-<!-- FEATURED -->
-<div class="space-y-20 md:space-y-28 mb-40">
-  {featured.map((item, i) => {
-    const isEven = i % 2 === 1;
+  <div class="space-y-20 md:space-y-28 mb-40">
+    {featured.map((item, i) => {
+      const isEven = i % 2 === 1;
 
-    return (
+      return (
+        <a
+          href={`/playlists/${item.id}`}
+          class={`block group reveal delay-${(i + 1) * 100}`}
+        >
+          <div class="grid grid-cols-12 gap-6 md:gap-12 items-start md:items-center">
+            <div
+              class={`
+                col-span-12 md:col-span-4
+                overflow-hidden rounded-xl
+                ${isEven ? "md:col-start-9" : ""}
+              `}
+            >
+              <img
+                src={item.image}
+                alt={item.title}
+                class="w-full aspect-4/5 md:aspect-square object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+              />
+            </div>
+
+            <div
+              class={`
+                col-span-12 md:col-span-8
+                ${isEven ? "md:col-start-1 md:row-start-1" : ""}
+              `}
+            >
+              <h4 class="font-anton text-xl xl:text-2xl leading-1.1 mt-4">
+                {item.title}
+              </h4>
+
+              <span class="block w-16 h-px bg-white/20 mb-6"></span>
+
+              <p class="opacity-55 text-base md:text-lg max-w-md mb-8 md:mb-10">
+                {item.description}
+              </p>
+
+              <p class="opacity-40 text-xs tracking-widest uppercase mt-2">
+                • {(item.followers ?? 0).toLocaleString()} guardados
+              </p>
+
+              <span
+                class="
+                  inline-flex items-center gap-4
+                  tracking-widest uppercase
+                  opacity-40
+                  group-hover:opacity-100
+                  transition
+                "
+              >
+                Ver playlist →
+              </span>
+            </div>
+          </div>
+        </a>
+      );
+    })}
+  </div>
+
+  <div
+    class="
+      grid
+      grid-cols-2
+      sm:grid-cols-2
+      md:grid-cols-3
+      xl:grid-cols-4
+      gap-14
+      xl:gap-16
+      evergreen-container
+    "
+  >
+    {evergreenLimited.map((item, i) => (
       <a
         href={`/playlists/${item.id}`}
-        class={`block group reveal delay-${(i + 1) * 100}`}
+        rel="noopener noreferrer"
+        class={`group reveal delay-${(i + 1) * 100}`}
       >
-        <div class="grid grid-cols-12 gap-6 md:gap-12 items-start md:items-center">
+        <div class="relative w-full aspect-square overflow-hidden rounded-2xl bg-neutral-900">
+          <img
+            src={item.image}
+            alt={item.title}
+            class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+          />
 
-          <!-- IMAGEN -->
-          <div
-            class={`
-              col-span-12 md:col-span-4
-              overflow-hidden rounded-xl
-              ${isEven ? "md:col-start-9" : ""}
-            `}
-          >
-            <img
-  src={item.image}
-  alt={item.title}
-  class="w-full aspect-4/5 md:aspect-square object-cover transition-transform duration-700 group-hover:scale-[1.05]"
-/>
+          <div class="absolute inset-0 bg-black/45 opacity-0 group-hover:opacity-100 transition flex items-end p-6">
+            <span class="tracking-widest uppercase opacity-40 group-hover:opacity-100 transition">
+              Ver playlist →
+            </span>
           </div>
-
-          <!-- TEXTO -->
-          <div
-            class={`
-              col-span-12 md:col-span-8
-              ${isEven ? "md:col-start-1 md:row-start-1" : ""}
-            `}
-          >
-           <h4 class="font-anton text-xl xl:text-2xl leading-1.1 mt-4">
-              {item.title}
-          </h4>
-
-          
-
-            <span class="block w-16 h-px bg-white/20 mb-6"></span>
-
-            <p class="opacity-55 text-base md:text-lg max-w-md mb-8 md:mb-10">
-              {item.description}
-            </p>
-
-            <p class="opacity-40 text-xs tracking-widest uppercase mt-2">
-  • {(item.followers ?? 0).toLocaleString()} <span data-i18n="playlist.saves"></span>
-</p>
-
-            <span
-              data-i18n="playlist.view"
-              class="
-                inline-flex items-center gap-4
-                tracking-widest uppercase
-                opacity-40
-                group-hover:opacity-100
-                transition
-              "
-            ></span>
-          </div>
-
         </div>
+
+        <h4 class="font-anton text-xl xl:text-2xl leading-1.1 mt-4">{item.title}</h4>
+        <p class="opacity-50 text-sm mt-2 leading-relaxed max-w-xs">{item.description}</p>
+        <p class="opacity-40 text-xs tracking-widest uppercase mt-2">
+          • {(item.followers ?? 0).toLocaleString()} guardados
+        </p>
       </a>
-    );
-  })}
-</div>
-
-  <!-- BLOQUE EXPLORAR -->
-  <div
-  class="
-    grid
-    grid-cols-2
-    sm:grid-cols-2
-    md:grid-cols-3
-    xl:grid-cols-4
-    gap-14
-    xl:gap-16
-    evergreen-container
-  "
->
-
-  {evergreenLimited.map((item, i) => (
-  <a
-    href={`/playlists/${item.id}`}
-    rel="noopener noreferrer"
-    class={`group reveal delay-${(i + 1) * 100}`}
-  >
-    <!-- COVER -->
-    <div class="relative w-full aspect-square overflow-hidden rounded-2xl bg-neutral-900">
-      <img
-        src={item.image}
-        alt={item.title}
-        class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-      />
-
-      <!-- OVERLAY -->
-      <div class="absolute inset-0 bg-black/45 opacity-0 group-hover:opacity-100 transition flex items-end p-6">
-        <span data-i18n="playlist.view" class="tracking-widest uppercase opacity-40 group-hover:opacity-100 transition"></span>
-      </div>
-    </div>
-
-    <!-- TEXT -->
-    <h4 class="font-anton text-xl xl:text-2xl leading-1.1 mt-4">{item.title}</h4>
-    <p class="opacity-50 text-sm mt-2 leading-relaxed max-w-xs">{item.description}</p>
-    <p class="opacity-40 text-xs tracking-widest uppercase mt-2">
-      • {(item.followers ?? 0).toLocaleString()} <span data-i18n="playlist.saves"></span>
-    </p>
-  </a>
-))}
-</div>
-
-  <!-- CTA FINAL -->
-  <div class="text-center mt-32 reveal mb-30">
-    <a
-  href="/playlists"
-  data-i18n="playlists.cta"
-  class="btn-tactical px-12 py-4"
-></a>
+    ))}
   </div>
 
+  <div class="text-center mt-32 reveal mb-30">
+    <a href="/playlists" class="btn-tactical px-12 py-4">
+      Ver catalogo completo →
+    </a>
+  </div>
 </section>

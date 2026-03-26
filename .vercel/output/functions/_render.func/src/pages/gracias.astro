@@ -1,0 +1,28 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SlugNavbar from "@/components/SlugNavbar.astro";
+import Footer from "@/components/Footer.astro";
+---
+
+<Layout title="Gracias">
+  <SlugNavbar />
+
+  <section class="min-h-screen flex items-center justify-center text-center px-6">
+    <div class="max-w-xl">
+      <h1 class="font-heading text-5xl md:text-6xl mb-6">
+        Mensaje enviado
+      </h1>
+
+      <p class="opacity-70 mb-10 leading-relaxed">
+        Gracias por escribirnos. Hemos recibido tu mensaje y te responderemos
+        pronto.
+      </p>
+
+      <a href="/" class="btn-tactical inline-flex items-center gap-2">
+        Regresar al sitio
+      </a>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
