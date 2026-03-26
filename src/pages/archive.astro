@@ -1,4 +1,6 @@
 ---
+export const revalidate = 60;
+
 import { releases } from "../data/releases";
 import { getSpotifyAlbum } from "../lib/spotify";
 import Layout from "../layouts/Layout.astro";
@@ -88,14 +90,14 @@ const allReleases: ReleaseView[] = (
       />
 
       <select id="yearFilter" class="bg-neutral-900 px-4 py-3 rounded-xl">
-        <option value="">Todos los anos</option>
+        <option value="">Todos los años</option>
       </select>
 
       <select id="typeFilter" class="bg-neutral-900 px-4 py-3 rounded-xl">
         <option value="">Todos los tipos</option>
         <option value="Single">Single</option>
         <option value="EP">EP</option>
-        <option value="Album">Album</option>
+        <option value="Album">Álbum</option>
       </select>
     </div>
 
@@ -117,6 +119,26 @@ const allReleases: ReleaseView[] = (
       </button>
     </div>
   </section>
+
+  <div id="shareModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
+  <div class="bg-neutral-900 p-6 rounded-xl max-w-md w-full text-center relative">
+
+    <button id="closeModal" class="absolute top-3 right-3 text-white/50">✕</button>
+
+    <img id="shareImage" class="w-full rounded-lg mb-4" />
+
+    <div class="flex gap-3 justify-center">
+      <button id="downloadImage" class="px-4 py-2 border border-white/30">
+        Descargar
+      </button>
+
+      <a id="openSpotify" target="_blank" class="px-4 py-2 border border-white/30">
+        Spotify
+      </a>
+    </div>
+
+  </div>
+</div>
 
   <script define:vars={{ allReleases }}>
     const releasesData = allReleases;
@@ -219,5 +241,86 @@ const allReleases: ReleaseView[] = (
     };
 
     render();
+
+    async function generateShareImage(release) {
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = 1080;
+  canvas.height = 1080;
+
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.src = release.image;
+
+  return new Promise((resolve) => {
+    img.onload = () => {
+      // fondo blur
+      ctx.filter = "blur(40px)";
+      ctx.drawImage(img, 0, 0, 1080, 1080);
+
+      ctx.filter = "none";
+
+      // overlay oscuro
+      ctx.fillStyle = "rgba(0,0,0,0.6)";
+      ctx.fillRect(0, 0, 1080, 1080);
+
+      // cover centrado
+      const size = 600;
+      const x = (1080 - size) / 2;
+      const y = 120;
+
+      ctx.drawImage(img, x, y, size, size);
+
+      // texto
+      ctx.fillStyle = "white";
+      ctx.textAlign = "center";
+
+      ctx.font = "bold 60px sans-serif";
+      ctx.fillText(release.title, 540, 800);
+
+      ctx.font = "40px sans-serif";
+      ctx.fillText(release.artist, 540, 860);
+
+      // logo (simple texto por ahora)
+      ctx.font = "30px sans-serif";
+      ctx.fillStyle = "rgba(255,255,255,0.6)";
+      ctx.fillText("MadNess Music Group", 540, 1000);
+
+      resolve(canvas.toDataURL());
+    };
+  });
+}
+
+const modal = document.getElementById("shareModal");
+const shareImg = document.getElementById("shareImage");
+const downloadBtn = document.getElementById("downloadImage");
+const spotifyBtn = document.getElementById("openSpotify");
+
+document.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".shareBtn");
+  if (!btn) return;
+
+  const card = btn.closest("div");
+  const index = [...grid.children].indexOf(card.parentElement);
+  const release = filtered[index];
+
+  const imgData = await generateShareImage(release);
+
+  shareImg.src = imgData;
+  spotifyBtn.href = release.url;
+
+  modal.classList.remove("hidden");
+});
+
+downloadBtn.addEventListener("click", () => {
+  const link = document.createElement("a");
+  link.href = shareImg.src;
+  link.download = "madness-share.png";
+  link.click();
+});
+document.getElementById("closeModal").onclick = () => {
+  modal.classList.add("hidden");
+};
   </script>
 </Layout>

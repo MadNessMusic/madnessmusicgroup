@@ -31,7 +31,7 @@ export const siteConfig = {
 
   /** Footer disclaimer */
   disclaimer:
-    "Este sitio funciona como una plataforma editorial y de promocion musical.",
+    "Este sitio funciona como una plataforma editorial y de promoción musical.",
 
   /** Navigation links */
   navLinks: [

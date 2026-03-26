@@ -1,4 +1,6 @@
 ---
+export const revalidate = 60;
+
 import Layout from "../layouts/Layout.astro";
 import { playlists } from "../data/playlists";
 import type { Playlist } from "../data/playlists";
@@ -50,7 +52,7 @@ const enriched = await Promise.all(playlists.map(enrich));
     />
 
     <select id="genreFilter" class="bg-neutral-900 px-4 py-3 rounded-xl mb-10">
-      <option value="">Todos los generos</option>
+      <option value="">Todos los géneros</option>
     </select>
 
     <div id="grid" class="grid grid-cols-2 md:grid-cols-4 gap-8"></div>

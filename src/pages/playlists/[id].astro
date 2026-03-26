@@ -1,8 +1,11 @@
 ---
+export const revalidate = 60;
+
 import Layout from "../../layouts/Layout.astro";
 import SlugNavbar from "../../components/SlugNavbar.astro";
 import { getSpotifyPlaylist } from "../../lib/spotify";
 import { playlists } from "../../data/playlists";
+
 
 const { id } = Astro.params;
 

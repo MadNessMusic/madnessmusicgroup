@@ -1,4 +1,6 @@
 ---
+export const revalidate = 60;
+
 import type { Playlist } from "../data/playlists";
 import { playlists } from "../data/playlists";
 import { getSpotifyPlaylist } from "../lib/spotify";
@@ -63,8 +65,8 @@ const evergreenLimited = evergreen.slice(0, 4);
       Playlists curadas
     </h2>
     <p class="opacity-60 text-1xl leading-relaxed">
-      Explora nuestras playlists curadas, disenadas para acompanar cada momento
-      del dia con la mejor musica.
+      Explora nuestras playlists curadas, diseñadas para acompañar cada momento
+      del dia con la mejor música.
     </p>
   </div>
 
@@ -173,7 +175,7 @@ const evergreenLimited = evergreen.slice(0, 4);
 
   <div class="text-center mt-32 reveal mb-30">
     <a href="/playlists" class="btn-tactical px-12 py-4">
-      Ver catalogo completo →
+      Ver catálogo completo →
     </a>
   </div>
 </section>

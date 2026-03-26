@@ -190,7 +190,8 @@ export async function getSpotifyAlbum(albumId: string): Promise<SpotifyAlbum> {
     return albumCache.get(albumId)!;
   }
 
-  const data = await spotifyFetch<any>(`/albums/${albumId}`);
+  const data = await spotifyFetch<any>(`/albums/${albumId}`)
+  ;
 
   const normalized: SpotifyAlbum = {
     id: data.id ?? albumId,
