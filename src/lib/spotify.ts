@@ -50,10 +50,8 @@ type TokenResponse = {
 };
 
 function getSpotifyCredentials() {
-  const clientId =
-    process.env.SPOTIFY_CLIENT_ID ?? import.meta.env.SPOTIFY_CLIENT_ID;
-  const clientSecret =
-    process.env.SPOTIFY_CLIENT_SECRET ?? import.meta.env.SPOTIFY_CLIENT_SECRET;
+  const clientId = process.env.SPOTIFY_CLIENT_ID;
+  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 
   return { clientId, clientSecret };
 }

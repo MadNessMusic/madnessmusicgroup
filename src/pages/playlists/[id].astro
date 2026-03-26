@@ -4,14 +4,13 @@ import SlugNavbar from "../../components/SlugNavbar.astro";
 import { getSpotifyPlaylist } from "../../lib/spotify";
 import { playlists } from "../../data/playlists";
 
-export function getStaticPaths() {
-  return playlists.map((playlist) => ({
-    params: { id: playlist.id },
-    props: { playlist },
-  }));
-}
+const { id } = Astro.params;
 
-const { playlist } = Astro.props;
+const playlist = playlists.find((p) => p.id === id);
+
+if (!playlist) {
+  throw new Response("Not found", { status: 404 });
+}
 
 let spotifyData = null;
 
@@ -27,7 +26,9 @@ const title = spotifyData?.name ?? playlist.title;
 const description = spotifyData?.description || playlist.description;
 const spotifyUrl =
   spotifyData?.external_urls?.spotify ??
-  `https://open.spotify.com/playlist/${playlist.spotifyId}`;
+  (playlist.spotifyId
+    ? `https://open.spotify.com/playlist/${playlist.spotifyId}`
+    : "#");
 
 const seoTitle = playlist.seo?.title ?? `${title} | MadNess Music Group`;
 const seoDescription = playlist.seo?.description ?? description;

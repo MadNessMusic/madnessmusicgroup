@@ -7,13 +7,16 @@ import { p as playlists } from '../../chunks/playlists_Bt-MSk8A.mjs';
 export { renderers } from '../../renderers.mjs';
 
 const $$Astro = createAstro();
-const prerender = false;
+function getStaticPaths() {
+  return playlists.map((playlist) => ({
+    params: { id: playlist.id },
+    props: { playlist }
+  }));
+}
 const $$id = createComponent(async ($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
   Astro2.self = $$id;
-  const { id } = Astro2.params;
-  const playlist = playlists.find((item) => item.id === id);
-  if (!playlist) throw new Error("Playlist no encontrada");
+  const { playlist } = Astro2.props;
   let spotifyData = null;
   if (playlist.spotifyId) {
     try {
@@ -48,7 +51,7 @@ const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
   default: $$id,
   file: $$file,
-  prerender,
+  getStaticPaths,
   url: $$url
 }, Symbol.toStringTag, { value: 'Module' }));
 
