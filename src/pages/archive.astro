@@ -216,12 +216,21 @@ const allReleases: ReleaseView[] = (await fetchReleasesInBatches()).sort(
 
         el.innerHTML = `
           <a href="${release.url}" target="_blank" class="group relative block">
-  <img src="${release.image}" class="w-full aspect-square object-cover rounded-xl"/>
+  <img src="${release.image}" class="w-full aspect-square object-cover rounded-xl group-hover:scale-105 transition duration-500"/>
 
-  <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-4">
-    <button class="playBtn text-white text-sm">Escuchar</button>
-    <button class="shareBtn text-white text-sm">Compartir</button>
-  </div>
+<div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 
+bg-gradient-to-t from-black/70 via-black/20 to-transparent 
+flex items-center justify-center gap-4">
+
+  <button class="playBtn bg-white text-black px-4 py-2 rounded-full text-sm font-semibold hover:scale-105 transition">
+    ▶ Escuchar
+  </button>
+
+  <button class="shareBtn bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm text-white hover:bg-white/30 transition">
+    Compartir
+  </button>
+
+</div>
 
   <p class="mt-2 font-bold">${release.title}</p>
   <p class="text-sm opacity-60">${release.artist}</p>
