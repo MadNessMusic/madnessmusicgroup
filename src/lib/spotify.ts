@@ -3,7 +3,10 @@ const API_URL = "https://api.spotify.com/v1";
 const TOKEN_SAFETY_WINDOW_MS = 60_000;
 
 const playlistCache = new Map<string, SpotifyPlaylist>();
-const albumCache = new Map<string, SpotifyAlbum>();
+const albumCache = new Map<
+  string,
+  { data: SpotifyAlbum; expires: number }
+>();
 
 let cachedToken: string | null = null;
 let tokenExpiresAt = 0;
@@ -26,22 +29,6 @@ type SpotifyAlbum = {
   type: "single" | "album";
   image: string | null;
   url: string;
-  tracks: {
-    id: string;
-    title: string;
-    preview: string | null;
-  }[];
-};
-
-type SpotifyTrack = {
-  title: string;
-  artists: string;
-  releaseDate: string;
-  releaseDatePrecision: string;
-  image: string | null;
-  url: string;
-  type: "single" | "album";
-  preview: string | null;
 };
 
 type TokenResponse = {
@@ -53,13 +40,7 @@ function getSpotifyCredentials() {
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 
-  console.log("ENV CHECK:", {
-  id: process.env.SPOTIFY_CLIENT_ID,
-  secret: process.env.SPOTIFY_CLIENT_SECRET ? "OK" : "MISSING"
-});
-
   return { clientId, clientSecret };
-  
 }
 
 async function parseSpotifyError(response: Response) {
@@ -87,7 +68,6 @@ function clearTokenCache() {
 }
 
 async function getAccessToken(forceRefresh = false): Promise<string> {
-  
   const now = Date.now();
 
   if (!forceRefresh && cachedToken && now < tokenExpiresAt) {
@@ -136,6 +116,17 @@ async function spotifyFetch<T>(path: string, retry = true): Promise<T> {
     },
   });
 
+  // 🔥 RATE LIMIT FIX
+  if (response.status === 429 && retry) {
+    const retryAfter = Number(response.headers.get("retry-after") ?? "1");
+
+    console.warn(`Spotify rate limit. Retrying in ${retryAfter}s`);
+
+    await new Promise((r) => setTimeout(r, retryAfter * 1000));
+
+    return spotifyFetch<T>(path, false);
+  }
+
   if (response.status === 401 && retry) {
     clearTokenCache();
     await getAccessToken(true);
@@ -150,6 +141,7 @@ async function spotifyFetch<T>(path: string, retry = true): Promise<T> {
   return (await response.json()) as T;
 }
 
+// PLAYLIST
 export async function getSpotifyPlaylist(
   playlistId: string,
 ): Promise<SpotifyPlaylist> {
@@ -177,48 +169,33 @@ export async function getSpotifyPlaylist(
   return normalized;
 }
 
-export async function getSpotifyTrack(trackId: string): Promise<SpotifyTrack> {
-  const data = await spotifyFetch<any>(`/tracks/${trackId}`);
-
-  return {
-    title: data.name ?? "",
-    artists: data.artists?.map((artist: { name: string }) => artist.name).join(", ") ?? "",
-    releaseDate: data.album?.release_date ?? "",
-    releaseDatePrecision: data.album?.release_date_precision ?? "day",
-    image: data.album?.images?.[0]?.url ?? null,
-    url: data.external_urls?.spotify ?? "#",
-    type: data.album?.album_type === "single" ? "single" : "album",
-    preview: data.preview_url ?? null,
-  };
-}
-
+// ALBUM (SIN TRACKS)
 export async function getSpotifyAlbum(albumId: string): Promise<SpotifyAlbum> {
-  if (albumCache.has(albumId)) {
-    return albumCache.get(albumId)!;
+  const cached = albumCache.get(albumId);
+
+  if (cached && Date.now() < cached.expires) {
+    return cached.data;
   }
 
-  const data = await spotifyFetch<any>(`/albums/${albumId}`)
-  ;
+  const data = await spotifyFetch<any>(`/albums/${albumId}`);
 
   const normalized: SpotifyAlbum = {
     id: data.id ?? albumId,
     title: data.name ?? "",
     artist:
-      data.artists?.map((artist: { name: string }) => artist.name).join(", ") ?? "",
+      data.artists?.map((artist: { name: string }) => artist.name).join(", ") ??
+      "",
     releaseDate: data.release_date ?? "",
     releasePrecision: data.release_date_precision ?? "day",
     type: data.album_type === "album" ? "album" : "single",
     image: data.images?.[0]?.url ?? null,
     url: data.external_urls?.spotify ?? "#",
-    tracks:
-      data.tracks?.items?.map((track: any) => ({
-        id: track.id,
-        title: track.name,
-        preview: track.preview_url ?? null,
-      })) ?? [],
   };
 
-  albumCache.set(albumId, normalized);
+  albumCache.set(albumId, {
+    data: normalized,
+    expires: Date.now() + 1000 * 60 * 10, // 10 min cache
+  });
 
   return normalized;
 }
