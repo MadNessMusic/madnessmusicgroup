@@ -64,7 +64,20 @@ async function getReleaseData(item: {
   try {
     const album = await getSpotifyAlbum(item.spotifyAlbumId);
 
-    if (!album) throw new Error("No album");
+    // 🚨 fallback si Spotify falla o rate limit
+    if (!album) {
+      return {
+        spotifyId: item.spotifyAlbumId,
+        title: "Untitled",
+        artist: "Unknown artist",
+        releaseDate: "",
+        releasePrecision: "day",
+        type: "single",
+        image: item.fallbackCover,
+        url: "#",
+        tracks: [],
+      };
+    }
 
     return {
       spotifyId: album.id,
@@ -73,13 +86,14 @@ async function getReleaseData(item: {
       releaseDate: album.releaseDate,
       releasePrecision: album.releasePrecision,
 
-      // 🔥 FIX: sin tracks
-      type: detectReleaseType(album.type, 1),
+      // 🔥 ahora sí usamos tracks correctamente
+      type: detectReleaseType(album.type, album.tracks?.length),
 
       image: album.image || item.fallbackCover,
       url: album.url,
 
-      tracks: [], // vacío siempre
+      // ✅ tracks reales
+      tracks: album.tracks ?? [],
     };
 
   } catch (e) {
