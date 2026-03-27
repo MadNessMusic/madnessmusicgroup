@@ -36,7 +36,8 @@ async function fetchReleasesInBatches(batchSize = 5) {
     const res = await Promise.allSettled(
       batch.map(async (item) => {
         try {
-          const album = await getSpotifyAlbum(item.spotifyAlbumId);
+
+          const album:any = await getSpotifyAlbum(item.spotifyAlbumId);
 
           const year = album.releaseDate
             ? new Date(album.releaseDate).getFullYear()
@@ -54,7 +55,7 @@ async function fetchReleasesInBatches(batchSize = 5) {
             type: detectReleaseType(album.type, album.tracks?.length),
             releaseDate: album.releaseDate || "",
             year,
-            tracks: album.tracks?.map((track) => ({
+            tracks: album.tracks?.map((track: { id: any; title: any; }) => ({
               id: track.id,
               title: track.title,
             })) ?? [],
@@ -233,20 +234,30 @@ const allReleases: ReleaseView[] = (await fetchReleasesInBatches()).sort(
     yearFilter.addEventListener("change", applyFilters);
     typeFilter.addEventListener("change", applyFilters);
 
-    prevBtn.onclick = () => {
-      if (page > 1) {
-        page--;
-        render();
-      }
-    };
+prevBtn.onclick = () => {
+  if (page > 1) {
+    page--;
+    render();
 
-    nextBtn.onclick = () => {
-      const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
-      if (page < totalPages) {
-        page++;
-        render();
-      }
-    };
+    window.scrollTo({
+      top: 10,
+      behavior: "smooth"
+    });
+  }
+};
+
+nextBtn.onclick = () => {
+  const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+  if (page < totalPages) {
+    page++;
+    render();
+
+    window.scrollTo({
+      top: 10,
+      behavior: "smooth"
+    });
+  }
+};
 
     render();
 
