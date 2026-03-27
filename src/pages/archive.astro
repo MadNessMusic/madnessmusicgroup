@@ -215,11 +215,17 @@ const allReleases: ReleaseView[] = (await fetchReleasesInBatches()).sort(
         const el = document.createElement("div");
 
         el.innerHTML = `
-          <a href="${release.url}" target="_blank" rel="noopener noreferrer">
-            <img src="${release.image}" class="w-full aspect-square object-cover rounded-xl"/>
-            <p class="mt-2 font-bold">${release.title}</p>
-            <p class="text-sm opacity-60">${release.artist}</p>
-          </a>
+          <a href="${release.url}" target="_blank" class="group relative block">
+  <img src="${release.image}" class="w-full aspect-square object-cover rounded-xl"/>
+
+  <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-4">
+    <button class="playBtn text-white text-sm">Escuchar</button>
+    <button class="shareBtn text-white text-sm">Compartir</button>
+  </div>
+
+  <p class="mt-2 font-bold">${release.title}</p>
+  <p class="text-sm opacity-60">${release.artist}</p>
+</a>
         `;
 
         grid.appendChild(el);
