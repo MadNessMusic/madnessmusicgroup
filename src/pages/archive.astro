@@ -201,12 +201,6 @@ const allReleases: ReleaseView[] = (await fetchReleasesInBatches()).sort(
       render();
     }
 
-    function getTypeColor(type){
-  if(type==="Single") return "text-green-400"
-  if(type==="EP") return "text-purple-400"
-  return "text-blue-400"
-}
-
     function render() {
       grid.innerHTML = "";
 
@@ -217,136 +211,16 @@ const allReleases: ReleaseView[] = (await fetchReleasesInBatches()).sort(
 
       noResults.classList.toggle("hidden", filtered.length > 0);
 
-      pageItems.forEach((r) => {
-        
+      pageItems.forEach((release) => {
         const el = document.createElement("div");
 
- el.className =
-      "group opacity-0 translate-y-4 transition duration-500"
-
-    el.innerHTML = `
-<div class="relative">
-
-  <!-- COVER -->
-  <div class="relative aspect-square rounded-2xl overflow-hidden bg-neutral-900">
-
-    <img
-      src="${r.image}"
-      class="w-full h-full object-cover transition duration-700 ease-out group-hover:scale-[1.08]"
-    />
-
-    <!-- OVERLAY -->
-    <div class="
-      absolute inset-0
-      bg-gradient-to-t from-black/80 via-black/30 to-transparent
-      opacity-0 group-hover:opacity-100
-      transition duration-300
-    "></div>
-
-    <!-- ACTIONS DESKTOP -->
-    <div class="
-      hidden md:flex
-      absolute inset-0
-      items-end justify-between
-      p-4
-      opacity-0 group-hover:opacity-100
-      transition duration-300
-    ">
-
-      <!-- SPOTIFY -->
-      <a
-        href="${r.url}"
-        target="_blank"
-        class="
-          flex items-center gap-2
-          bg-[#1DB954] text-black
-          px-4 py-2 rounded-full
-          text-sm font-bold
-          shadow-lg
-          hover:scale-105 hover:bg-[#1ed760]
-          transition
-        "
-      >
-        ▶ Escuchar
-      </a>
-
-      <!-- SHARE -->
-      <button
-        class="
-          shareBtn
-          flex items-center gap-2
-          bg-black/60 backdrop-blur
-          border border-white/20
-          px-4 py-2 rounded-full
-          text-sm
-          hover:scale-105
-          transition
-        "
-        data-title="${r.title}"
-        data-artist="${r.artist}"
-        data-cover="${r.image}"
-        data-url="${r.url}"
-      >
-        Compartir
-      </button>
-
-    </div>
-
-  </div>
-
-  <!-- TEXT -->
-  <div class="mt-4 space-y-1">
-
-    <p class="font-anton text-lg leading-tight">
-      ${r.title}
-    </p>
-
-    <p class="text-sm opacity-70">
-      ${r.artist}
-    </p>
-
-    <p class="text-[10px] uppercase tracking-wide ${getTypeColor(r.type || "Single")}">
-      ${r.type}
-    </p>
-
-  </div>
-
-  <!-- MOBILE ACTIONS -->
-  <div class="flex md:hidden gap-3 mt-3">
-
-    <a
-      href="${r.url}"
-      target="_blank"
-      class="
-        flex-1 flex items-center justify-center
-        bg-[#1DB954] text-black
-        py-2 rounded-lg
-        font-semibold
-      "
-    >
-      ▶
-    </a>
-
-    <button
-      class="
-        shareBtn
-        flex-1 flex items-center justify-center
-        bg-neutral-800
-        py-2 rounded-lg
-      "
-      data-title="${r.title}"
-      data-artist="${r.artist}"
-      data-cover="${r.image}"
-      data-url="${r.url}"
-    >
-      ⤴
-    </button>
-
-  </div>
-
-</div>
-`
-;
+        el.innerHTML = `
+          <a href="${release.url}" target="_blank" rel="noopener noreferrer">
+            <img src="${release.image}" class="w-full aspect-square object-cover rounded-xl"/>
+            <p class="mt-2 font-bold">${release.title}</p>
+            <p class="text-sm opacity-60">${release.artist}</p>
+          </a>
+        `;
 
         grid.appendChild(el);
       });
@@ -360,30 +234,20 @@ const allReleases: ReleaseView[] = (await fetchReleasesInBatches()).sort(
     yearFilter.addEventListener("change", applyFilters);
     typeFilter.addEventListener("change", applyFilters);
 
-prevBtn.onclick = () => {
-  if (page > 1) {
-    page--;
-    render();
+    prevBtn.onclick = () => {
+      if (page > 1) {
+        page--;
+        render();
+      }
+    };
 
-    window.scrollTo({
-      top: 10,
-      behavior: "smooth"
-    });
-  }
-};
-
-nextBtn.onclick = () => {
-  const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
-  if (page < totalPages) {
-    page++;
-    render();
-
-    window.scrollTo({
-      top: 10,
-      behavior: "smooth"
-    });
-  }
-};
+    nextBtn.onclick = () => {
+      const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+      if (page < totalPages) {
+        page++;
+        render();
+      }
+    };
 
     render();
 
