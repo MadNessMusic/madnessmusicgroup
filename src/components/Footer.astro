@@ -1,5 +1,6 @@
 ---
-import logoDark from "../assets/MadNess Music Group - Logo Black.png";
+import logoDark from "../assets/MadNess Music Group - Logo White.png";
+import logoLight from "../assets/MadNess Music Group - Logo Black.png";
 import { siteConfig } from "../data/siteConfig";
 ---
 
@@ -16,6 +17,12 @@ import { siteConfig } from "../data/siteConfig";
           src={logoDark.src}
           alt={`${siteConfig.siteName} Logo`}
           class="w-14 h-14 object-contain logo-nav-dark"
+        />
+
+        <img
+          src={logoLight.src}
+          alt={`${siteConfig.siteName} Logo`}
+          class="w-14 h-14 object-contain logo-nav-light"
         />
 
         <h2 class="text-3xl tracking-tighter">{siteConfig.siteName}</h2>
