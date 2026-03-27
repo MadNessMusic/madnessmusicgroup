@@ -117,13 +117,11 @@ async function spotifyFetch<T>(path: string, retry = true): Promise<T> {
   });
 
   // 🔥 RATE LIMIT FIX
-  if (response.status === 429 && retry) {
-    const retryAfter = Number(response.headers.get("retry-after") ?? "1");
+if (response.status === 429) {
+  console.warn("Spotify rate limit — skipping request");
 
-    console.warn(`Spotify rate limit. Retrying in ${retryAfter}s`);
-
-    return spotifyFetch<T>(path, false);
-  }
+  return null as T;
+}
 
   if (response.status === 401 && retry) {
     clearTokenCache();
@@ -176,6 +174,10 @@ export async function getSpotifyAlbum(albumId: string): Promise<SpotifyAlbum> {
   }
 
   const data = await spotifyFetch<any>(`/albums/${albumId}`);
+
+if (!data) {
+  throw new Error("Spotify rate limited");
+}
 
   const normalized: SpotifyAlbum = {
     id: data.id ?? albumId,

@@ -61,10 +61,10 @@ async function getReleaseData(item: {
   spotifyAlbumId: string;
   fallbackCover: string;
 }): Promise<ReleaseView> {
-
   try {
-
     const album = await getSpotifyAlbum(item.spotifyAlbumId);
+
+    if (!album) throw new Error("No album");
 
     return {
       spotifyId: album.id,
@@ -72,14 +72,17 @@ async function getReleaseData(item: {
       artist: album.artist,
       releaseDate: album.releaseDate,
       releasePrecision: album.releasePrecision,
-      type: detectReleaseType(album.type, album.tracks?.length),
+
+      // 🔥 FIX: sin tracks
+      type: detectReleaseType(album.type, 1),
+
       image: album.image || item.fallbackCover,
       url: album.url,
-      tracks: album.tracks,
+
+      tracks: [], // vacío siempre
     };
 
   } catch (e) {
-
     console.error("Album error:", e);
 
     return {
@@ -115,9 +118,11 @@ async function fetchReleasesInBatches() {
     );
 
     for (const r of res) {
-      if (r.status === "fulfilled") {
-        results.push(r.value);
-      }
+if (r.status === "fulfilled") {
+  results.push(r.value);
+} else {
+  console.error("Batch item failed:", r.reason);
+}
     }
   }
 
