@@ -122,8 +122,6 @@ async function spotifyFetch<T>(path: string, retry = true): Promise<T> {
 
     console.warn(`Spotify rate limit. Retrying in ${retryAfter}s`);
 
-    await new Promise((r) => setTimeout(r, retryAfter * 1000));
-
     return spotifyFetch<T>(path, false);
   }
 
