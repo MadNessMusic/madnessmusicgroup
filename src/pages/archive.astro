@@ -362,24 +362,25 @@ function setActiveStyle(style) {
   active.classList.add("bg-white", "text-black");
 }
 
-document.querySelectorAll(".style-btn").forEach(btn => {
-  btn.onclick = async () => {
-    currentStyle = btn.dataset.style;
+document.addEventListener("click", async (e) => {
+  const styleBtn = e.target.closest(".style-btn");
+  if (!styleBtn) return;
 
-    setActiveStyle(currentStyle);
+  currentStyle = styleBtn.dataset.style;
 
-    const result = await generateCard({
-      image: originalImage, // 🔥 FIX CLAVE
-      title: currentTitle,
-      artist: currentArtist,
-      style: currentStyle
-    });
+  setActiveStyle(currentStyle);
 
-    currentImage = result.url;
-    currentBlob = result.blob;
+  const result = await generateCard({
+    image: originalImage,
+    title: currentTitle,
+    artist: currentArtist,
+    style: currentStyle
+  });
 
-    document.getElementById("sharePreview").src = currentImage;
-  };
+  currentImage = result.url;
+  currentBlob = result.blob;
+
+  document.getElementById("sharePreview").src = currentImage;
 });
 
 render();
@@ -455,31 +456,49 @@ async function generateCard({ image, title, artist, style }) {
   }
 
   // COVER
-  const size = 720;
-  const x = (canvas.width - size) / 2;
-  ctx.drawImage(img, x, 150, size, size);
+const size = 720;
+const x = (canvas.width - size) / 2;
+const y = 150; // 🔥 ESTA LÍNEA FALTABA
+
+ctx.drawImage(img, x, y, size, size);
+
+  // 🔥 TEXTO VERTICAL
+ctx.save();
+
+// mover origen al lado izquierdo del cover
+ctx.translate(x - 40, y + size); 
+
+// rotar -90 grados
+ctx.rotate(-Math.PI / 2);
+
+// estilo
+ctx.font = "900 60px sans-serif";
+ctx.fillStyle = "rgba(255, 107, 61,0.2)";
+
+// dibujar
+drawSpacedText(ctx, "LISTEN NOW", 0, 0, 25);
+
+ctx.restore();
 
   // TEXT
-  const padding = 80;
+  const padding = 100;
   ctx.textAlign = "left";
 
-  ctx.font = "bold 56px sans-serif";
+  ctx.font = "900 45px sans-serif";
   ctx.fillStyle = "white";
 
-  ctx.font = "28px sans-serif";
+  const lastY = wrapText(ctx, title, padding, 1000, canvas.width - padding * 2, 60);
+
+    ctx.font = "25px sans-serif";
 ctx.fillStyle = "rgba(255,255,255,0.7)";
 ctx.fillText("www.madnessmusicgroup.com", padding, canvas.height - 65);
 
-  const lastY = wrapText(ctx, title, padding, 950, canvas.width - padding * 2, 60);
-
-  ctx.font = "34px sans-serif";
+  ctx.font = "48px sans-serif";
   ctx.fillStyle = "rgba(255,255,255,0.6)";
-  ctx.fillText(artist, padding, lastY + 70);
+  ctx.fillText(artist, padding, lastY + 85);
 
-  ctx.font = "900 45px sans-serif";
+  ctx.font = "900 40px sans-serif";
 ctx.fillStyle = "#fff";
-
-drawSpacedText(ctx, "LISTEN NOW", padding, lastY + 160, 10);
 
   // 🔥 LOGO
 const logo = new Image();
@@ -558,8 +577,8 @@ function showToast(message) {
   toast.textContent = message;
 
   toast.className = `
-    fixed bottom-30 left-1/2 -translate-x-1/2
-    bg-[#ff6b3d] text-white px-4 py-3 rounded-xl
+    fixed bottom-20 left-1/2 -translate-x-1/2
+    bg-[#ff6b3d] text-white px-4 py-2 rounded-xl
     text-sm shadow-lg z-[9999]
     opacity-0 transition-all duration-300
   `;
