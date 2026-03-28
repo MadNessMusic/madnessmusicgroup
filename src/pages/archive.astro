@@ -431,12 +431,13 @@ async function generateCard({ image, title, artist, style }) {
   const color = getDominantColor(img);
 
   // BLUR
-  for (let i = 0; i < 20; i++) {
-    const offset = i * 2;
-    ctx.globalAlpha = 0.08;
-    ctx.drawImage(img, -offset, -offset, canvas.width + offset * 2, canvas.height + offset * 2);
-  }
-  ctx.globalAlpha = 1;
+ctx.filter = "blur(70px)";
+ctx.drawImage(img, -100, -100, canvas.width + 200, canvas.height + 200);
+ctx.filter = "none";
+
+ctx.fillStyle = "rgba(0,0,0,0.4)";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
 
   // STYLES
   if (style === "vibrant") {
@@ -473,7 +474,7 @@ ctx.rotate(-Math.PI / 2);
 
 // estilo
 ctx.font = "900 60px sans-serif";
-ctx.fillStyle = "rgba(255, 107, 61,0.2)";
+ctx.fillStyle = "rgba(255, 107, 61,0.35)"; // color vibrante con opacidad
 
 // dibujar
 drawSpacedText(ctx, "LISTEN NOW", 0, 0, 25);
