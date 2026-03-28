@@ -131,7 +131,7 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
   </div>
 </section>
 
-<div id="shareModal" class="fixed inset-0 z-999 hidden items-center justify-center bg-black/80 backdrop-blur-md">
+<div id="shareModal" class="fixed inset-0 z-999 hidden items-center justify-center bg-black/80 backdrop-blur-lg">
 
   <div class="bg-neutral-900 rounded-2xl p-6 max-w-md w-full mx-4">
 
@@ -350,12 +350,16 @@ document.addEventListener("click", async (e) => {
   currentTitle = title;
 
   document.getElementById("sharePreview").src = currentImage;
-  document.getElementById("shareModal").classList.remove("hidden");
+  const modal = document.getElementById("shareModal");
+modal.classList.remove("hidden");
+modal.classList.add("flex");
 });
 
 // ❌ CLOSE
 document.getElementById("closeModal").onclick = () => {
-  document.getElementById("shareModal").classList.add("hidden");
+  const modal = document.getElementById("shareModal");
+  modal.classList.add("hidden");
+  modal.classList.remove("flex"); // 👈 ESTO FALTABA
 };
 
 // 💾 DOWNLOAD
@@ -446,12 +450,12 @@ const textWidth = canvas.width - padding * 2;
 
   ctx.font = "bold 56px sans-serif";
   ctx.fillStyle = "rgba(255,255,255,0.9)";
- wrapText(ctx, title, padding, 980, textWidth, 70);
+  
+const lastY = wrapText(ctx, title, padding, 980, textWidth, 70);
 
-  // 🎤 ARTIST
-  ctx.font = "36px sans-serif";
-  ctx.fillStyle = "rgba(255,255,255,0.6)";
-  ctx.fillText(artist, padding, 1120);
+ctx.font = "36px sans-serif";
+ctx.fillStyle = "rgba(255,255,255,0.6)";
+ctx.fillText(artist, padding, lastY + 60);
 
   // 🔥 LOGO
   const logo = new Image();
@@ -489,22 +493,24 @@ return { blob, url };
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   const words = text.split(" ");
   let line = "";
+  let currentY = y;
 
   for (let n = 0; n < words.length; n++) {
     const testLine = line + words[n] + " ";
-    const metrics = ctx.measureText(testLine);
-    const testWidth = metrics.width;
+    const testWidth = ctx.measureText(testLine).width;
 
     if (testWidth > maxWidth && n > 0) {
-      ctx.fillText(line, x, y);
+      ctx.fillText(line, x, currentY);
       line = words[n] + " ";
-      y += lineHeight;
+      currentY += lineHeight;
     } else {
       line = testLine;
     }
   }
 
-  ctx.fillText(line, x, y);
+  ctx.fillText(line, x, currentY);
+
+  return currentY; // 👈 CLAVE
 }
 
 </script>
