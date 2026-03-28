@@ -1,8 +1,14 @@
+// src/lib/spotify.ts
+
+import { Redis } from "@upstash/redis";
+
+const redis = Redis.fromEnv();
+
 const TOKEN_URL = "https://accounts.spotify.com/api/token";
 const API_URL = "https://api.spotify.com/v1";
 const TOKEN_SAFETY_WINDOW_MS = 60_000;
 
-// 🌍 GLOBAL CACHE (Vercel reuse)
+// 🌍 GLOBAL CACHE (memoria)
 const globalCache = globalThis as any;
 
 if (!globalCache.spotify) {
@@ -106,8 +112,18 @@ async function getAccessToken(): Promise<string> {
   return cache.token;
 }
 
-// 🚀 FETCH INTELIGENTE (DEDUP + RATE LIMIT SAFE)
+// 🚀 FETCH INTELIGENTE (con Redis + dedup)
 async function spotifyFetch<T>(path: string): Promise<T | null> {
+  const redisKey = `spotify:raw:${path}`;
+
+  // 1. Redis cache
+  const redisCached = await redis.get(redisKey);
+  if (redisCached) {
+    console.log("REDIS RAW HIT:", path);
+    return redisCached as T;
+  }
+
+  // 2. Dedup requests
   if (cache.inFlight.has(path)) {
     return cache.inFlight.get(path);
   }
@@ -122,13 +138,11 @@ async function spotifyFetch<T>(path: string): Promise<T | null> {
         },
       });
 
-      // 🚨 RATE LIMIT → NO RETRY
       if (res.status === 429) {
         console.warn("Spotify rate limit — skipping");
         return null;
       }
 
-      // 🔄 TOKEN EXPIRADO
       if (res.status === 401) {
         cache.token = null;
         return spotifyFetch<T>(path);
@@ -139,8 +153,12 @@ async function spotifyFetch<T>(path: string): Promise<T | null> {
         return null;
       }
 
-      return (await res.json()) as T;
+      const data = (await res.json()) as T;
 
+      // guardar en Redis (24h)
+      await redis.set(redisKey, data, { ex: 60 * 60 * 24 });
+
+      return data;
     } catch (err) {
       console.error("Spotify fetch error:", err);
       return null;
@@ -154,19 +172,21 @@ async function spotifyFetch<T>(path: string): Promise<T | null> {
   return promise;
 }
 
-// 🎧 PLAYLIST CACHE (30 min)
+// 🎧 PLAYLIST
 export async function getSpotifyPlaylist(
   playlistId: string
 ): Promise<SpotifyPlaylist | null> {
+  const redisKey = `spotify:playlist:${playlistId}`;
+
+  const redisCached = await redis.get(redisKey);
+  if (redisCached) return redisCached as SpotifyPlaylist;
 
   const cached = cache.playlists.get(playlistId);
-
   if (cached && Date.now() < cached.expires) {
     return cached.data;
   }
 
   const data = await spotifyFetch<any>(`/playlists/${playlistId}`);
-
   if (!data) return null;
 
   const normalized: SpotifyPlaylist = {
@@ -178,6 +198,8 @@ export async function getSpotifyPlaylist(
     followers: { total: data.followers?.total ?? 0 },
   };
 
+  await redis.set(redisKey, normalized, { ex: 60 * 60 * 24 });
+
   cache.playlists.set(playlistId, {
     data: normalized,
     expires: Date.now() + 1000 * 60 * 30,
@@ -186,26 +208,27 @@ export async function getSpotifyPlaylist(
   return normalized;
 }
 
-// 💿 ALBUM CACHE (1 hora + tracks incluidos)
+// 💿 ALBUM
 export async function getSpotifyAlbum(
   albumId: string
 ): Promise<SpotifyAlbum | null> {
+  const redisKey = `spotify:album:${albumId}`;
+
+  const redisCached = await redis.get(redisKey);
+  if (redisCached) return redisCached as SpotifyAlbum;
 
   const cached = cache.albums.get(albumId);
-
   if (cached && Date.now() < cached.expires) {
     return cached.data;
   }
 
   const data = await spotifyFetch<any>(`/albums/${albumId}`);
-
   if (!data) return null;
 
   const normalized: SpotifyAlbum = {
     id: data.id ?? albumId,
     title: data.name ?? "",
-    artist:
-      data.artists?.map((a: any) => a.name).join(", ") ?? "",
+    artist: data.artists?.map((a: any) => a.name).join(", ") ?? "",
     releaseDate: data.release_date ?? "",
     releasePrecision: data.release_date_precision ?? "day",
     type: data.album_type === "album" ? "album" : "single",
@@ -219,33 +242,39 @@ export async function getSpotifyAlbum(
       })) ?? [],
   };
 
+  await redis.set(redisKey, normalized, { ex: 60 * 60 * 24 });
+
   cache.albums.set(albumId, {
     data: normalized,
-    expires: Date.now() + 1000 * 60 * 60, // 1 hora
+    expires: Date.now() + 1000 * 60 * 60,
   });
 
   return normalized;
 }
 
-// 🎵 TRACK CACHE (1 hora)
+// 🎵 TRACK
 export async function getSpotifyTrack(
   trackId: string
 ): Promise<SpotifyTrack | null> {
+  const redisKey = `spotify:track:${trackId}`;
+
+  const redisCached = await redis.get(redisKey);
+  if (redisCached) {
+    console.log("REDIS HIT:", trackId);
+    return redisCached as SpotifyTrack;
+  }
 
   const cached = cache.tracks.get(trackId);
-
   if (cached && Date.now() < cached.expires) {
     return cached.data;
   }
 
   const data = await spotifyFetch<any>(`/tracks/${trackId}`);
-
   if (!data) return null;
 
   const normalized: SpotifyTrack = {
     title: data.name ?? "",
-    artists:
-      data.artists?.map((a: any) => a.name).join(", ") ?? "",
+    artists: data.artists?.map((a: any) => a.name).join(", ") ?? "",
     releaseDate: data.album?.release_date ?? "",
     releaseDatePrecision: data.album?.release_date_precision ?? "day",
     image: data.album?.images?.[0]?.url ?? null,
@@ -253,6 +282,8 @@ export async function getSpotifyTrack(
     type: data.album?.album_type === "single" ? "single" : "album",
     preview: data.preview_url ?? null,
   };
+
+  await redis.set(redisKey, normalized, { ex: 60 * 60 * 24 });
 
   cache.tracks.set(trackId, {
     data: normalized,

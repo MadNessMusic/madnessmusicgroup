@@ -27,76 +27,58 @@ function detectReleaseType(albumType?: string, tracks?: number) {
   return "Single";
 }
 
-async function fetchReleasesInBatches(batchSize = 5) {
-  const results: ReleaseView[] = [];
+// 🚀 OPTIMIZADO (SIN BATCH + SIN DELAY)
+async function fetchReleases() {
+  const res = await Promise.allSettled(
+    releases.map(async (item) => {
+      try {
+        const album: any = await getSpotifyAlbum(item.spotifyAlbumId);
 
-  for (let i = 0; i < releases.length; i += batchSize) {
-    const batch = releases.slice(i, i + batchSize);
+        const year = album.releaseDate
+          ? new Date(album.releaseDate).getFullYear()
+          : 0;
 
-    const res = await Promise.allSettled(
-      batch.map(async (item) => {
-        try {
-
-          const album:any = await getSpotifyAlbum(item.spotifyAlbumId);
-
-          const year = album.releaseDate
-            ? new Date(album.releaseDate).getFullYear()
-            : 0;
-
-          return {
-            id: album.id,
-            title: album.title || "Sin titulo",
-            artist: album.artist || "Artista no disponible",
-            image:
-              album.image ||
-              item.cover ||
-              "/images/releases/coming-soon.png",
-            url: album.url || "#",
-            type: detectReleaseType(album.type, album.tracks?.length),
-            releaseDate: album.releaseDate || "",
-            year,
-            tracks: album.tracks?.map((track: { id: any; title: any; }) => ({
+        return {
+          id: album.id,
+          title: album.title || "Sin titulo",
+          artist: album.artist || "Artista no disponible",
+          image:
+            album.image ||
+            item.cover ||
+            "/images/releases/coming-soon.png",
+          url: album.url || "#",
+          type: detectReleaseType(album.type, album.tracks?.length),
+          releaseDate: album.releaseDate || "",
+          year,
+          tracks:
+            album.tracks?.map((track: any) => ({
               id: track.id,
               title: track.title,
             })) ?? [],
-          };
-        } catch (error) {
-          console.error(
-            "Spotify album fallback:",
-            item.spotifyAlbumId,
-            error
-          );
-
-          return {
-            id: item.id,
-            title: item.id,
-            artist: "Artista no disponible",
-            image:
-              item.cover || "/images/releases/coming-soon.png",
-            url: "#",
-            type: "Single",
-            releaseDate: "",
-            year: 0,
-            tracks: [],
-          };
-        }
-      })
-    );
-
-    for (const r of res) {
-      if (r.status === "fulfilled") {
-        results.push(r.value);
+        };
+      } catch (error) {
+        return {
+          id: item.id,
+          title: item.id,
+          artist: "Artista no disponible",
+          image:
+            item.cover || "/images/releases/coming-soon.png",
+          url: "#",
+          type: "Single",
+          releaseDate: "",
+          year: 0,
+          tracks: [],
+        };
       }
-    }
+    })
+  );
 
-    // pequeño delay anti-rate-limit
-    await new Promise((r) => setTimeout(r, 200));
-  }
-
-  return results;
+  return res
+    .filter((r) => r.status === "fulfilled")
+    .map((r: any) => r.value);
 }
 
-const allReleases: ReleaseView[] = (await fetchReleasesInBatches()).sort(
+const allReleases: ReleaseView[] = (await fetchReleases()).sort(
   (a, b) =>
     new Date(b.releaseDate || 0).getTime() -
     new Date(a.releaseDate || 0).getTime()
@@ -104,228 +86,222 @@ const allReleases: ReleaseView[] = (await fetchReleasesInBatches()).sort(
 ---
 
 <Layout />
-  <Navbar />
+<Navbar />
 
-  <section class="max-w-7xl mx-auto px-6 py-24">
-    <h1 class="font-anton text-6xl mb-16">
-      Archivo
-    </h1>
+<section class="max-w-7xl mx-auto px-6 py-24">
+  <h1 class="font-anton text-6xl mb-16">
+    Archivo
+  </h1>
 
-    <div class="flex flex-wrap items-center gap-6 mb-14 w-full">
-      <input
-        id="searchInput"
-        placeholder="Buscar artista, cancion o lanzamiento..."
-        class="flex-2 min-w-70 bg-neutral-900 px-4 py-3 rounded-xl outline-none"
-      />
+  <div class="flex flex-wrap items-center gap-6 mb-14 w-full">
+    <input
+      id="searchInput"
+      placeholder="Buscar artista, cancion o lanzamiento..."
+      class="flex-2 min-w-70 bg-neutral-900 px-4 py-3 rounded-xl outline-none"
+    />
 
-      <select id="yearFilter" class="bg-neutral-900 px-4 py-3 rounded-xl">
-        <option value="">Todos los años</option>
-      </select>
+    <select id="yearFilter" class="bg-neutral-900 px-4 py-3 rounded-xl">
+      <option value="">Todos los años</option>
+    </select>
 
-      <select id="typeFilter" class="bg-neutral-900 px-4 py-3 rounded-xl">
-        <option value="">Todos los tipos</option>
-        <option value="Single">Single</option>
-        <option value="EP">EP</option>
-        <option value="Album">Álbum</option>
-      </select>
-    </div>
+    <select id="typeFilter" class="bg-neutral-900 px-4 py-3 rounded-xl">
+      <option value="">Todos los tipos</option>
+      <option value="Single">Single</option>
+      <option value="EP">EP</option>
+      <option value="Album">Álbum</option>
+    </select>
+  </div>
 
-    <div id="releaseGrid" class="grid grid-cols-2 md:grid-cols-4 gap-10"></div>
+  <div id="releaseGrid" class="grid grid-cols-2 md:grid-cols-4 gap-10"></div>
 
-    <p id="noResults" class="opacity-50 mt-10 hidden text-lg font-medium">
-      Sin resultados
-    </p>
+  <p id="noResults" class="opacity-50 mt-10 hidden text-lg font-medium">
+    Sin resultados
+  </p>
 
-    <div class="flex items-center justify-center gap-4 mt-20">
-      <button id="prevPage" class="px-4 py-2 border border-neutral-700">
-        ← Anterior
-      </button>
+  <div class="flex items-center justify-center gap-4 mt-20">
+    <button id="prevPage" class="px-4 py-2 border border-neutral-700">
+      ← Anterior
+    </button>
 
-      <span id="pageIndicator"></span>
+    <span id="pageIndicator"></span>
 
-      <button id="nextPage" class="px-4 py-2 border border-neutral-700">
-        Siguiente →
-      </button>
-    </div>
-  </section>
+    <button id="nextPage" class="px-4 py-2 border border-neutral-700">
+      Siguiente →
+    </button>
+  </div>
+</section>
 
-  <script define:vars={{ allReleases }}>
-    const releasesData = allReleases;
+<script define:vars={{ allReleases }}>
+  const releasesData = allReleases;
 
-    const grid = document.getElementById("releaseGrid");
-    const noResults = document.getElementById("noResults");
-    const searchInput = document.getElementById("searchInput");
-    const yearFilter = document.getElementById("yearFilter");
-    const typeFilter = document.getElementById("typeFilter");
-    const prevBtn = document.getElementById("prevPage");
-    const nextBtn = document.getElementById("nextPage");
-    const pageIndicator = document.getElementById("pageIndicator");
+  const grid = document.getElementById("releaseGrid");
+  const noResults = document.getElementById("noResults");
+  const searchInput = document.getElementById("searchInput");
+  const yearFilter = document.getElementById("yearFilter");
+  const typeFilter = document.getElementById("typeFilter");
+  const prevBtn = document.getElementById("prevPage");
+  const nextBtn = document.getElementById("nextPage");
+  const pageIndicator = document.getElementById("pageIndicator");
 
-    let filtered = [...releasesData];
-    let page = 1;
-    const perPage = 12;
+  let filtered = [...releasesData];
+  let page = 1;
+  const perPage = 12;
 
-    const years = [...new Set(releasesData.map((r) => r.year).filter(Boolean))].sort(
-      (a, b) => b - a,
-    );
+  const years = [...new Set(releasesData.map((r) => r.year).filter(Boolean))].sort(
+    (a, b) => b - a
+  );
 
-    years.forEach((year) => {
-      const option = document.createElement("option");
-      option.value = String(year);
-      option.textContent = String(year);
-      yearFilter.appendChild(option);
+  years.forEach((year) => {
+    const option = document.createElement("option");
+    option.value = String(year);
+    option.textContent = String(year);
+    yearFilter.appendChild(option);
+  });
+
+  function applyFilters() {
+    const query = searchInput.value.toLowerCase();
+    const year = yearFilter.value;
+    const type = typeFilter.value;
+
+    filtered = releasesData.filter((release) => {
+      const trackMatch = release.tracks.some((track) =>
+        track.title.toLowerCase().includes(query)
+      );
+
+      const matchSearch =
+        release.title.toLowerCase().includes(query) ||
+        release.artist.toLowerCase().includes(query) ||
+        trackMatch;
+
+      const matchYear = !year || String(release.year) === year;
+      const matchType = !type || release.type === type;
+
+      return matchSearch && matchYear && matchType;
     });
 
-    function applyFilters() {
-      const query = searchInput.value.toLowerCase();
-      const year = yearFilter.value;
-      const type = typeFilter.value;
+    page = 1;
+    render();
+  }
 
-      filtered = releasesData.filter((release) => {
-        const trackMatch = release.tracks.some((track) =>
-          track.title.toLowerCase().includes(query),
-        );
+  function render() {
+    grid.innerHTML = "";
 
-        const matchSearch =
-          release.title.toLowerCase().includes(query) ||
-          release.artist.toLowerCase().includes(query) ||
-          trackMatch;
+    const start = (page - 1) * perPage;
+    const end = start + perPage;
+    const pageItems = filtered.slice(start, end);
+    const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
 
-        const matchYear = !year || String(release.year) === year;
-        const matchType = !type || release.type === type;
+    noResults.classList.toggle("hidden", filtered.length > 0);
 
-        return matchSearch && matchYear && matchType;
-      });
+    pageItems.forEach((release) => {
+      const el = document.createElement("div");
+      el.className = "group";
 
-      page = 1;
+      el.innerHTML = `
+      <div class="relative">
+
+        <a href="${release.url}" target="_blank" class="block rounded-2xl overflow-hidden">
+          <img 
+            src="${release.image}" 
+            loading="lazy"
+            class="w-full aspect-square object-cover transition duration-500 group-hover:scale-105"
+          />
+        </a>
+
+        <div class="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition duration-300">
+
+          <button 
+            class="share-btn absolute top-3 right-3 z-30 bg-black/60 backdrop-blur-md p-2 rounded-full hover:scale-110 transition"
+            data-url="${release.url}"
+            data-title="${release.title}"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="white" stroke-width="2">
+              <path d="M4 12v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+              <path d="M12 16V4"/>
+              <path d="M8 8l4-4 4 4"/>
+            </svg>
+          </button>
+
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-4">
+
+            <a href="${release.url}" target="_blank"
+              class="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-black text-lg hover:scale-110 transition"
+            >
+              ▶
+            </a>
+
+            <span class="text-[10px] tracking-widest uppercase opacity-80 mt-2">
+              Escuchar en Spotify
+            </span>
+
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <p class="font-anton text-sm sm:text-base">${release.title}</p>
+          <p class="text-xs sm:text-sm opacity-60">${release.artist}</p>
+
+          <div class="mt-2 flex items-center gap-2">
+            <span class="text-[9px] uppercase opacity-50">${release.type}</span>
+            <span class="w-1.5 h-1.5 rounded-full ${
+              release.type === "Single"
+                ? "bg-green-400"
+                : release.type === "EP"
+                ? "bg-purple-400"
+                : "bg-blue-400"
+            }"></span>
+          </div>
+
+          <p class="text-[9px] uppercase opacity-30 mt-1">
+            ${release.releaseDate || ""}
+          </p>
+        </div>
+      </div>
+      `;
+
+      grid.appendChild(el);
+    });
+
+    pageIndicator.textContent = `${page} / ${totalPages}`;
+    prevBtn.disabled = page <= 1;
+    nextBtn.disabled = page >= totalPages;
+  }
+
+  searchInput.addEventListener("input", applyFilters);
+  yearFilter.addEventListener("change", applyFilters);
+  typeFilter.addEventListener("change", applyFilters);
+
+  prevBtn.onclick = () => {
+    if (page > 1) {
+      page--;
       render();
     }
+  };
 
-    function render() {
-      grid.innerHTML = "";
-
-      const start = (page - 1) * perPage;
-      const end = start + perPage;
-      const pageItems = filtered.slice(start, end);
-      const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
-
-      noResults.classList.toggle("hidden", filtered.length > 0);
-
-      pageItems.forEach((release) => {
-      const el = document.createElement("div");
-
-el.className = "group";
-
-el.innerHTML = `
-  <div class="relative">
-
-  <!-- LINK SOLO PARA LA IMAGEN -->
-  <a href="${release.url}" target="_blank" class="block rounded-2xl overflow-hidden">
-    <img ... />
-  </a>
-
-  <!-- OVERLAY -->
- <div class="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition duration-300">
-
-  <!-- BOTÓN SHARE (TOP RIGHT) -->
-<button class="share-btn absolute top-3 right-3 z-30">
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    width="16" 
-    height="16" 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    stroke-width="2" 
-    stroke-linecap="round" 
-    stroke-linejoin="round"
-  >
-    <path d="M4 12v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
-    <path d="M12 16V4"/>
-    <path d="M8 8l4-4 4 4"/>
-  </svg>
-</button>
-
-  <!-- OVERLAY GRADIENTE -->
-  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-4">
-
-    <div class="flex items-center gap-3">
-      <a href="${release.url}" target="_blank" class="spotify-btn play">
-        ▶
-      </a>
-    </div>
-
-    <span class="text-[10px] tracking-widest uppercase opacity-80">
-      Escuchar en Spotify
-    </span>
-
-  </div>
-
-</div>
-
-  <!-- INFO -->
-  <div class="mt-3">
-
-    <p class="font-anton text-sm sm:text-base">
-      ${release.title}
-    </p>
-
-    <p class="text-xs sm:text-sm opacity-60">
-      ${release.artist}
-    </p>
-
-    <div class="mt-2 flex items-center gap-2">
-
-      <!-- TYPE -->
-      <span class="text-[9px] sm:text-[10px] tracking-widest uppercase opacity-50">
-        ${release.type}
-      </span>
-
-      <span class="w-1.5 h-1.5 rounded-full ${
-        release.type === "Single"
-          ? "bg-green-400"
-          : release.type === "EP"
-          ? "bg-purple-400"
-          : "bg-blue-400"
-      }"></span>
-
-    </div>
-
-    <p class="text-[9px] sm:text-[10px] tracking-widest uppercase opacity-30 mt-1">
-      ${release.releaseDate || ""}
-    </p>
-
-  </div>
-`;
-
-        grid.appendChild(el);
-      });
-
-      pageIndicator.textContent = `${page} / ${totalPages}`;
-      prevBtn.disabled = page <= 1;
-      nextBtn.disabled = page >= totalPages;
+  nextBtn.onclick = () => {
+    const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+    if (page < totalPages) {
+      page++;
+      render();
     }
+  };
 
-    searchInput.addEventListener("input", applyFilters);
-    yearFilter.addEventListener("change", applyFilters);
-    typeFilter.addEventListener("change", applyFilters);
+  document.addEventListener("click", async (e) => {
+    const btn = e.target.closest(".share-btn");
+    if (!btn) return;
 
-    prevBtn.onclick = () => {
-      if (page > 1) {
-        page--;
-        render();
+    const url = btn.dataset.url;
+    const title = btn.dataset.title;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({ title, url });
+      } else {
+        await navigator.clipboard.writeText(url);
+        alert("Link copiado 🔗");
       }
-    };
+    } catch {}
+  });
 
-    nextBtn.onclick = () => {
-      const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
-      if (page < totalPages) {
-        page++;
-        render();
-      }
-    };
-
-    render();
-
-  </script>
-
+  render();
+</script>
