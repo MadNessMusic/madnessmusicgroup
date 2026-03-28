@@ -175,6 +175,7 @@ let currentTitle = "";
 let currentArtist = "";
 let currentStyle = "vibrant";
 let originalImage = "";
+let currentUrl = "";
 
 // RENDER
 function render() {
@@ -279,6 +280,7 @@ document.addEventListener("click", async (e) => {
   currentTitle = title;
   currentArtist = artist;
   originalImage = image;
+  currentUrl = btn.closest(".group").querySelector("a")?.href || "";
 
   const result = await generateCard({
     image,
@@ -315,12 +317,28 @@ document.getElementById("downloadAction").onclick = () => {
   link.click();
 };
 
-// SHARE
 document.getElementById("shareAction").onclick = async () => {
-  const file = new File([currentBlob], "track.png", { type: "image/png" });
+  try {
+    // 📋 copiar link
+    if (currentUrl) {
+      await navigator.clipboard.writeText(currentUrl);
+    }
 
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    await navigator.share({ files: [file], title: currentTitle });
+    // 📱 compartir imagen
+    const file = new File([currentBlob], "track.png", { type: "image/png" });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: currentTitle,
+      });
+    }
+
+    // 🔥 FEEDBACK VISUAL
+    showToast("Link copiado 🔥 listo para pegar en Instagram");
+
+  } catch {
+    showToast("Error al compartir");
   }
 };
 
@@ -448,11 +466,20 @@ async function generateCard({ image, title, artist, style }) {
   ctx.font = "bold 56px sans-serif";
   ctx.fillStyle = "white";
 
+  ctx.font = "28px sans-serif";
+ctx.fillStyle = "rgba(255,255,255,0.7)";
+ctx.fillText("www.madnessmusicgroup.com", padding, canvas.height - 65);
+
   const lastY = wrapText(ctx, title, padding, 950, canvas.width - padding * 2, 60);
 
   ctx.font = "34px sans-serif";
   ctx.fillStyle = "rgba(255,255,255,0.6)";
   ctx.fillText(artist, padding, lastY + 70);
+
+  ctx.font = "900 45px sans-serif";
+ctx.fillStyle = "#fff";
+
+drawSpacedText(ctx, "LISTEN NOW", padding, lastY + 160, 10);
 
   // 🔥 LOGO
 const logo = new Image();
@@ -525,4 +552,38 @@ function setActiveStyle(style) {
   active.classList.add("bg-[#ff6b3d]", "text-white");
 }
 
+function showToast(message) {
+  const toast = document.createElement("div");
+
+  toast.textContent = message;
+
+  toast.className = `
+    fixed bottom-30 left-1/2 -translate-x-1/2
+    bg-[#ff6b3d] text-white px-4 py-3 rounded-xl
+    text-sm shadow-lg z-[9999]
+    opacity-0 transition-all duration-300
+  `;
+
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.remove("opacity-0");
+    toast.classList.add("opacity-100");
+  }, 50);
+
+  setTimeout(() => {
+    toast.classList.remove("opacity-100");
+    toast.classList.add("opacity-0");
+
+    setTimeout(() => toast.remove(), 200);
+  }, 3000);
+}
+
+function drawSpacedText(ctx, text, x, y, spacing = 2) {
+  let currentX = x;
+  for (let char of text) {
+    ctx.fillText(char, currentX, y);
+    currentX += ctx.measureText(char).width + spacing;
+  }
+}
 </script>
