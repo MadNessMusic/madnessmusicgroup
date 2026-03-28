@@ -133,33 +133,33 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
 
 <div id="shareModal" class="fixed inset-0 z-999 hidden items-center justify-center bg-black/80 backdrop-blur-lg">
 
-  <div class="bg-neutral-900 rounded-2xl p-6 max-w-md w-full mx-4">
+  <div class="bg-neutral-900 rounded-2xl p-6 w-95 sm:w-115 shadow-2xl transition-all duration-300">
 
     <!-- IMAGE PREVIEW -->
     <img id="sharePreview" class="w-full rounded-xl mb-4" />
 
-    <div class="flex gap-2 mb-4">
-  <button class="style-btn px-3 py-2 bg-neutral-800 rounded style-btn" data-style="vibrant">Vibrant</button>
-  <button class="style-btn px-3 py-2 bg-neutral-800 rounded style-btn" data-style="dark">Dark</button>
-  <button class="style-btn px-3 py-2 bg-neutral-800 rounded style-btn" data-style="minimal">Minimal</button>
+    <div class="flex gap-3 mb-5 px-1">
+  <button class="style-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm transition cursor-pointer hover:bg-neutral-700" data-style="vibrant">Vibrant</button>
+  <button class="style-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm transition cursor-pointer hover:bg-neutral-700" data-style="dark">Dark</button>
+  <button class="style-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm transition cursor-pointer hover:bg-neutral-700" data-style="minimal">Minimal</button>
 </div>
 
-    <!-- BUTTONS -->
-    <div class="flex gap-3">
+<div class="flex gap-3 mt-2">
+  <button id="shareAction"
+    class="flex-1 py-3 rounded-xl font-medium bg-[#ff6b3d] text-white shadow-lg hover:opacity-90 transition cursor-pointer">
+    Compartir
+  </button>
 
-      <button id="shareAction" class="flex-1 bg-white text-black py-3 rounded-xl font-semibold">
-        Compartir
-      </button>
+  <button id="downloadAction"
+    class="flex-1 py-3 rounded-xl font-medium bg-neutral-800 hover:bg-neutral-700 transition cursor-pointer">
+    Descargar
+  </button>
 
-      <button id="downloadAction" class="flex-1 bg-neutral-800 py-3 rounded-xl">
-        Descargar
-      </button>
-
-      <button id="closeModal" class="px-4 bg-neutral-700 rounded-xl">
-        ✕
-      </button>
-
-    </div>
+  <button id="closeModal"
+    class="w-12 h-12 rounded-xl bg-neutral-800 hover:bg-neutral-700 transition cursor-pointer">
+    ✕
+  </button>
+</div>
 
   </div>
 </div>
@@ -452,7 +452,7 @@ async function generateCard({ image, title, artist, style }) {
 
   ctx.font = "34px sans-serif";
   ctx.fillStyle = "rgba(255,255,255,0.6)";
-  ctx.fillText(artist, padding, lastY + 50);
+  ctx.fillText(artist, padding, lastY + 70);
 
   // 🔥 LOGO
 const logo = new Image();
@@ -462,15 +462,15 @@ logo.src = "/logo.png"; // asegúrate que exista en /public
 try {
   await new Promise((res) => (logo.onload = res));
 
-  const logoWidth = 180;
-  const logoHeight = 60;
+  const logoWidth = 220;
+  const logoHeight = 75;
 
   ctx.globalAlpha = 0.9;
 
   ctx.drawImage(
     logo,
-    canvas.width - logoWidth - 60,   // derecha
-    canvas.height - logoHeight - 60, // abajo
+    canvas.width - logoWidth - 50,   // derecha
+    canvas.height - logoHeight - 50, // abajo
     logoWidth,
     logoHeight
   );
@@ -513,4 +513,16 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   ctx.fillText(line, x, currentY);
   return currentY;
 }
+
+function setActiveStyle(style) {
+  document.querySelectorAll(".style-btn").forEach(b => {
+    b.classList.remove("bg-[#ff6b3d]", "text-white");
+    b.classList.add("bg-neutral-800");
+  });
+
+  const active = document.querySelector(`[data-style="${style}"]`);
+  active.classList.remove("bg-neutral-800");
+  active.classList.add("bg-[#ff6b3d]", "text-white");
+}
+
 </script>
