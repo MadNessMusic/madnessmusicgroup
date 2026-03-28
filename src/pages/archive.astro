@@ -200,6 +200,20 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
       el.innerHTML = `
 <div>
 
+  
+      <!-- SHARE BUTTON -->
+      <button 
+        class="share-btn absolute top-3 right-3 z-40 w-10 h-10 flex items-center justify-center rounded-full bg-black/60 backdrop-blur-xl border border-white/20 shadow-xl active:scale-90 transition"
+        data-url="${release.url}"
+        data-title="${release.title}"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="currentColor" class="text-white" stroke-width="2">
+          <path d="M4 12v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+          <path d="M12 16V4"/>
+          <path d="M8 8l4-4 4 4"/>
+        </svg>
+      </button>
+
   <!-- IMAGE WRAPPER -->
   <div class="relative rounded-2xl overflow-hidden group">
 
@@ -213,20 +227,10 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
     </a>
 
     <!-- OVERLAY (SOLO IMAGEN) -->
+
+
     <div class="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition duration-300">
 
-      <!-- SHARE BUTTON -->
-      <button 
-        class="share-btn absolute top-3 right-3 z-40 w-10 h-10 flex items-center justify-center rounded-full bg-black/60 backdrop-blur-xl border border-white/20 shadow-xl active:scale-90 transition"
-        data-url="${release.url}"
-        data-title="${release.title}"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="currentColor" class="text-white" stroke-width="2">
-          <path d="M4 12v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
-          <path d="M12 16V4"/>
-          <path d="M8 8l4-4 4 4"/>
-        </svg>
-      </button>
 
       <!-- GRADIENT + PLAY -->
       <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-4">
