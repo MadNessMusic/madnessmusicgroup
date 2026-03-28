@@ -234,6 +234,7 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
         class="share-btn absolute top-3 right-3 z-40 w-15 h-15 flex items-center justify-center rounded-full bg-black/60 backdrop-blur-xl border border-white/20 shadow-xl active:scale-90 transition"
         data-url="${release.url}"
         data-title="${release.title}"
+        data-artist="${release.artist}"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="none" stroke="currentColor" class="text-white" stroke-width="2">
           <path d="M4 12v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
@@ -341,7 +342,8 @@ document.addEventListener("click", async (e) => {
   const imgEl = card.querySelector("img");
   const image = imgEl?.currentSrc || imgEl?.src;
   const title = btn.dataset.title;
-  const artist = card.querySelector(".mt-3 p:nth-of-type(2)")?.textContent || "";
+  const artist = btn.dataset.artist;
+  console.log("ARTIST:", artist);
 
   const result = await generateCard({ image, title, artist });
 
@@ -451,14 +453,15 @@ const textWidth = canvas.width - padding * 2;
   ctx.font = "bold 56px sans-serif";
   ctx.fillStyle = "rgba(255,255,255,0.9)";
 
-const startY = 800;
-const spacing = 35;
+const startY = 980;
+const spacing = 45;
 
 const lastY = wrapText(ctx, title, padding, startY, textWidth, 65);
 
 ctx.font = "34px sans-serif";
 ctx.fillStyle = "rgba(255,255,255,0.6)";
 ctx.fillText(artist, padding, lastY + spacing);
+
 
   // 🔥 LOGO
   const logo = new Image();
