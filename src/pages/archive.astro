@@ -316,27 +316,25 @@ document.addEventListener("click", async (e) => {
   render();
 
 
-  async function generateCard({ image, title, artist }) {
+ async function generateCard({ image, title, artist }) {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
   canvas.width = 1080;
   canvas.height = 1350;
 
-  // 🔥 FIX CORS (clave)
+  // 🖼 IMAGE
   const img = new Image();
   img.crossOrigin = "anonymous";
-
-  // 👇 proxy hack (evita CORS de Spotify)
-  img.src = image + "?w=1080";
+  img.src = image;
 
   await new Promise((res, rej) => {
     img.onload = res;
     img.onerror = rej;
   });
 
-  // BACKGROUND
-  ctx.filter = "blur(60px)";
+  // 🌌 BACKGROUND BLUR
+  ctx.filter = "blur(80px)";
   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
   ctx.filter = "none";
@@ -344,27 +342,50 @@ document.addEventListener("click", async (e) => {
   ctx.fillStyle = "rgba(0,0,0,0.6)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // COVER
-  const size = 700;
+  // 🎵 COVER
+  const size = 720;
   const x = (canvas.width - size) / 2;
-  const y = 200;
+  const y = 180;
 
   ctx.shadowColor = "rgba(0,0,0,0.6)";
-  ctx.shadowBlur = 40;
-
+  ctx.shadowBlur = 50;
   ctx.drawImage(img, x, y, size, size);
 
-  // TEXT
   ctx.shadowBlur = 0;
+
+  // 📝 TITLE
   ctx.fillStyle = "white";
   ctx.textAlign = "center";
 
-  ctx.font = "bold 48px sans-serif";
-  wrapText(ctx, title, canvas.width / 2, 1000, 800, 60);
+  ctx.font = "bold 56px sans-serif";
+  wrapText(ctx, title, canvas.width / 2, 980, 800, 70);
 
-  ctx.font = "32px sans-serif";
-  ctx.fillStyle = "rgba(255,255,255,0.7)";
+  // 🎤 ARTIST
+  ctx.font = "36px sans-serif";
+  ctx.fillStyle = "rgba(255,255,255,0.75)";
   ctx.fillText(artist, canvas.width / 2, 1100);
+
+  // 🔥 LOGO
+  const logo = new Image();
+  logo.crossOrigin = "anonymous";
+  logo.src = "/logo.png"; // 👈 CAMBIA ESTO
+
+  try {
+    await new Promise((res) => (logo.onload = res));
+
+    const logoWidth = 200;
+    const logoHeight = 60;
+
+    ctx.globalAlpha = 0.9;
+    ctx.drawImage(
+      logo,
+      canvas.width / 2 - logoWidth / 2,
+      1200,
+      logoWidth,
+      logoHeight
+    );
+    ctx.globalAlpha = 1;
+  } catch {}
 
   // EXPORT
   const blob = await new Promise((resolve) =>
@@ -373,7 +394,7 @@ document.addEventListener("click", async (e) => {
 
   const file = new File([blob], "track.png", { type: "image/png" });
 
-  // 📱 SHARE REAL
+  // 📱 SHARE
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
     try {
       await navigator.share({
