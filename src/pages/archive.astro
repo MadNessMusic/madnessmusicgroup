@@ -341,7 +341,7 @@ document.addEventListener("click", async (e) => {
   const imgEl = card.querySelector("img");
   const image = imgEl?.currentSrc || imgEl?.src;
   const title = btn.dataset.title;
-  const artist = card.querySelector(".mt-3 p:nth-child(2)")?.textContent || "";
+  const artist = card.querySelector(".mt-3 p:nth-of-type(2)")?.textContent || "";
 
   const result = await generateCard({ image, title, artist });
 
@@ -450,12 +450,15 @@ const textWidth = canvas.width - padding * 2;
 
   ctx.font = "bold 56px sans-serif";
   ctx.fillStyle = "rgba(255,255,255,0.9)";
-  
-const lastY = wrapText(ctx, title, padding, 980, textWidth, 70);
 
-ctx.font = "36px sans-serif";
+const startY = 800;
+const spacing = 35;
+
+const lastY = wrapText(ctx, title, padding, startY, textWidth, 65);
+
+ctx.font = "34px sans-serif";
 ctx.fillStyle = "rgba(255,255,255,0.6)";
-ctx.fillText(artist, padding, lastY + 60);
+ctx.fillText(artist, padding, lastY + spacing);
 
   // 🔥 LOGO
   const logo = new Image();
