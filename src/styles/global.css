@@ -295,12 +295,27 @@
   }
 }
 
-.shareBtn{
-backdrop-filter: blur(6px);
+
+.share-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  transition: all 0.25s ease;
 }
 
-.shareBtn{
-box-shadow:0 6px 18px rgba(0,0,0,.45);
+.share-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.12);
 }
 
 .dot{

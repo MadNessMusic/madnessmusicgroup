@@ -219,37 +219,49 @@ el.className = "group";
 el.innerHTML = `
   <div class="relative">
 
-    <a href="${release.url}" target="_blank" class="block relative rounded-2xl overflow-hidden">
+  <!-- LINK SOLO PARA LA IMAGEN -->
+  <a href="${release.url}" target="_blank" class="block rounded-2xl overflow-hidden">
+    <img ... />
+  </a>
 
-      <img 
-        src="${release.image}" 
-        class="w-full aspect-square object-cover transition-transform duration-700 group-hover:scale-105"
-      />
+  <!-- OVERLAY -->
+ <div class="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition duration-300">
 
-      <!-- HOVER -->
-      <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end gap-3 p-4">
+  <!-- BOTÓN SHARE (TOP RIGHT) -->
+<button class="share-btn absolute top-3 right-3 z-30">
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="16" 
+    height="16" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    stroke-width="2" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+  >
+    <path d="M4 12v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+    <path d="M12 16V4"/>
+    <path d="M8 8l4-4 4 4"/>
+  </svg>
+</button>
 
-        <div class="flex items-center gap-3">
+  <!-- OVERLAY GRADIENTE -->
+  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-4">
 
-          <!-- PLAY -->
-          <div class="spotify-btn play">▶</div>
+    <div class="flex items-center gap-3">
+      <a href="${release.url}" target="_blank" class="spotify-btn play">
+        ▶
+      </a>
+    </div>
 
-          <!-- SHARE -->
-          <div class="share-btn text-xs px-3 py-1 bg-white/20 backdrop-blur rounded-full">
-            Compartir
-          </div>
-
-        </div>
-
-        <span class="text-[10px] tracking-widest uppercase opacity-80">
-          Escuchar en Spotify
-        </span>
-
-      </div>
-
-    </a>
+    <span class="text-[10px] tracking-widest uppercase opacity-80">
+      Escuchar en Spotify
+    </span>
 
   </div>
+
+</div>
 
   <!-- INFO -->
   <div class="mt-3">
