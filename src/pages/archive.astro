@@ -434,7 +434,7 @@ async function generateCard({ image, title, artist, style }) {
 // detectar soporte
 if ("filter" in ctx) {
   // ✅ blur real (moderno)
-  ctx.filter = "blur(20px)";
+  ctx.filter = "blur(30px)";
   ctx.drawImage(img, -100, -100, canvas.width + 200, canvas.height + 200);
   ctx.filter = "none";
 
@@ -504,16 +504,19 @@ ctx.restore();
   const padding = 100;
   ctx.textAlign = "left";
 
-  ctx.font = "900 45px sans-serif";
+  // TÍTULO
+  ctx.font = "900 47px sans-serif";
   ctx.fillStyle = "white";
 
   const lastY = wrapText(ctx, title, padding, 1000, canvas.width - padding * 2, 60);
+
 
     ctx.font = "25px sans-serif";
 ctx.fillStyle = "rgba(255,255,255,0.7)";
 ctx.fillText("www.madnessmusicgroup.com", padding, canvas.height - 65);
 
-  ctx.font = "48px sans-serif";
+// ARTISTA
+  ctx.font = "40px sans-serif";
   ctx.fillStyle = "rgba(255,255,255,0.6)";
   ctx.fillText(artist, padding, lastY + 85);
 
@@ -528,8 +531,8 @@ logo.src = "/logo.png"; // asegúrate que exista en /public
 try {
   await new Promise((res) => (logo.onload = res));
 
-  const logoWidth = 220;
-  const logoHeight = 75;
+  const logoWidth = 250;
+  const logoHeight = 80;
 
   ctx.globalAlpha = 0.9;
 
