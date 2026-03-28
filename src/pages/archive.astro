@@ -131,6 +131,33 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
   </div>
 </section>
 
+<div id="shareModal" class="fixed inset-0 z-999 hidden items-center justify-center bg-black/80 backdrop-blur-md">
+
+  <div class="bg-neutral-900 rounded-2xl p-6 max-w-md w-full mx-4">
+
+    <!-- IMAGE PREVIEW -->
+    <img id="sharePreview" class="w-full rounded-xl mb-4" />
+
+    <!-- BUTTONS -->
+    <div class="flex gap-3">
+
+      <button id="shareAction" class="flex-1 bg-white text-black py-3 rounded-xl font-semibold">
+        Compartir
+      </button>
+
+      <button id="downloadAction" class="flex-1 bg-neutral-800 py-3 rounded-xl">
+        Descargar
+      </button>
+
+      <button id="closeModal" class="px-4 bg-neutral-700 rounded-xl">
+        ✕
+      </button>
+
+    </div>
+
+  </div>
+</div>
+
 <script define:vars={{ allReleases }}>
   const releasesData = allReleases;
 
@@ -298,8 +325,12 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
     }
   };
 
+let currentImage = null;
+let currentBlob = null;
+let currentTitle = "";
+
 document.addEventListener("click", async (e) => {
- const btn = e.target.closest(".share-btn");
+  const btn = e.target.closest(".share-btn");
   if (!btn) return;
 
   e.preventDefault();
@@ -307,12 +338,56 @@ document.addEventListener("click", async (e) => {
 
   const card = btn.closest(".group");
 
-  const image = card.querySelector("img").src;
+  const imgEl = card.querySelector("img");
+  const image = imgEl?.currentSrc || imgEl?.src;
   const title = btn.dataset.title;
   const artist = card.querySelector(".mt-3 p:nth-child(2)")?.textContent || "";
 
-  await generateCard({ image, title, artist });
+  const result = await generateCard({ image, title, artist });
+
+  currentImage = result.url;
+  currentBlob = result.blob;
+  currentTitle = title;
+
+  document.getElementById("sharePreview").src = currentImage;
+  document.getElementById("shareModal").classList.remove("hidden");
 });
+
+// ❌ CLOSE
+document.getElementById("closeModal").onclick = () => {
+  document.getElementById("shareModal").classList.add("hidden");
+};
+
+// 💾 DOWNLOAD
+document.getElementById("downloadAction").onclick = () => {
+  const link = document.createElement("a");
+  link.download = `${currentTitle}.png`;
+  link.href = currentImage;
+  link.click();
+};
+
+// 📱 SHARE
+document.getElementById("shareAction").onclick = async () => {
+  const file = new File([currentBlob], "track.png", { type: "image/png" });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        files: [file],
+        title: currentTitle,
+      });
+    } catch {}
+  } else {
+    alert("Tu dispositivo no soporta compartir imágenes");
+  }
+};
+
+document.getElementById("shareModal").addEventListener("click", (e) => {
+  if (e.target.id === "shareModal") {
+    e.currentTarget.classList.add("hidden");
+  }
+});
+
   render();
 
 
@@ -334,10 +409,20 @@ document.addEventListener("click", async (e) => {
   });
 
   // 🌌 BACKGROUND BLUR
-  ctx.filter = "blur(80px)";
-  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  for (let i = 0; i < 20; i++) {
+  const offset = i * 2;
 
-  ctx.filter = "none";
+  ctx.globalAlpha = 0.08;
+  ctx.drawImage(
+    img,
+    -offset,
+    -offset,
+    canvas.width + offset * 2,
+    canvas.height + offset * 2
+  );
+}
+
+ctx.globalAlpha = 1;
 
   ctx.fillStyle = "rgba(0,0,0,0.6)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -345,7 +430,7 @@ document.addEventListener("click", async (e) => {
   // 🎵 COVER
   const size = 720;
   const x = (canvas.width - size) / 2;
-  const y = 180;
+  const y = 150;
 
   ctx.shadowColor = "rgba(0,0,0,0.6)";
   ctx.shadowBlur = 50;
@@ -354,16 +439,19 @@ document.addEventListener("click", async (e) => {
   ctx.shadowBlur = 0;
 
   // 📝 TITLE
+  const padding = 80;
+const textWidth = canvas.width - padding * 2;
   ctx.fillStyle = "white";
-  ctx.textAlign = "center";
+  ctx.textAlign = "left";
 
   ctx.font = "bold 56px sans-serif";
-  wrapText(ctx, title, canvas.width / 2, 980, 800, 70);
+  ctx.fillStyle = "rgba(255,255,255,0.9)";
+ wrapText(ctx, title, padding, 980, textWidth, 70);
 
   // 🎤 ARTIST
   ctx.font = "36px sans-serif";
-  ctx.fillStyle = "rgba(255,255,255,0.75)";
-  ctx.fillText(artist, canvas.width / 2, 1100);
+  ctx.fillStyle = "rgba(255,255,255,0.6)";
+  ctx.fillText(artist, padding, 1120);
 
   // 🔥 LOGO
   const logo = new Image();
@@ -379,37 +467,23 @@ document.addEventListener("click", async (e) => {
     ctx.globalAlpha = 0.9;
     ctx.drawImage(
       logo,
-      canvas.width / 2 - logoWidth / 2,
-      1200,
+      canvas.width - logoWidth - 60,
+      canvas.height - logoHeight - 60,
       logoWidth,
       logoHeight
     );
     ctx.globalAlpha = 1;
   } catch {}
 
-  // EXPORT
-  const blob = await new Promise((resolve) =>
-    canvas.toBlob(resolve, "image/png")
-  );
+// EXPORT
+const blob = await new Promise((resolve) =>
+  canvas.toBlob(resolve, "image/png")
+);
 
-  const file = new File([blob], "track.png", { type: "image/png" });
+const url = URL.createObjectURL(blob);
 
-  // 📱 SHARE
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try {
-      await navigator.share({
-        files: [file],
-        title,
-      });
-      return;
-    } catch {}
-  }
-
-  // 💻 DOWNLOAD
-  const link = document.createElement("a");
-  link.download = `${title}.png`;
-  link.href = URL.createObjectURL(blob);
-  link.click();
+// 👇 IMPORTANTE: devolver datos
+return { blob, url };
 }
 
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
