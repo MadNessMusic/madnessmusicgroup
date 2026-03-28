@@ -185,4 +185,20 @@ export const releases: Release[] = [
     spotifyAlbumId: "4b7YUDrQl56GetcZ9CYGZL",
     cover:"",
   },
+  {
+    id:"release-ya no volvere-garden-melodico",
+    spotifyAlbumId: "7iVqf9YpAXtg1WcYQ9ORoM",
+    cover:"",
+  },
+  {
+    id:"release-chiquilla local-feely",
+    spotifyAlbumId: "6WqyypuDuRD2wnkrTaiAm6",
+    cover:"",
+  },
+  {
+    id:"release-bbyxf4vor-lili4",
+    spotifyAlbumId: "4kzLFZDnqHl7IBcTdGO6DV",
+    cover:"",
+  },
+
 ];
