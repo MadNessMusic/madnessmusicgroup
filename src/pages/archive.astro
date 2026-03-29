@@ -66,7 +66,6 @@ async function fetchReleases() {
             item.cover || "/images/releases/coming-soon.png",
           url: "#",
           type: "Single",
-          source: item.source || "supported",
           releaseDate: "",
           year: 0,
           tracks: [],
@@ -179,9 +178,6 @@ const releasesData = allReleases;
 
 const grid = document.getElementById("releaseGrid");
 
-const ITEMS_PER_PAGE = 12;
-let currentPage = 1;
-
 let filtered = [...releasesData];
 
 const searchInput = document.getElementById("searchInput");
@@ -189,11 +185,14 @@ const yearFilter = document.getElementById("yearFilter");
 const typeFilter = document.getElementById("typeFilter");
 const sourceFilter = document.getElementById("sourceFilter");
 
-const prevBtn = document.getElementById("prevPage");
-const nextBtn = document.getElementById("nextPage");
-const pageIndicator = document.getElementById("pageIndicator");
+let currentImage = null;
+let currentBlob = null;
+let currentTitle = "";
+let currentArtist = "";
+let currentStyle = "vibrant";
+let originalImage = "";
+let currentUrl = "";
 
-// 🧠 YEARS
 function populateYears() {
   const years = [...new Set(releasesData.map(r => r.year))].sort((a,b) => b-a);
 
@@ -207,7 +206,6 @@ function populateYears() {
 
 populateYears();
 
-// 🔍 FILTERS
 function applyFilters() {
   const search = searchInput.value.toLowerCase();
   const year = yearFilter.value;
@@ -226,12 +224,10 @@ function applyFilters() {
     return matchesSearch && matchesYear && matchesType && matchesSource;
   });
 
-  currentPage = 1;
-  render();
+  renderFiltered();
 }
 
-// 🎯 RENDER (PAGINADO)
-function render() {
+function renderFiltered() {
   grid.innerHTML = "";
 
   if (!filtered.length) {
@@ -241,12 +237,8 @@ function render() {
 
   document.getElementById("noResults").classList.add("hidden");
 
-  const start = (currentPage - 1) * ITEMS_PER_PAGE;
-  const end = start + ITEMS_PER_PAGE;
-
-  const pageItems = filtered.slice(start, end);
-
-  pageItems.forEach((release) => {
+  filtered.forEach((release) => {
+    // 🔥 reutiliza tu render actual
     const el = document.createElement("div");
     el.className =
       "group transition-all duration-300 hover:-translate-y-1";
@@ -254,8 +246,10 @@ function render() {
     el.innerHTML = `
 <div>
 
+  <!-- IMAGE WRAPPER -->
   <div class="relative rounded-2xl overflow-hidden group shadow-sm group-hover:shadow-xl transition-all duration-500">
 
+    <!-- SHARE BUTTON -->
     <button 
       class="share-btn absolute top-3 right-3 z-40 w-12 h-12 flex items-center justify-center rounded-full bg-black/60 backdrop-blur-xl border border-white/20 shadow-xl active:scale-90 transition"
       data-title="${release.title}"
@@ -268,6 +262,7 @@ function render() {
       </svg>
     </button>
 
+    <!-- IMAGE -->
     <a href="${release.url}" target="_blank" class="block aspect-square">
       <img 
         src="${release.image}" 
@@ -276,9 +271,12 @@ function render() {
       />
     </a>
 
+    <!-- OVERLAY -->
     <div class="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition duration-300 backdrop-blur-md">
+
       <div class="absolute inset-0 bg-black/20 flex flex-col justify-end gap-3 p-5">
 
+        <!-- PLAY PRO -->
         <a href="${release.url}" target="_blank"
           class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-black text-sm shadow-lg active:scale-95 transition"
         >
@@ -293,16 +291,20 @@ function render() {
     </div>
   </div>
 
+  <!-- INFO -->
   <div class="mt-4">
 
+    <!-- TITLE -->
     <p class="font-anton text-lg tracking-tight">
       ${release.title}
     </p>
 
+    <!-- ARTIST -->
     <p class="text-sm text-base-content/60">
       ${release.artist}
     </p>
 
+    <!-- META -->
     <div class="mt-3 flex items-center gap-2 text-[10px] tracking-widest uppercase">
 
       <span class="text-base-content/50">
@@ -321,6 +323,7 @@ function render() {
 
     </div>
 
+    <!-- TYPE DOT -->
     <span class="inline-block mt-2 w-2 h-2 rounded-full ${
       release.type === "Single"
         ? "bg-accent"
@@ -329,6 +332,124 @@ function render() {
         : "bg-accent/30 ring-1 ring-accent/20"
     }"></span>
 
+    <!-- DATE -->
+    <p class="text-[10px] tracking-widest uppercase text-base-content/30 mt-2">
+      ${release.releaseDate || ""}
+    </p>
+
+  </div>
+
+</div>
+`;
+    grid.appendChild(el);
+  });
+}
+
+searchInput.addEventListener("input", applyFilters);
+yearFilter.addEventListener("change", applyFilters);
+typeFilter.addEventListener("change", applyFilters);
+sourceFilter.addEventListener("change", applyFilters);
+
+
+// RENDER
+function render() {
+  grid.innerHTML = "";
+
+  releasesData.forEach((release) => {
+    const el = document.createElement("div");
+    el.className =
+      "group transition-all duration-300 hover:-translate-y-1";
+
+    el.innerHTML = `
+<div>
+
+  <!-- IMAGE WRAPPER -->
+  <div class="relative rounded-2xl overflow-hidden group shadow-sm group-hover:shadow-xl transition-all duration-500">
+
+    <!-- SHARE BUTTON -->
+    <button 
+      class="share-btn absolute top-3 right-3 z-40 w-12 h-12 flex items-center justify-center rounded-full bg-black/60 backdrop-blur-xl border border-white/20 shadow-xl active:scale-90 transition"
+      data-title="${release.title}"
+      data-artist="${release.artist}"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" class="text-white" stroke-width="2">
+        <path d="M4 12v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+        <path d="M12 16V4"/>
+        <path d="M8 8l4-4 4 4"/>
+      </svg>
+    </button>
+
+    <!-- IMAGE -->
+    <a href="${release.url}" target="_blank" class="block aspect-square">
+      <img 
+        src="${release.image}" 
+        loading="lazy"
+        class="w-full h-full object-cover transition duration-700 group-hover:scale-105"
+      />
+    </a>
+
+    <!-- OVERLAY -->
+    <div class="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition duration-300 backdrop-blur-md">
+
+      <div class="absolute inset-0 bg-black/20 flex flex-col justify-end gap-3 p-5">
+
+        <!-- PLAY PRO -->
+        <a href="${release.url}" target="_blank"
+          class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-black text-sm shadow-lg active:scale-95 transition"
+        >
+          ▶
+        </a>
+
+        <span class="text-[11px] tracking-widest uppercase text-white/80">
+          Escuchar en Spotify
+        </span>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- INFO -->
+  <div class="mt-4">
+
+    <!-- TITLE -->
+    <p class="font-anton text-lg tracking-tight">
+      ${release.title}
+    </p>
+
+    <!-- ARTIST -->
+    <p class="text-sm text-base-content/60">
+      ${release.artist}
+    </p>
+
+    <!-- META -->
+    <div class="mt-3 flex items-center gap-2 text-[10px] tracking-widest uppercase">
+
+      <span class="text-base-content/50">
+        ${release.type}
+      </span>
+
+      <span class="w-1 h-1 rounded-full bg-accent/50"></span>
+
+      <span class="${
+        release.source === "madness"
+          ? "text-accent font-medium"
+          : "text-base-content/40"
+      }">
+        ${release.source === "madness" ? "MadNess" : "Supported"}
+      </span>
+
+    </div>
+
+    <!-- TYPE DOT -->
+    <span class="inline-block mt-2 w-2 h-2 rounded-full ${
+      release.type === "single"
+        ? "bg-accent"
+        : release.type === "ep"
+        ? "bg-accent/60 ring-1 ring-accent/30"
+        : "bg-accent/30 ring-1 ring-accent/20"
+    }"></span>
+
+    <!-- DATE -->
     <p class="text-[10px] tracking-widest uppercase text-base-content/30 mt-2">
       ${release.releaseDate || ""}
     </p>
@@ -340,50 +461,7 @@ function render() {
 
     grid.appendChild(el);
   });
-
-  updatePagination();
 }
-
-// 🔢 PAGINATION UI
-function updatePagination() {
-  const maxPage = Math.ceil(filtered.length / ITEMS_PER_PAGE);
-
-  pageIndicator.textContent = `${currentPage} / ${maxPage}`;
-
-  prevBtn.disabled = currentPage === 1;
-  nextBtn.disabled = currentPage === maxPage;
-
-  prevBtn.classList.toggle("opacity-30", currentPage === 1);
-  nextBtn.classList.toggle("opacity-30", currentPage === maxPage);
-}
-
-// ⬅️➡️ BUTTONS
-prevBtn.addEventListener("click", () => {
-  if (currentPage > 1) {
-    currentPage--;
-    render();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-});
-
-nextBtn.addEventListener("click", () => {
-  const maxPage = Math.ceil(filtered.length / ITEMS_PER_PAGE);
-  if (currentPage < maxPage) {
-    currentPage++;
-    render();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-});
-
-// 🎧 EVENTS
-searchInput.addEventListener("input", applyFilters);
-yearFilter.addEventListener("change", applyFilters);
-typeFilter.addEventListener("change", applyFilters);
-sourceFilter.addEventListener("change", applyFilters);
-
-// 🚀 INIT
-applyFilters();
-
 
 // CLICK SHARE
 document.addEventListener("click", async (e) => {
@@ -506,6 +584,8 @@ document.addEventListener("click", async (e) => {
 
   document.getElementById("sharePreview").src = currentImage;
 });
+
+render();
 
 // 🎨 COLOR DETECTION
 function getDominantColor(img) {
