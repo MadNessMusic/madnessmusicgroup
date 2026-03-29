@@ -71,13 +71,13 @@
 /* Animación glow pulsante */
 @keyframes scrollGlow {
   0% {
-    box-shadow: 0 0 0px var(--color-accent);
+    box-shadow: 0 0 0px var(#ed7651);
   }
   50% {
-    box-shadow: 0 0 8px var(--color-accent);
+    box-shadow: 0 0 8px var(#ed7651);
   }
   100% {
-    box-shadow: 0 0 0px var(--color-accent);
+    box-shadow: 0 0 0px var(#ed7651);
   }
 }
 
