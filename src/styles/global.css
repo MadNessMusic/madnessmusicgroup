@@ -4,10 +4,10 @@
    EDITORIAL CULTURAL THEME
    ============================== */
 
-:root {
+@theme{
   /* IDENTIDAD */
   --color-primary: #ff8a5b;
-  --color-primary-content: #120b08
+  --color-primary-content: #120b08;
 
   --color-accent: #ed7651;
   --color-accent-content: #fff1ea;
