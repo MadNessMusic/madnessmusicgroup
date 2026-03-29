@@ -1,6 +1,8 @@
 ---
 export const revalidate = 60;
 
+import "../styles/global.css";
+
 interface ReleaseView {
   spotifyId: string;
   title: string;
@@ -241,11 +243,11 @@ const featuredPlaylist = featured[0];
           </a>
           
           {release.source === "madness" ? (
-  <span class="text-[10px] tracking-widest uppercase text-[#ef4d30]/60 mt-2">
+  <span class="text-[10px] tracking-widest uppercase text-[#ef4d30] font-medium">
     MadNess Release
   </span>
 ) : (
-  <span class="text-[10px] tracking-widest uppercase text-success/70 mt-2">
+  <span class="text-[10px] tracking-widest uppercase text-base-content/40">
     Supported Release
   </span>
 )}
