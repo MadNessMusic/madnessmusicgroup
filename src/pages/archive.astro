@@ -94,30 +94,31 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
     Archivo
   </h1>
 
-  <div class="flex flex-wrap items-center gap-6 mb-14 w-full">
-    <input
-      id="searchInput"
-      placeholder="Buscar artista, cancion o lanzamiento..."
-      class="bg-base-200 text-base-content px-4 py-3 rounded-xl outline-none"
-    />
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-14 w-full">
 
-    <select id="yearFilter" class="bg-neutral-900 px-4 py-3 rounded-xl">
-      <option value="">Todos los años</option>
-    </select>
+  <input
+    id="searchInput"
+    placeholder="Buscar artista, cancion o lanzamiento..."
+    class="md:col-span-2 w-full bg-base-200 text-base-content px-4 py-3 rounded-xl outline-none"
+  />
 
-    <select id="typeFilter" class="bg-neutral-900 px-4 py-3 rounded-xl">
-      <option value="">Todos los tipos</option>
-      <option value="Single">Single</option>
-      <option value="EP">EP</option>
-      <option value="Album">Álbum</option>
-    </select>
+  <select id="yearFilter" class="w-full bg-base-200 px-4 py-3 rounded-xl">
+    <option value="">Todos los años</option>
+  </select>
 
-    <select id="sourceFilter" class="bg-base-200 px-4 py-3 rounded-xl">
-  <option value="">Todos</option>
-  <option value="madness">MadNess</option>
-  <option value="supported">Supported</option>
-</select>
-  </div>
+  <select id="typeFilter" class="w-full bg-base-200 px-4 py-3 rounded-xl">
+    <option value="">Todos los tipos</option>
+    <option value="Single">Single</option>
+    <option value="EP">EP</option>
+    <option value="Album">Álbum</option>
+  </select>
+
+  <select id="sourceFilter" class="w-full bg-base-200 px-4 py-3 rounded-xl">
+    <option value="">Todos</option>
+    <option value="madness">MadNess</option>
+    <option value="supported">Supported</option>
+  </select>
+
 
   <div id="releaseGrid" class="grid grid-cols-2 md:grid-cols-4 gap-10"></div>
 
@@ -177,6 +178,9 @@ const releasesData = allReleases;
 
 const grid = document.getElementById("releaseGrid");
 
+const ITEMS_PER_PAGE = 12;
+let currentPage = 1;
+
 let filtered = [...releasesData];
 
 const searchInput = document.getElementById("searchInput");
@@ -223,7 +227,40 @@ function applyFilters() {
     return matchesSearch && matchesYear && matchesType && matchesSource;
   });
 
-  renderFiltered();
+  currentPage = 1; // 🔥 IMPORTANTE
+
+  renderPaginated();
+}
+
+const prevBtn = document.getElementById("prevPage");
+const nextBtn = document.getElementById("nextPage");
+const pageIndicator = document.getElementById("pageIndicator");
+
+prevBtn.addEventListener("click", () => {
+  if (currentPage > 1) {
+    currentPage--;
+    renderPaginated();
+  }
+});
+
+nextBtn.addEventListener("click", () => {
+  const maxPage = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+  if (currentPage < maxPage) {
+    currentPage++;
+    renderPaginated();
+  }
+});
+
+function updatePagination() {
+  const maxPage = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+
+  pageIndicator.textContent = `${currentPage} / ${maxPage}`;
+
+  prevBtn.disabled = currentPage === 1;
+  nextBtn.disabled = currentPage === maxPage;
+
+  prevBtn.classList.toggle("opacity-30", currentPage === 1);
+  nextBtn.classList.toggle("opacity-30", currentPage === maxPage);
 }
 
 function renderFiltered() {
@@ -439,15 +476,6 @@ function render() {
 
     </div>
 
-    <!-- TYPE DOT -->
-    <span class="inline-block mt-2 w-2 h-2 rounded-full ${
-      release.type === "single"
-        ? "bg-accent"
-        : release.type === "ep"
-        ? "bg-accent/60 ring-1 ring-accent/30"
-        : "bg-accent/30 ring-1 ring-accent/20"
-    }"></span>
-
     <!-- DATE -->
     <p class="text-[10px] tracking-widest uppercase text-base-content/30 mt-2">
       ${release.releaseDate || ""}
@@ -584,7 +612,7 @@ document.addEventListener("click", async (e) => {
   document.getElementById("sharePreview").src = currentImage;
 });
 
-render();
+applyFilters();
 
 // 🎨 COLOR DETECTION
 function getDominantColor(img) {
