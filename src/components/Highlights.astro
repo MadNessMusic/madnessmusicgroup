@@ -234,7 +234,7 @@ const featuredPlaylist = featured[0];
               class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
 
-            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end gap-3 p-6">
+            <div class="backdrop-blur-sm absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end gap-3 p-6">
               <div class="spotify-btn play">▶</div>
               <span class="text-[11px] tracking-widest uppercase opacity-80">
                 Escuchar en Spotify
@@ -281,7 +281,7 @@ const featuredPlaylist = featured[0];
 
               <!-- MÁS RECIENTE -->
               {index === 0 && (
-                <span class="text-[10px] uppercase tracking-widest text-green-400">
+                <span class="text-[10px] uppercase tracking-widest text-[#ed7651]">
                   Más reciente
                 </span>
               )}
