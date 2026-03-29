@@ -9,7 +9,7 @@
   --color-primary: #ff8a5b;
   --color-primary-content: #120b08;
 
-  --color-accent: #ff6a3d;
+  --color-accent: #ed7651;
   --color-accent-content: #fff1ea;
 
   /* LIGHT (DEFAULT) */
@@ -175,6 +175,18 @@
   height: auto;
   display: block;
   opacity: 0.9;
+  animation: fadeIn 1.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* Light */

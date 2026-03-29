@@ -1,6 +1,7 @@
 ---
 import LogoLight from "../assets/MadNess Music Group - Logo White.png";
 import LogoDark from "../assets/MadNess Music Group - Logo Black.png";
+import "../styles/global.css";
 ---
 
 <section id="hero" class="relative min-h-screen flex items-center">
@@ -29,35 +30,29 @@ import LogoDark from "../assets/MadNess Music Group - Logo Black.png";
         </span>
 
         <div class="pt-20 sm:pt-28 md:pt-32">
-          <span class="block text-2xl tracking-wider uppercase opacity-60 mb-8">
-            Colectivo cultural · Música · Editorial
-          </span>
+<span class="block text-2xl tracking-wider uppercase opacity-60 mb-8">
+  <span class="text-accent">Sello Independiente</span> · Distribución · Plataforma Musical
+</span>
 
-          <p class="text-sm md:text-base opacity-70 leading-relaxed max-w-100px mb-15">
-            Plataforma editorial y colectiva dedicada a curar, documentar y
-            amplificar expresiones musicales contemporáneas.
-          </p>
+          <p class="text-sm md:text-base opacity-70 leading-relaxed max-w-105 mb-15">
+  Lanzamos, distribuímos y apoyamos artistas emergentes mientras construímos un ecosistema curado para la música contemporánea.
+</p>
 
-          <a
-            href="#playlists"
-            class="
-              inline-flex items-center justify-center
-              px-9 py-4
-              border border-white/30
-              rounded-full
-              text-[11px]
-              tracking-[0.45em]
-              uppercase
-              opacity-70
-              transition-all duration-300 ease-out
-              hover:opacity-100
-              hover:border-white
-              hover:-translate-y-0.5
-              hover:shadow-[0_12px_40px_rgba(255,255,255,0.15)]
-            "
-          >
-            Explorar ↓
-          </a>
+        <div class="flex gap-4 flex-wrap">
+  <a
+    href="#playlists"
+    class="inline-flex items-center justify-center px-9 py-4 border border-[#ed7651]/70 rounded-full text-[11px] tracking-[0.45em] uppercase opacity-70 transition-all duration-300 ease-out hover:opacity-100 hover:border-white hover:-translate-y-0.5"
+  >
+    Explorar
+  </a>
+
+  <a
+    href="/submit"
+    class="inline-flex items-center justify-center px-9 py-4 bg-[#ed7651] text-white rounded-full text-[11px] tracking-[0.45em] uppercase transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(255,255,255,0.25)]"
+  >
+    Enviar música
+  </a>
+</div>
         </div>
       </div>
     </div>
