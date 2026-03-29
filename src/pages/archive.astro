@@ -119,27 +119,7 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
     <option value="supported">Supported</option>
   </select>
 
-
-  <div id="releaseGrid" class="grid grid-cols-2 md:grid-cols-4 gap-10"></div>
-
-  <p id="noResults" class="opacity-50 mt-10 hidden text-lg font-medium">
-    Sin resultados
-  </p>
-
-  <div class="flex items-center justify-center gap-4 mt-20">
-    <button id="prevPage" class="px-4 py-2 border border-neutral-700">
-      ← Anterior
-    </button>
-
-    <span id="pageIndicator"></span>
-
-    <button id="nextPage" class="px-4 py-2 border border-neutral-700">
-      Siguiente →
-    </button>
-  </div>
-</section>
-
-<div id="shareModal" class="fixed inset-0 z-999 hidden items-center justify-center bg-black/80 backdrop-blur-lg">
+  <div id="shareModal" class="fixed inset-0 z-999 hidden items-center justify-center bg-black/80 backdrop-blur-lg">
 
   <div class="bg-neutral-900 rounded-2xl p-6 w-95 sm:w-115 shadow-2xl transition-all duration-300">
 
@@ -171,6 +151,28 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
 
   </div>
 </div>
+
+
+  <div id="releaseGrid" class="grid grid-cols-2 md:grid-cols-4 gap-10"></div>
+
+  <p id="noResults" class="opacity-50 mt-10 hidden text-lg font-medium">
+    Sin resultados
+  </p>
+
+  <div class="flex items-center justify-center gap-4 mt-20">
+    <button id="prevPage" class="px-4 py-2 border border-neutral-700">
+      ← Anterior
+    </button>
+
+    <span id="pageIndicator"></span>
+
+    <button id="nextPage" class="px-4 py-2 border border-neutral-700">
+      Siguiente →
+    </button>
+  </div>
+</section>
+
+
 
 
 <script define:vars={{ allReleases }}>
