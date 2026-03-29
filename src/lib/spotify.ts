@@ -242,7 +242,7 @@ export async function getSpotifyAlbum(
       })) ?? [],
   };
 
-  await redis.set(redisKey, normalized, { ex: 60 * 60 * 24 });
+  await redis.set(redisKey, normalized, { ex: 60 * 60 * 12 });
 
   cache.albums.set(albumId, {
     data: normalized,

@@ -8,6 +8,7 @@ interface ReleaseView {
   releaseDate: string;
   releasePrecision: string;
   type: "single" | "ep" | "album";
+  source: "supported" | "madness";
   image: string;
   url: string;
   tracks: {
@@ -60,6 +61,7 @@ import { getSpotifyPlaylist, getSpotifyAlbum } from "../lib/spotify";
 async function getReleaseData(item: {
   spotifyAlbumId: string;
   fallbackCover: string;
+  source: "supported" | "madness";
 }): Promise<ReleaseView> {
   try {
     const album = await getSpotifyAlbum(item.spotifyAlbumId);
@@ -76,6 +78,7 @@ async function getReleaseData(item: {
         image: item.fallbackCover,
         url: "#",
         tracks: [],
+        source: item.source,
       };
     }
 
@@ -88,12 +91,14 @@ async function getReleaseData(item: {
 
       // 🔥 ahora sí usamos tracks correctamente
       type: detectReleaseType(album.type, album.tracks?.length),
+      source: item.source,
 
       image: album.image || item.fallbackCover,
       url: album.url,
 
       // ✅ tracks reales
       tracks: album.tracks ?? [],
+    
     };
 
   } catch (e) {
@@ -106,6 +111,7 @@ async function getReleaseData(item: {
       releaseDate: "",
       releasePrecision: "day",
       type: "single",
+      source: item.source,
       image: item.fallbackCover,
       url: "#",
       tracks: [],
@@ -127,6 +133,7 @@ async function fetchReleasesInBatches() {
         getReleaseData({
           spotifyAlbumId: item.spotifyAlbumId,
           fallbackCover: item.cover,
+          source: item.source,
         })
       )
     );
@@ -232,6 +239,17 @@ const featuredPlaylist = featured[0];
               </span>
             </div>
           </a>
+          
+          {release.source === "madness" ? (
+  <span class="text-[10px] tracking-widest uppercase text-accent">
+    MadNess
+  </span>
+) : (
+  <span class="text-[10px] tracking-widest uppercase text-base-content/50">
+    Supported
+  </span>
+)}
+          
 
           <div class="mt-4">
             <p class="font-anton text-lg font-black">
