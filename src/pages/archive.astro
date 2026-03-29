@@ -95,38 +95,43 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
     Archivo
   </h1>
 
-<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-14 w-full">
+  <!-- 🔥 FILTROS -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-14 w-full">
 
-  <input
-    id="searchInput"
-    placeholder="Buscar artista, cancion o lanzamiento..."
-    class="md:col-span-2 w-full bg-base-200 text-base-content px-4 py-3 rounded-xl outline-none"
-  />
+    <input
+      id="searchInput"
+      placeholder="Buscar artista, cancion o lanzamiento..."
+      class="md:col-span-2 w-full bg-base-200 text-base-content px-4 py-3 rounded-xl outline-none"
+    />
 
-  <select id="yearFilter" class="w-full bg-base-200 px-4 py-3 rounded-xl">
-    <option value="">Todos los años</option>
-  </select>
+    <select id="yearFilter" class="w-full bg-base-200 px-4 py-3 rounded-xl">
+      <option value="">Todos los años</option>
+    </select>
 
-  <select id="typeFilter" class="w-full bg-base-200 px-4 py-3 rounded-xl">
-    <option value="">Todos los tipos</option>
-    <option value="Single">Single</option>
-    <option value="EP">EP</option>
-    <option value="Album">Álbum</option>
-  </select>
+    <select id="typeFilter" class="w-full bg-base-200 px-4 py-3 rounded-xl">
+      <option value="">Todos los tipos</option>
+      <option value="Single">Single</option>
+      <option value="EP">EP</option>
+      <option value="Album">Álbum</option>
+    </select>
 
-  <select id="sourceFilter" class="w-full bg-base-200 px-4 py-3 rounded-xl">
-    <option value="">Todos</option>
-    <option value="madness">MadNess</option>
-    <option value="supported">Supported</option>
-  </select>
+    <select id="sourceFilter" class="w-full bg-base-200 px-4 py-3 rounded-xl">
+      <option value="">Todos</option>
+      <option value="madness">MadNess</option>
+      <option value="supported">Supported</option>
+    </select>
 
+  </div>
 
-  <div id="releaseGrid" class="grid grid-cols-2 md:grid-cols-4 gap-10"></div>
+  <!-- 🔥 GRID (SEPARADO) -->
+  <div id="releaseGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-10"></div>
 
+  <!-- EMPTY -->
   <p id="noResults" class="opacity-50 mt-10 hidden text-lg font-medium">
     Sin resultados
   </p>
 
+  <!-- PAGINATION -->
   <div class="flex items-center justify-center gap-4 mt-20">
     <button id="prevPage" class="px-4 py-2 border border-neutral-700">
       ← Anterior
@@ -138,40 +143,8 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
       Siguiente →
     </button>
   </div>
+
 </section>
-
-<div id="shareModal" class="fixed inset-0 z-999 hidden items-center justify-center bg-black/80 backdrop-blur-lg">
-
-  <div class="bg-neutral-900 rounded-2xl p-6 w-95 sm:w-115 shadow-2xl transition-all duration-300">
-
-    <!-- IMAGE PREVIEW -->
-    <img id="sharePreview" class="w-full rounded-xl mb-4" />
-
-    <div class="flex gap-3 mb-5 px-1">
-  <button class="style-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm transition cursor-pointer hover:bg-neutral-700" data-style="vibrant">Vibrant</button>
-  <button class="style-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm transition cursor-pointer hover:bg-neutral-700" data-style="dark">Dark</button>
-  <button class="style-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm transition cursor-pointer hover:bg-neutral-700" data-style="minimal">Minimal</button>
-</div>
-
-<div class="flex gap-3 mt-2">
-  <button id="shareAction"
-    class="flex-1 py-3 rounded-xl font-medium bg-accent text-white shadow-lg hover:opacity-90 transition cursor-pointer">
-    Compartir
-  </button>
-
-  <button id="downloadAction"
-    class="flex-1 py-3 rounded-xl font-medium bg-neutral-800 hover:bg-neutral-700 transition cursor-pointer">
-    Descargar
-  </button>
-
-  <button id="closeModal"
-    class="w-12 h-12 rounded-xl bg-neutral-800 hover:bg-neutral-700 transition cursor-pointer">
-    ✕
-  </button>
-</div>
-
-  </div>
-</div>
 
 
 <script define:vars={{ allReleases }}>
