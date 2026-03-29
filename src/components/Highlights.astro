@@ -222,6 +222,14 @@ const featuredPlaylist = featured[0];
     <!-- ROW 1 · RELEASES -->
     <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
       {releasesData.map((release, index) => (
+        <div class="absolute top-3 left-3 text-[9px] tracking-widest uppercase bg-accent text-black px-2 py-1 rounded">
+              <!-- MÁS RECIENTE -->
+              {index === 0 && (
+                <span class="text-[10px] uppercase tracking-widest text-[#ed7651]">
+                NEW
+                </span>
+              )}
+</div>
         <div class="group">
           <a
             href={release.url}
@@ -242,16 +250,11 @@ const featuredPlaylist = featured[0];
             </div>
           </a>
           
-              <!-- MÁS RECIENTE -->
-              {index === 0 && (
-                <span class="text-[10px] uppercase tracking-widest text-[#ed7651]">
-                  Más reciente
-                </span>
-              )}
+
           
 
           <div class="mt-4">
-            <p class="font-anton text-lg font-black">
+            <p class="font-anton text-lg tracking-tight font-black">
               {release.title}
             </p>
 
@@ -259,19 +262,25 @@ const featuredPlaylist = featured[0];
               {release.artist}
             </p>
 
-            <div class="mt-2 flex items-center gap-3">
+            <div class="mt-3 flex items-center gap-2 text-[10px] tracking-widest uppercase">
 
-              <!-- TYPE -->
-              <span class="text-[10px] tracking-widest uppercase text-base-content/50">
-  {release.type}
-</span>
+  <span class="text-base-content/50">
+    {release.type}
+  </span>
 
-              <span class="text-base-content/20">|</span>
+  <span class="w-1 h-1 rounded-full bg-accent/60"></span>
 
-              <!-- SOURCE -->
-              <span class="text-[10px] tracking-widest uppercase text-base-content/50">
-  {release.source === "madness" ? "MadNess Release" : "Supported Release"}
-</span>
+  <span
+    class={`${
+      release.source === "madness"
+        ? "text-accent font-medium"
+        : "text-base-content/40"
+    }`}
+  >
+    {release.source === "madness" ? "MadNess" : "Supported"}
+  </span>
+
+</div>
 
             <span
             class={`w-1.5 h-1.5 rounded-full ${
@@ -290,7 +299,6 @@ const featuredPlaylist = featured[0];
               {formatReleaseDate(release.releaseDate, release.releasePrecision)}
             </p>
           </div>
-        </div>
       ))}
     </div>
 
