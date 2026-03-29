@@ -183,13 +183,14 @@ function render() {
 
   releasesData.forEach((release) => {
     const el = document.createElement("div");
-    el.className = "group";
+    el.className =
+      "group transition-all duration-300 hover:-translate-y-1";
 
     el.innerHTML = `
 <div>
 
   <!-- IMAGE WRAPPER -->
-  <div class="relative rounded-2xl overflow-hidden group">
+  <div class="relative rounded-2xl overflow-hidden group shadow-sm group-hover:shadow-xl transition-all duration-500">
 
     <!-- SHARE BUTTON -->
     <button 
@@ -205,27 +206,27 @@ function render() {
     </button>
 
     <!-- IMAGE -->
-    <a href="${release.url}" target="_blank">
+    <a href="${release.url}" target="_blank" class="block aspect-square">
       <img 
         src="${release.image}" 
         loading="lazy"
-        class="w-full aspect-square object-cover transition duration-500 group-hover:scale-105"
+        class="w-full h-full object-cover transition duration-700 group-hover:scale-105"
       />
     </a>
 
     <!-- OVERLAY -->
-    <div class="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition duration-300">
+    <div class="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition duration-300 backdrop-blur-md">
 
-      <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-4">
+      <div class="absolute inset-0 bg-black/20 flex flex-col justify-end gap-3 p-5">
 
-        <!-- PLAY -->
+        <!-- PLAY PRO -->
         <a href="${release.url}" target="_blank"
-          class="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center text-black text-xl shadow-lg active:scale-95 transition"
+          class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-black text-sm shadow-lg active:scale-95 transition"
         >
           ▶
         </a>
 
-        <span class="text-[10px] tracking-widest uppercase opacity-80 mt-2">
+        <span class="text-[11px] tracking-widest uppercase text-white/80">
           Escuchar en Spotify
         </span>
 
@@ -234,24 +235,51 @@ function render() {
   </div>
 
   <!-- INFO -->
-  <div class="mt-3">
-    <p class="font-anton text-sm sm:text-base">${release.title}</p>
-    <p class="text-xs sm:text-sm opacity-60">${release.artist}</p>
+  <div class="mt-4">
 
-    <div class="mt-2 flex items-center gap-2">
-      <span class="text-[9px] uppercase opacity-50">${release.type}</span>
-      <span class="w-1.5 h-1.5 rounded-full ${
-        release.type === "Single"
-          ? "bg-green-400"
-          : release.type === "EP"
-          ? "bg-purple-400"
-          : "bg-blue-400"
-      }"></span>
+    <!-- TITLE -->
+    <p class="font-anton text-lg tracking-tight">
+      ${release.title}
+    </p>
+
+    <!-- ARTIST -->
+    <p class="text-sm text-base-content/60">
+      ${release.artist}
+    </p>
+
+    <!-- META -->
+    <div class="mt-3 flex items-center gap-2 text-[10px] tracking-widest uppercase">
+
+      <span class="text-base-content/50">
+        ${release.type}
+      </span>
+
+      <span class="w-1 h-1 rounded-full bg-accent/50"></span>
+
+      <span class="${
+        release.source === "madness"
+          ? "text-accent font-medium"
+          : "text-base-content/40"
+      }">
+        ${release.source === "madness" ? "MadNess" : "Supported"}
+      </span>
+
     </div>
 
-    <p class="text-[9px] uppercase opacity-30 mt-1">
+    <!-- TYPE DOT -->
+    <span class="inline-block mt-2 w-2 h-2 rounded-full ${
+      release.type === "single"
+        ? "bg-accent"
+        : release.type === "ep"
+        ? "bg-accent/60 ring-1 ring-accent/30"
+        : "bg-accent/30 ring-1 ring-accent/20"
+    }"></span>
+
+    <!-- DATE -->
+    <p class="text-[10px] tracking-widest uppercase text-base-content/30 mt-2">
       ${release.releaseDate || ""}
     </p>
+
   </div>
 
 </div>
