@@ -242,15 +242,12 @@ const featuredPlaylist = featured[0];
             </div>
           </a>
           
-          {release.source === "madness" ? (
-  <span class="text-[10px] tracking-widest uppercase text-[#ef4d30] font-medium">
-    MadNess Release
-  </span>
-) : (
-  <span class="text-[10px] tracking-widest uppercase text-base-content/40">
-    Supported Release
-  </span>
-)}
+              <!-- MÁS RECIENTE -->
+              {index === 0 && (
+                <span class="text-[10px] uppercase tracking-widest text-[#ed7651]">
+                  Más reciente
+                </span>
+              )}
           
 
           <div class="mt-4">
@@ -286,12 +283,7 @@ const featuredPlaylist = featured[0];
   }`}
 ></span>
 
-              <!-- MÁS RECIENTE -->
-              {index === 0 && (
-                <span class="text-[10px] uppercase tracking-widest text-[#ed7651]">
-                  Más reciente
-                </span>
-              )}
+
             </div>
 
             <p class="text-[10px] tracking-widest uppercase opacity-30 mt-1">
