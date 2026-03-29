@@ -188,14 +188,11 @@ const yearFilter = document.getElementById("yearFilter");
 const typeFilter = document.getElementById("typeFilter");
 const sourceFilter = document.getElementById("sourceFilter");
 
-let currentImage = null;
-let currentBlob = null;
-let currentTitle = "";
-let currentArtist = "";
-let currentStyle = "vibrant";
-let originalImage = "";
-let currentUrl = "";
+const prevBtn = document.getElementById("prevPage");
+const nextBtn = document.getElementById("nextPage");
+const pageIndicator = document.getElementById("pageIndicator");
 
+// 🧠 YEARS
 function populateYears() {
   const years = [...new Set(releasesData.map(r => r.year))].sort((a,b) => b-a);
 
@@ -209,6 +206,7 @@ function populateYears() {
 
 populateYears();
 
+// 🔍 FILTERS
 function applyFilters() {
   const search = searchInput.value.toLowerCase();
   const year = yearFilter.value;
@@ -227,43 +225,12 @@ function applyFilters() {
     return matchesSearch && matchesYear && matchesType && matchesSource;
   });
 
-  currentPage = 1; // 🔥 IMPORTANTE
-
-  renderPaginated();
+  currentPage = 1;
+  render();
 }
 
-const prevBtn = document.getElementById("prevPage");
-const nextBtn = document.getElementById("nextPage");
-const pageIndicator = document.getElementById("pageIndicator");
-
-prevBtn.addEventListener("click", () => {
-  if (currentPage > 1) {
-    currentPage--;
-    renderPaginated();
-  }
-});
-
-nextBtn.addEventListener("click", () => {
-  const maxPage = Math.ceil(filtered.length / ITEMS_PER_PAGE);
-  if (currentPage < maxPage) {
-    currentPage++;
-    renderPaginated();
-  }
-});
-
-function updatePagination() {
-  const maxPage = Math.ceil(filtered.length / ITEMS_PER_PAGE);
-
-  pageIndicator.textContent = `${currentPage} / ${maxPage}`;
-
-  prevBtn.disabled = currentPage === 1;
-  nextBtn.disabled = currentPage === maxPage;
-
-  prevBtn.classList.toggle("opacity-30", currentPage === 1);
-  nextBtn.classList.toggle("opacity-30", currentPage === maxPage);
-}
-
-function renderFiltered() {
+// 🎯 RENDER (PAGINADO)
+function render() {
   grid.innerHTML = "";
 
   if (!filtered.length) {
@@ -273,8 +240,12 @@ function renderFiltered() {
 
   document.getElementById("noResults").classList.add("hidden");
 
-  filtered.forEach((release) => {
-    // 🔥 reutiliza tu render actual
+  const start = (currentPage - 1) * ITEMS_PER_PAGE;
+  const end = start + ITEMS_PER_PAGE;
+
+  const pageItems = filtered.slice(start, end);
+
+  pageItems.forEach((release) => {
     const el = document.createElement("div");
     el.className =
       "group transition-all duration-300 hover:-translate-y-1";
@@ -282,10 +253,8 @@ function renderFiltered() {
     el.innerHTML = `
 <div>
 
-  <!-- IMAGE WRAPPER -->
   <div class="relative rounded-2xl overflow-hidden group shadow-sm group-hover:shadow-xl transition-all duration-500">
 
-    <!-- SHARE BUTTON -->
     <button 
       class="share-btn absolute top-3 right-3 z-40 w-12 h-12 flex items-center justify-center rounded-full bg-black/60 backdrop-blur-xl border border-white/20 shadow-xl active:scale-90 transition"
       data-title="${release.title}"
@@ -298,7 +267,6 @@ function renderFiltered() {
       </svg>
     </button>
 
-    <!-- IMAGE -->
     <a href="${release.url}" target="_blank" class="block aspect-square">
       <img 
         src="${release.image}" 
@@ -307,12 +275,9 @@ function renderFiltered() {
       />
     </a>
 
-    <!-- OVERLAY -->
     <div class="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition duration-300 backdrop-blur-md">
-
       <div class="absolute inset-0 bg-black/20 flex flex-col justify-end gap-3 p-5">
 
-        <!-- PLAY PRO -->
         <a href="${release.url}" target="_blank"
           class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-black text-sm shadow-lg active:scale-95 transition"
         >
@@ -327,20 +292,16 @@ function renderFiltered() {
     </div>
   </div>
 
-  <!-- INFO -->
   <div class="mt-4">
 
-    <!-- TITLE -->
     <p class="font-anton text-lg tracking-tight">
       ${release.title}
     </p>
 
-    <!-- ARTIST -->
     <p class="text-sm text-base-content/60">
       ${release.artist}
     </p>
 
-    <!-- META -->
     <div class="mt-3 flex items-center gap-2 text-[10px] tracking-widest uppercase">
 
       <span class="text-base-content/50">
@@ -359,7 +320,6 @@ function renderFiltered() {
 
     </div>
 
-    <!-- TYPE DOT -->
     <span class="inline-block mt-2 w-2 h-2 rounded-full ${
       release.type === "Single"
         ? "bg-accent"
@@ -368,7 +328,6 @@ function renderFiltered() {
         : "bg-accent/30 ring-1 ring-accent/20"
     }"></span>
 
-    <!-- DATE -->
     <p class="text-[10px] tracking-widest uppercase text-base-content/30 mt-2">
       ${release.releaseDate || ""}
     </p>
@@ -377,14 +336,52 @@ function renderFiltered() {
 
 </div>
 `;
+
     grid.appendChild(el);
   });
+
+  updatePagination();
 }
 
+// 🔢 PAGINATION UI
+function updatePagination() {
+  const maxPage = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+
+  pageIndicator.textContent = `${currentPage} / ${maxPage}`;
+
+  prevBtn.disabled = currentPage === 1;
+  nextBtn.disabled = currentPage === maxPage;
+
+  prevBtn.classList.toggle("opacity-30", currentPage === 1);
+  nextBtn.classList.toggle("opacity-30", currentPage === maxPage);
+}
+
+// ⬅️➡️ BUTTONS
+prevBtn.addEventListener("click", () => {
+  if (currentPage > 1) {
+    currentPage--;
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+});
+
+nextBtn.addEventListener("click", () => {
+  const maxPage = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+  if (currentPage < maxPage) {
+    currentPage++;
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+});
+
+// 🎧 EVENTS
 searchInput.addEventListener("input", applyFilters);
 yearFilter.addEventListener("change", applyFilters);
 typeFilter.addEventListener("change", applyFilters);
 sourceFilter.addEventListener("change", applyFilters);
+
+// 🚀 INIT
+applyFilters();
 
 
 // RENDER
