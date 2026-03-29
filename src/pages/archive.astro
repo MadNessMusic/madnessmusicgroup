@@ -230,7 +230,7 @@ function applyFilters() {
   render();
 }
 
-// 🎯 RENDER (PAGINADO)
+// 🎯 RENDER
 function render() {
   grid.innerHTML = "";
 
@@ -344,7 +344,7 @@ function render() {
   updatePagination();
 }
 
-// 🔢 PAGINATION UI
+// 🔢 PAGINATION
 function updatePagination() {
   const maxPage = Math.ceil(filtered.length / ITEMS_PER_PAGE);
 
