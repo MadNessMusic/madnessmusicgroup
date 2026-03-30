@@ -175,19 +175,19 @@
   height: 100%;
   object-fit: cover;
 
-  opacity: 0.18; /* 🔥 clave */
-  filter: brightness(0.5) contrast(1.2);
+  opacity: 0.28; /* 🔥 clave */
+  filter: brightness(0.7) contrast(1.2);
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  z-index: 1; /* 🔥 clave */
+  z-index: 1;
 
   background: linear-gradient(
     to bottom,
-    rgba(0,0,0,0.6),
-    rgba(0,0,0,0.9)
+    rgba(0,0,0,0.3), /* 🔥 antes 0.6 */
+    rgba(0,0,0,0.7)  /* 🔥 antes 0.9 */
   );
 }
 
