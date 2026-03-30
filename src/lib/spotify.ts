@@ -216,7 +216,7 @@ export async function getSpotifyPlaylist(
 export async function getSpotifyAlbum(
   albumId: string
 ): Promise<SpotifyAlbum | null> {
-  const redisKey = `spotify:album:${albumId}`;
+  const redisKey = `spotify:album:v2:${albumId}`;
 
   const redisCached = await redis.get(redisKey);
   if (redisCached) return redisCached as SpotifyAlbum;
@@ -251,7 +251,7 @@ export async function getSpotifyAlbum(
   })) ?? [],
   };
 
-  await redis.set(redisKey, normalized, { ex: 10 });
+  await redis.set(redisKey, normalized, { ex: 60 * 60 * 12 });
 
   cache.albums.set(albumId, {
     data: normalized,
