@@ -109,6 +109,15 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
   <button class="style-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm transition cursor-pointer hover:bg-neutral-700" data-style="minimal">Minimal</button>
 </div>
 
+<div class="flex gap-3 mb-4 px-1">
+  <button class="ratio-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm hover:bg-neutral-700" data-ratio="4:5">
+    Post 4:5
+  </button>
+  <button class="ratio-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm hover:bg-neutral-700" data-ratio="9:16">
+    Story 19:6
+  </button>
+</div>
+
 <div class="flex gap-3 mt-2">
   <button id="shareAction"
     class="flex-1 py-3 rounded-xl font-medium bg-accent text-white shadow-lg hover:opacity-90 transition cursor-pointer">
@@ -123,15 +132,6 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
   <button id="closeModal"
     class="w-12 h-12 rounded-xl bg-neutral-800 hover:bg-neutral-700 transition cursor-pointer">
     ✕
-  </button>
-</div>
-
-<div class="flex gap-3 mb-4 px-1">
-  <button class="ratio-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm hover:bg-neutral-700" data-ratio="4:5">
-    Post 4:5
-  </button>
-  <button class="ratio-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm hover:bg-neutral-700" data-ratio="19:6">
-    Story 19:6
   </button>
 </div>
 
@@ -653,13 +653,13 @@ async function generateCard({ image, title, artist, style, ratio="4:5" }) {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
-  if (ratio === "19:6") {
-    canvas.width = 1920;
-    canvas.height = 607;
-  } else {
-    canvas.width = 1080;
-    canvas.height = 1350;
-  }
+if (ratio === "9:16") {
+  canvas.width = 1080;
+  canvas.height = 1920;
+} else {
+  canvas.width = 1080;
+  canvas.height = 1350;
+}
 
   const img = new Image();
   img.crossOrigin = "anonymous";
@@ -717,10 +717,10 @@ ctx.fillRect(0, 0, canvas.width, canvas.height);
   // COVER
 let size, x, y;
 
-if (ratio === "19:6") {
-  size = 450;
-  x = 120;
-  y = (canvas.height - size) / 2;
+if (ratio === "9:16") {
+  size = 700;
+  x = (canvas.width - size) / 2;
+  y = 250;
 } else {
   size = 720;
   x = (canvas.width - size) / 2;
@@ -748,7 +748,7 @@ drawSpacedText(ctx, "LISTEN NOW", 0, 0, 25);
 ctx.restore();
 
   // TEXT
-  const padding = ratio === "19:6" ? 650 : 100;
+  const padding = ratio === "9:16" ? 100 : 100;
   ctx.textAlign = "left";
 
   // TÍTULO
