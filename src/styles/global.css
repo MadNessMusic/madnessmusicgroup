@@ -13,10 +13,11 @@
   --color-accent-content: #fff1ea;
 
   /* LIGHT (DEFAULT) */
-  --color-base-100: #f6f2ee;
-  --color-base-200: #ede6e0;
-  --color-base-300: #e4dbd3;
-  --color-base-content: #120b08;
+  --color-base-100: #ffffff;  /* fondo principal */
+  --color-base-200: #f5f5f5;  /* secciones */
+  --color-base-300: #eaeaea;  /* cards */
+
+  --color-base-content: #0a0a0a;
 
   /* NEUTROS */
   --color-neutral: #120b08;
@@ -37,15 +38,18 @@
    ============================== */
 
 .dark {
-  --color-base-100: #120b08;
-  --color-base-200: #1a110d;
-  --color-base-300: #221612;
-  --color-base-content: #f4efe9;
+  /* 🔥 BASE (fondos) */
+  --color-base-100: #000000;  /* fondo principal */
+  --color-base-200: #0a0a0a;  /* secciones */
+  --color-base-300: #121212;  /* cards / bloques */
 
+  /* 🔥 TEXTO */
+  --color-base-content: #f5f5f5;
+
+  /* 🔥 ACCENTS (mantén tu identidad) */
   --color-primary: #ff9c70;
   --color-accent: #ff7848;
 }
-
 /* fade para playlists evergreen */
 .evergreen-item {
   opacity: 0;
@@ -180,8 +184,8 @@
   height: 100%;
   object-fit: cover;
 
-  opacity: 0.28; /* 🔥 clave */
-  filter: brightness(0.7) contrast(1.2);
+  opacity: 0.58; /* 🔥 clave */
+  filter: brightness(0.7) contrast(1.1);
 }
 
 .hero-overlay {
@@ -191,8 +195,8 @@
 
   background: linear-gradient(
     to bottom,
-    rgba(0,0,0,0.15),
-    rgba(0,0,0,0.9)
+    rgba(0,0,0,0.5),
+    rgba(0,0,0,1)
   );
 }
 
@@ -204,8 +208,33 @@
   background: radial-gradient(
     circle at center,
     transparent 30%,
-    rgba(0,0,0,0.5) 100%
+    rgba(0,0,0,0.8) 100%
   );
+}
+
+/* ==============================
+   HERO OVERLAY LIGHT MODE
+   ============================== */
+html:not(.dark) .hero-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.05) 0%,
+    rgba(255,255,255,0.4) 50%,
+    #ffffff 100%
+  );
+}
+
+html:not(.dark) .hero-overlay::after {
+  background: radial-gradient(
+    circle at center,
+    transparent 30%,
+    rgba(255,255,255,0.8) 100%
+  );
+}
+
+html:not(.dark) .hero-video video {
+  opacity: 0.4;
+  filter: brightness(1.1) contrast(1);
 }
 
 .hero-content {
