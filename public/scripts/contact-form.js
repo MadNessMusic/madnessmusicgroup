@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector('#contact form');
+  const form = document.getElementById("contactForm");
   if (!form) return;
 
   const button = form.querySelector('button[type="submit"]');
@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // evitar doble submit
     if (button.disabled) return;
 
     // UI feedback
@@ -22,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const data = new FormData(form);
 
     try {
-      await fetch(form.action, {
+      const res = await fetch(form.action, {
         method: "POST",
         body: data,
         headers: {
@@ -30,10 +29,12 @@ document.addEventListener("DOMContentLoaded", () => {
         },
       });
 
-      // limpiar inputs
+      if (!res.ok) throw new Error("Error en envío");
+
+      // limpiar
       form.reset();
 
-      // redirigir
+      // redirect
       window.location.href = "/gracias";
 
     } catch (error) {
@@ -41,6 +42,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (text) text.textContent = "Error, intenta de nuevo";
       button.disabled = false;
+      button.classList.remove("opacity-70");
+
+      if (loader) loader.classList.add("hidden");
     }
   });
 });

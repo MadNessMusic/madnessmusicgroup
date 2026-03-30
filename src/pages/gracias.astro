@@ -7,21 +7,44 @@ import Footer from "@/components/Footer.astro";
 <Layout title="Gracias">
   <SlugNavbar />
 
-  <section class="min-h-screen flex items-center justify-center text-center px-6">
-    <div class="max-w-xl">
-      <h1 class="font-heading text-5xl md:text-6xl mb-6">
+  <section class="relative min-h-screen flex items-center justify-center px-6 overflow-hidden">
+
+    <!-- 🌑 overlay sutil -->
+    <div class="absolute inset-0 pointer-events-none
+      bg-gradient-to-b 
+      from-transparent 
+      via-base-100/60 
+      to-base-100">
+    </div>
+
+    <div class="relative z-10 max-w-xl text-center">
+
+      <!-- 🔥 etiqueta -->
+      <span class="block text-xs uppercase tracking-[0.5em] text-base-content/40 mb-6">
+        Contacto
+      </span>
+
+      <!-- 💣 headline -->
+      <h1 class="font-heading text-5xl md:text-6xl mb-6 leading-tight">
         Mensaje enviado
       </h1>
 
-      <p class="opacity-70 mb-10 leading-relaxed">
+      <!-- ✨ texto -->
+      <p class="text-base md:text-lg text-base-content/70 leading-relaxed mb-10">
         Gracias por escribirnos. Hemos recibido tu mensaje y te responderemos
-        pronto.
+        lo antes posible.
       </p>
 
-      <a href="/" class="btn-tactical inline-flex items-center gap-2">
+      <!-- 🚀 botón -->
+      <a 
+        href="/" 
+        class="btn-tactical inline-flex items-center gap-3 px-6 py-3 hover:scale-[1.02] transition-all"
+      >
         Regresar al sitio
       </a>
+
     </div>
+
   </section>
 
   <Footer />
