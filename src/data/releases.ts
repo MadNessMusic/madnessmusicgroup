@@ -11,6 +11,12 @@ export const releases: Release[] = [
     spotifyAlbumId: "5r2tgpw6u7UOFOkC3ee5WL",
     source: "madness",
     cover: "",
+  }
+  {
+    id: "release-baskiat-volver a empezar",
+    spotifyAlbumId: "0PGmnOC5erWJw8ii0s4WQG",
+    source: "supported",
+    cover: "",
   },
   {
     id: "release-rexx-legally",
