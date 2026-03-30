@@ -98,10 +98,20 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
 
   <div id="shareModal" class="fixed inset-0 z-999 hidden items-center justify-center bg-black/80 backdrop-blur-lg">
 
-  <div class="bg-neutral-900 rounded-2xl p-6 w-95 sm:w-115 shadow-2xl transition-all duration-300">
+  <div class="
+  bg-neutral-900 rounded-2xl p-4 sm:p-6
+  w-full max-w-md sm:max-w-lg
+  max-h-[90vh]
+  overflow-y-auto
+  shadow-2xl
+  flex flex-col
+">
 
     <!-- IMAGE PREVIEW -->
-    <img id="sharePreview" class="w-full rounded-xl mb-4" />
+   <img 
+  id="sharePreview" 
+  class="w-full max-h-[60vh] object-contain rounded-xl mb-4 mx-auto" 
+/>
 
     <div class="flex gap-3 mb-5 px-1">
   <button class="style-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm transition cursor-pointer hover:bg-neutral-700" data-style="vibrant">Vibrant</button>
