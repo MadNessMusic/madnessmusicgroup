@@ -306,14 +306,12 @@ const supportedReleases = allReleases
             <p class="text-[10px] tracking-widest uppercase opacity-30 mt-1">
               {formatReleaseDate(release.releaseDate, release.releasePrecision)}
             </p>
-            
-            <div class="w-6 h-px bg-base-content/10 my-2"></div>
 
             {(release.copyrights ?? []).length > 0 && (
   <>
     <div class="w-6 h-px bg-base-content/10 my-2"></div>
 
-    <div class="flex flex-col text-[8px] tracking-wide uppercase text-base-content/20 leading-tight">
+    <div class="flex flex-col text-[9px] tracking-wide uppercase text-base-content/20 leading-tight">
       {(release.copyrights ?? []).map((c) => (
         <span>
           {c.type === "P" ? "℗" : "©"}{" "}
@@ -344,7 +342,7 @@ const supportedReleases = allReleases
     <!-- 🔥 BADGE NEW -->
     {index === 0 && (
       <div class="absolute top-3 left-3 text-[10px] tracking-widest uppercase bg-accent/90 text-black px-3 py-1 rounded-md backdrop-blur-sm">
-        NEW IN ARCHIVE
+        LATEST
       </div>
     )}
 
@@ -402,15 +400,19 @@ const supportedReleases = allReleases
             <p class="text-[10px] tracking-widest uppercase opacity-30 mt-1">
               {formatReleaseDate(release.releaseDate, release.releasePrecision)}
             </p>
-            <div class="w-6 h-px bg-base-content/10 my-2"></div>
-            {release.copyrights && release.copyrights.length > 0 && (
-    <div class="mt-2 flex flex-col text-[8px] tracking-wide uppercase text-base-content/20 leading-tight">
+                       {(release.copyrights ?? []).length > 0 && (
+  <>
+    <div class="w-6 h-px bg-base-content/10 my-2"></div>
 
-    {release.copyrights.map((c) => (
-      <span>{c.text}</span>
-    ))}
-
-  </div>
+    <div class="flex flex-col text-[9px] tracking-wide uppercase text-base-content/20 leading-tight">
+      {(release.copyrights ?? []).map((c) => (
+        <span>
+          {c.type === "P" ? "℗" : "©"}{" "}
+          {c.text.replace(/[©℗]/g, "")}
+        </span>
+      ))}
+    </div>
+  </>
 )}
             </div>
 
