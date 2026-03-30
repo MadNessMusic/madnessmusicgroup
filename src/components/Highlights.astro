@@ -227,9 +227,9 @@ const supportedReleases = allReleases
     </div>
 
     <!-- ROW 1 · RELEASES -->
-     <h3 class="text-xl font-anton mb-6">MadNess Releases</h3>
+    <h2 class="text-xl font-anton mt-20 mb-6">MadNess Music Group Releases</h3>
     <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          <!-- ROW 1 · Madness RELEASES -->
+    <!-- ROW 1 · Madness RELEASES -->
       {madnessReleases.map((release, index) => (
 <div class="group">
   <a
@@ -295,18 +295,19 @@ const supportedReleases = allReleases
   </span>
 
 </div>
-            </div>
-
             <p class="text-[10px] tracking-widest uppercase opacity-30 mt-1">
               {formatReleaseDate(release.releaseDate, release.releasePrecision)}
             </p>
+            </div>
+
+
           </div>
       ))}
     </div>
+
     <!-- ROW 1 · Supported RELEASES -->
-      <h3 class="text-xl font-anton mb-6">Supported Releases</h3>
+      <h2 class="text-xl font-anton mt-20 mb-6">Supported Releases</h3>
       <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-      
       {supportedReleases.map((release, index) => (
 <div class="group">
   <a
@@ -372,11 +373,12 @@ const supportedReleases = allReleases
   </span>
 
 </div>
-            </div>
-
             <p class="text-[10px] tracking-widest uppercase opacity-30 mt-1">
               {formatReleaseDate(release.releaseDate, release.releasePrecision)}
             </p>
+            </div>
+
+
           </div>
       ))}
     </div>
