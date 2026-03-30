@@ -1,18 +1,10 @@
-
 export type Release = {
   id: string;
   spotifyAlbumId: string;
   source: "madness" | "supported";
   cover: string;
-
-  // 🔥 datos enriquecidos (desde Spotify)
-  title?: string;
-  artist?: string;
-  type?: "single" | "ep" | "album";
-  releaseDate?: string;
-  releasePrecision?: string;
-  url?: string;
 };
+
 export const releases: Release[] = [
   {
     id: "release-playa-y-arena-recho",
