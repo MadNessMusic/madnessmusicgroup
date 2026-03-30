@@ -161,5 +161,23 @@
 </section>
 
 <script is:inline>
-  import "/scripts/contact-form.js";
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("contactForm");
+  if (!form) return;
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const res = await fetch(form.action, {
+      method: "POST",
+      body: new FormData(form),
+      headers: { Accept: "application/json" },
+    });
+
+    if (res.ok) {
+      form.reset();
+      window.location.href = "/gracias";
+    }
+  });
+});
 </script>
