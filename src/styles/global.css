@@ -248,7 +248,7 @@
 
   section {
     padding: 56px 16px;
-    max-width: 1300px;
+    max-width: 1600px;
     margin: 0 auto;
   }
 
@@ -411,12 +411,12 @@ transform:scale(.8);
 
 .playlists-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 48px;
 }
 
 .highlights-wrapper {
-  max-width: 1200px;   /* 🔴 CLAVE */
+  max-width: 1600px;   /* 🔴 CLAVE */
   margin: 0 auto;
   padding: 0 24px;
 }
