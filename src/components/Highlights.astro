@@ -192,6 +192,10 @@ const featured = await Promise.all(
 );
 
 const featuredPlaylist = featured[0];
+
+const madnessReleases = releasesData.filter(r => r.source === "madness");
+const supportedReleases = releasesData.filter(r => r.source === "supported");
+const orderedReleases = [...madnessReleases, ...supportedReleases];
 ---
 <!-- HEADER LINE -->
 <div class="mx-auto px-6 mb-20 reveal">
@@ -221,7 +225,7 @@ const featuredPlaylist = featured[0];
 
     <!-- ROW 1 · RELEASES -->
     <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-      {releasesData.map((release, index) => (
+      {orderedReleases.map((release, index) => (
 <div class="group">
   <a
     href={release.url}
