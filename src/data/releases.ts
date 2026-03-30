@@ -240,5 +240,17 @@ export const releases: Release[] = [
     source: "madness",
     cover:"",
   },
+  {
+    id:"release-844-kevin perez",
+    spotifyAlbumId: "7It0lQKS9gcuqpkLTzP4Ws",
+    source: "supported",
+    cover:"",
+  },
+  {
+    id:"release-otico-lexxsb-telmar",
+    spotifyAlbumId: "2e9TMD1D5dUUfEQcmdoXv5",
+    source: "supported",
+    cover:"",
+  },
 
 ];
