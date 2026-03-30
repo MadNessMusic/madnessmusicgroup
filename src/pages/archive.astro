@@ -126,6 +126,15 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
   </button>
 </div>
 
+<div class="flex gap-3 mb-4 px-1">
+  <button class="ratio-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm hover:bg-neutral-700" data-ratio="4:5">
+    Post 4:5
+  </button>
+  <button class="ratio-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm hover:bg-neutral-700" data-ratio="19:6">
+    Story 19:6
+  </button>
+</div>
+
   </div>
 </div>
 
@@ -200,6 +209,7 @@ let currentBlob = null;
 let currentTitle = "";
 let currentArtist = "";
 let currentCopyrights = [];
+let currentRatio = "4:5";
 let currentStyle = "vibrant";
 let originalImage = "";
 let currentUrl = "";
@@ -456,11 +466,6 @@ function render() {
 
     </div>
 
-    <!-- DATE -->
-    <p class="text-[10px] tracking-widest uppercase text-base-content/30 mt-2">
-      ${release.releaseDate || ""}
-    </p>
-
     <!--copyright-->
     ${release.copyrights?.length ? `
   <div class="w-6 h-px bg-base-content/10 my-2"></div>
@@ -513,7 +518,8 @@ window.currentReleaseCopyrights = currentCopyrights;
     image,
     title,
     artist,
-    style: currentStyle
+    style: currentStyle,
+    ratio: "4:5"
   });
 
   currentImage = result.url;
@@ -617,8 +623,13 @@ function getDominantColor(img) {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
-  canvas.width = 50;
-  canvas.height = 50;
+  if (ratio === "19:6") {
+  canvas.width = 1920;
+  canvas.height = 607;
+} else {
+  canvas.width = 1080;
+  canvas.height = 1350;
+}
 
   ctx.drawImage(img, 0, 0, 50, 50);
 
@@ -703,9 +714,17 @@ ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
   // COVER
-const size = 720;
-const x = (canvas.width - size) / 2;
-const y = 150; // 🔥 ESTA LÍNEA FALTABA
+let size, x, y;
+
+if (ratio === "19:6") {
+  size = 450;
+  x = 120;
+  y = (canvas.height - size) / 2;
+} else {
+  size = 720;
+  x = (canvas.width - size) / 2;
+  y = 150;
+}
 
 ctx.drawImage(img, x, y, size, size);
 
@@ -728,11 +747,13 @@ drawSpacedText(ctx, "LISTEN NOW", 0, 0, 25);
 ctx.restore();
 
   // TEXT
-  const padding = 100;
+  const padding = ratio === "19:6" ? 650 : 100;
   ctx.textAlign = "left";
 
   // TÍTULO
-  ctx.font = "900 47px sans-serif";
+  ctx.font = ratio === "19:6"
+  ? "900 60px sans-serif"
+  : "900 47px sans-serif";
   ctx.fillStyle = "white";
 
   const lastY = wrapText(ctx, title, padding, 1000, canvas.width - padding * 2, 60);
@@ -745,15 +766,18 @@ ctx.fillText("www.madnessmusicgroup.com", padding, canvas.height - 65);
 // ARTISTA
   ctx.font = "40px sans-serif";
   ctx.fillStyle = "rgba(255,255,255,0.6)";
-  ctx.fillText(artist, padding, lastY + 85);
+  ctx.fillText(
+  artist,
+  padding,
+  ratio === "19:6" ? lastY + 60 : lastY + 85
+);
 
   // 🔥 COPYRIGHTS (PRO LEVEL)
 if (window.currentReleaseCopyrights?.length) {
   ctx.font = "20px sans-serif";
   ctx.fillStyle = "rgba(255,255,255,0.4)";
 
-  let startY = lastY + 130;
-
+  let startY = ratio === "19:6" ? lastY + 100 : lastY + 130;
   window.currentReleaseCopyrights.forEach((c) => {
     const text = `${c.type === "P" ? "℗" : "©"} ${c.text.replace(/[©℗]/g, "")}`;
 
@@ -830,6 +854,26 @@ function setActiveStyle(style) {
     b.classList.remove("bg-accent", "text-white");
     b.classList.add("bg-neutral-800");
   });
+
+  document.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".ratio-btn");
+  if (!btn) return;
+
+  currentRatio = btn.dataset.ratio;
+
+  const result = await generateCard({
+    image: originalImage,
+    title: currentTitle,
+    artist: currentArtist,
+    style: currentStyle,
+    ratio: currentRatio
+  });
+
+  currentImage = result.url;
+  currentBlob = result.blob;
+
+  document.getElementById("sharePreview").src = currentImage;
+});
 
   const active = document.querySelector(`[data-style="${style}"]`);
   active.classList.remove("bg-neutral-800");
