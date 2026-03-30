@@ -147,7 +147,7 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
   </select>
 
   <select id="sourceFilter" class="w-full bg-base-200 px-4 py-3 rounded-xl">
-    <option value="">Todos</option>
+    <option value="">Todos los orígenes</option>
     <option value="madness">MadNess</option>
     <option value="supported">Supported</option>
   </select>
@@ -321,7 +321,7 @@ function renderFiltered() {
           ? "text-accent font-medium"
           : "text-base-content/40"
       }">
-        ${release.source === "madness" ? "MadNess" : "Supported"}
+        ${release.source === "madness" ? "Released by MadNess" : "Supported"}
       </span>
 
     </div>
