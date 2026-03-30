@@ -4,18 +4,22 @@ import LogoDark from "../assets/MadNess Music Group - Logo Black.png";
 import "../styles/global.css";
 ---
 
-<section id="hero" class="relative min-h-screen flex items-center">
-  <div class="hero-content">
+<section id="hero" class="relative min-h-screen flex items-center overflow-hidden">
+
+  <!-- 🎬 VIDEO BACKGROUND -->
+  <div class="hero-video">
+    <video autoplay muted loop playsinline>
+      <source src="/public/videos/hero-video.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <!-- 🌑 OVERLAY -->
+  <div class="hero-overlay"></div>
+
+  <!-- 🔥 CONTENIDO -->
+  <div class="hero-content relative z-10">
     <div class="grid grid-cols-12 items-center">
       <div class="col-span-12 md:col-span-6 md:col-start-3">
-
-        <div class="hero-video">
-  <video autoplay muted loop playsinline>
-    <source src="../../public/videos/hero-video.mp4" type="video/mp4" />
-  </video>
-</div>
-
-<div class="hero-overlay"></div>
 
         <div class="hero-logo-wrap">
           <img
@@ -31,69 +35,47 @@ import "../styles/global.css";
           />
         </div>
 
-<span
-  class="absolute right-0.5 top-2/6 -translate-y-1/2 text-[25vw] font-anton opacity-[0.03] select-none text-white/20"
-  aria-hidden="true"
->
-  MADNESS
-</span>
+        <!-- TEXTO GIGANTE -->
+        <span
+          class="absolute right-0.5 top-2/6 -translate-y-1/2 text-[25vw] font-anton opacity-[0.03] select-none text-white/20"
+          aria-hidden="true"
+        >
+          MADNESS
+        </span>
 
         <div class="pt-20 sm:pt-28 md:pt-32">
-<span class="block text-2xl tracking-wider uppercase opacity-70 mb-8">
-  <span class="text-accent">Sello Independiente</span> · Plataforma curatorial · Distribución selectiva
-</span>
 
-<div class="w-35 h-0.5 bg-accent/80 mb-6"></div>
+          <span class="block text-2xl tracking-wider uppercase opacity-70 mb-8">
+            <span class="text-accent">Sello Independiente</span> · Plataforma curatorial · Distribución selectiva
+          </span>
+
+          <div class="w-35 h-0.5 bg-accent/80 mb-6"></div>
 
           <p class="text-sm md:text-base opacity-80 leading-relaxed max-w-120 mb-15">
- Lanzamos música de artistas con los que trabajamos directamente y documentamos proyectos contemporáneos a través de nuestro archivo.
-</p>
+            Lanzamos música de artistas con los que trabajamos directamente y documentamos proyectos contemporáneos a través de nuestro archivo.
+          </p>
 
-        <div class="flex gap-4 flex-wrap">
-<a
-  href="/submit"
-  class="
-  inline-flex items-center justify-center
-  px-9 py-4
-  rounded-full
-  text-[11px]
-  tracking-[0.45em]
-  uppercase
-  bg-accent
-  text-white
-  transition-all duration-300 ease-out
-  hover:scale-[1.02]
-  active:scale-[0.98]
-  hover:shadow-[0_12px_40px_rgba(237,118,81,0.35)]
-"
->
-  Enviar música
-</a>
-<a
-  href="/archive"
-  class="
-  inline-flex items-center justify-center
-  px-9 py-4
-  rounded-full
-  text-[11px]
-  tracking-[0.45em]
-  uppercase
-  border border-base-content/30
-  text-base-content/70
-  transition-all duration-300 ease-out
-  hover:border-accent
-  hover:text-accent
-  hover:-translate-y-0.5
-"
->
-  Explorar archivo
-</a>
+          <div class="flex gap-4 flex-wrap">
 
+            <a
+              href="/submit"
+              class="inline-flex items-center justify-center px-9 py-4 rounded-full text-[11px] tracking-[0.45em] uppercase bg-accent text-white transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] hover:shadow-[0_12px_40px_rgba(237,118,81,0.35)]"
+            >
+              Enviar música
+            </a>
 
+            <a
+              href="/archive"
+              class="inline-flex items-center justify-center px-9 py-4 rounded-full text-[11px] tracking-[0.45em] uppercase border border-base-content/30 text-base-content/70 transition-all duration-300 ease-out hover:border-accent hover:text-accent hover:-translate-y-0.5"
+            >
+              Explorar archivo
+            </a>
 
-</div>
+          </div>
         </div>
+
       </div>
     </div>
   </div>
+
 </section>
