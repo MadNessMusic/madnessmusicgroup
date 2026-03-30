@@ -438,7 +438,7 @@ function render() {
           ? "text-accent font-medium"
           : "text-base-content/40"
       }">
-        ${release.source === "madness" ? "MadNess" : "Supported"}
+        ${release.source === "madness" ? "Released by MadNess" : "Supported"}
       </span>
 
     </div>
@@ -452,10 +452,8 @@ function render() {
         : "bg-accent/30 ring-1 ring-accent/20"
     }"></span>
 
-    <!-- DATE -->
-    <p class="text-[10px] tracking-widest uppercase text-base-content/30 mt-2">
-      ${release.releaseDate || ""}
-    </p>
+    <!-- SOURCE -->
+
 
   </div>
 
