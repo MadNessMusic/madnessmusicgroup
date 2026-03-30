@@ -519,7 +519,7 @@ window.currentReleaseCopyrights = currentCopyrights;
     title,
     artist,
     style: currentStyle,
-    ratio: "4:5"
+    ratio: currentRatio
   });
 
   currentImage = result.url;
@@ -607,7 +607,8 @@ document.addEventListener("click", async (e) => {
     image: originalImage,
     title: currentTitle,
     artist: currentArtist,
-    style: currentStyle
+    style: currentStyle,
+    ratio: currentRatio
   });
 
   currentImage = result.url;
@@ -623,13 +624,8 @@ function getDominantColor(img) {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
-  if (ratio === "19:6") {
-  canvas.width = 1920;
-  canvas.height = 607;
-} else {
-  canvas.width = 1080;
-  canvas.height = 1350;
-}
+canvas.width = 50;
+canvas.height = 50;
 
   ctx.drawImage(img, 0, 0, 50, 50);
 
@@ -653,12 +649,17 @@ function getDominantColor(img) {
 }
 
 // 🎯 GENERATE CARD
-async function generateCard({ image, title, artist, style }) {
+async function generateCard({ image, title, artist, style, ratio="4:5" }) {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
-  canvas.width = 1080;
-  canvas.height = 1350;
+  if (ratio === "19:6") {
+    canvas.width = 1920;
+    canvas.height = 607;
+  } else {
+    canvas.width = 1080;
+    canvas.height = 1350;
+  }
 
   const img = new Image();
   img.crossOrigin = "anonymous";
@@ -855,7 +856,12 @@ function setActiveStyle(style) {
     b.classList.add("bg-neutral-800");
   });
 
-  document.addEventListener("click", async (e) => {
+  const active = document.querySelector(`[data-style="${style}"]`);
+  active.classList.remove("bg-neutral-800");
+  active.classList.add("bg-accent", "text-white");
+}
+
+ document.addEventListener("click", async (e) => {
   const btn = e.target.closest(".ratio-btn");
   if (!btn) return;
 
@@ -874,11 +880,6 @@ function setActiveStyle(style) {
 
   document.getElementById("sharePreview").src = currentImage;
 });
-
-  const active = document.querySelector(`[data-style="${style}"]`);
-  active.classList.remove("bg-neutral-800");
-  active.classList.add("bg-accent", "text-white");
-}
 
 function showToast(message) {
   const toast = document.createElement("div");
