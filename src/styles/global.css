@@ -69,6 +69,28 @@
 }
 
 /* ==============================
+   FOOTER LOGO CONTROL
+   ============================== */
+
+/* LIGHT */
+.logo-footer-dark {
+  display: none;
+}
+
+.logo-footer-light {
+  display: block;
+}
+
+/* DARK */
+html.dark .logo-footer-dark {
+  display: block;
+}
+
+html.dark .logo-footer-light {
+  display: none;
+}
+
+/* ==============================
    SCROLLBAR PREMIUM ANIMADA
    ============================== */
 
