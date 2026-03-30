@@ -1,0 +1,82 @@
+---
+const { releases = [] } = Astro.props;
+
+const madnessReleases = releases.filter((r: { source: string; }) => r.source === "madness");
+---
+
+<section id="madness-releases" class="py-24 px-6">
+  <div class="max-w-7xl mx-auto">
+
+    <!-- HEADER -->
+    <div class="mb-12">
+      <h2 class="font-anton text-4xl md:text-6xl tracking-tight">
+        MadNess Releases
+      </h2>
+
+      <p class="mt-4 text-base-content/60 max-w-xl">
+        Proyectos lanzados y distribuidos directamente por el sello.
+      </p>
+    </div>
+
+    <!-- GRID -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+
+      {madnessReleases.map((release: { url: string | URL | null | undefined; image: string | null | undefined; title: unknown; artist: unknown; type: unknown; }) => (
+        <div class="group">
+
+          <a
+            href={release.url}
+            target="_blank"
+            class="relative block rounded-2xl overflow-hidden aspect-square"
+          >
+            <img
+              src={release.image}
+              class="w-full h-full object-cover transition duration-500 group-hover:scale-105"
+            />
+
+            <!-- OVERLAY -->
+            <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-black/50 backdrop-blur-md flex items-end p-4">
+              <div class="flex flex-col gap-2">
+                <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-black">
+                  ▶
+                </div>
+
+                <span class="text-[11px] tracking-widest uppercase text-white/80">
+                  Escuchar
+                </span>
+              </div>
+            </div>
+          </a>
+
+          <!-- INFO -->
+          <div class="mt-4">
+            <p class="font-anton text-lg">
+              {release.title}
+            </p>
+
+            <p class="text-sm opacity-60">
+              {release.artist}
+            </p>
+
+            <!-- META -->
+            <div class="mt-2 flex items-center gap-2 text-[10px] tracking-widest uppercase">
+
+              <span class="text-accent/80">
+                {release.type}
+              </span>
+
+              <span class="w-1 h-1 rounded-full bg-accent/60"></span>
+
+              <span class="text-accent font-medium">
+                Released by MadNess
+              </span>
+
+            </div>
+          </div>
+
+        </div>
+      ))}
+
+    </div>
+  </div>
+</section>
