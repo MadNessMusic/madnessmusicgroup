@@ -306,15 +306,22 @@ const supportedReleases = allReleases
             <p class="text-[10px] tracking-widest uppercase opacity-30 mt-1">
               {formatReleaseDate(release.releaseDate, release.releasePrecision)}
             </p>
+            
             <div class="w-6 h-px bg-base-content/10 my-2"></div>
-            {release.copyrights && release.copyrights.length > 0 && (
-  <div class="mt-2 flex flex-col text-[8px] tracking-wide uppercase text-base-content/20 leading-tight">
 
-    {release.copyrights.map((c) => (
-      <span>{c.text}</span>
-    ))}
+            {(release.copyrights ?? []).length > 0 && (
+  <>
+    <div class="w-6 h-px bg-base-content/10 my-2"></div>
 
-  </div>
+    <div class="flex flex-col text-[8px] tracking-wide uppercase text-base-content/20 leading-tight">
+      {(release.copyrights ?? []).map((c) => (
+        <span>
+          {c.type === "P" ? "℗" : "©"}{" "}
+          {c.text.replace(/[©℗]/g, "")}
+        </span>
+      ))}
+    </div>
+  </>
 )}
             </div>
          
