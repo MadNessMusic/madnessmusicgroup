@@ -48,6 +48,10 @@ type SpotifyAlbum = {
     title: string;
     preview: string | null;
   }[];
+  copyrights: {
+    text: string;
+    type: string;
+  }[];
 };
 
 type SpotifyTrack = {
@@ -240,6 +244,11 @@ export async function getSpotifyAlbum(
         title: track.name,
         preview: track.preview_url ?? null,
       })) ?? [],
+      copyrights:
+  data.copyrights?.map((c: any) => ({
+    text: c.text,
+    type: c.type,
+  })) ?? [],
   };
 
   await redis.set(redisKey, normalized, { ex: 60 * 60 * 12 });
