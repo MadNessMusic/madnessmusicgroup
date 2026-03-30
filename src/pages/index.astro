@@ -10,6 +10,7 @@ import Contact from "../components/Contact.astro";
 import Footer from "../components/Footer.astro";
 import About from "../components/About.astro";
 import MadNessReleases from "../components/MadNessReleases.astro";
+import { releases } from "../data/releases.ts";
 ---
 
 <Layout title="Inicio">
@@ -20,7 +21,7 @@ import MadNessReleases from "../components/MadNessReleases.astro";
     <Hero />
 
     <About />
-    <MadNessReleases />
+    <MadNessReleases releases={releases} />
 
     <Playlists />
 
