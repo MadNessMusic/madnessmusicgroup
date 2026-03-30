@@ -165,18 +165,56 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("contactForm");
   if (!form) return;
 
+  const button = form.querySelector('button[type="submit"]');
+  const text = button?.querySelector(".btn-text");
+  const loader = button?.querySelector(".btn-loader");
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const res = await fetch(form.action, {
-      method: "POST",
-      body: new FormData(form),
-      headers: { Accept: "application/json" },
-    });
+    // 🚫 prevenir doble submit
+    if (button.disabled) return;
 
-    if (res.ok) {
+    // 🔄 UI loading
+    button.disabled = true;
+    button.classList.add("opacity-70");
+
+    if (text) text.textContent = "Enviando…";
+    if (loader) loader.classList.remove("hidden");
+
+    try {
+      const res = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" },
+      });
+
+      if (!res.ok) throw new Error("Error en envío");
+
+      // 🧹 limpiar inputs
       form.reset();
-      window.location.href = "/gracias";
+
+      // ✅ feedback
+      if (text) text.textContent = "Enviado ✓";
+
+      // 🔄 ocultar loader
+      if (loader) loader.classList.add("hidden");
+
+      // 🚀 redirigir
+      setTimeout(() => {
+        window.location.href = "/gracias";
+      }, 700);
+
+    } catch (err) {
+      console.error(err);
+
+      // ❌ error UI
+      if (text) text.textContent = "Error, intenta de nuevo";
+
+      button.disabled = false;
+      button.classList.remove("opacity-70");
+
+      if (loader) loader.classList.add("hidden");
     }
   });
 });
