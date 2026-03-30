@@ -456,17 +456,33 @@ function render() {
 
     </div>
 
-    <!-- SOURCE -->
+    <!-- DATE -->
+    <p class="text-[10px] tracking-widest uppercase text-base-content/30 mt-2">
+      ${release.releaseDate || ""}
+    </p>
 
+    <!--copyright-->
+    ${release.copyrights?.length ? `
+  <div class="w-6 h-px bg-base-content/10 my-2"></div>
+
+  <div class="flex flex-col text-[8px] tracking-wide uppercase text-base-content/20 leading-tight">
+    ${release.copyrights.map(c => `
+      <span>
+        ${c.type === "P" ? "℗" : "©"} 
+        ${c.text.replace(/[©℗]/g, "")}
+      </span>
+    `).join("")}
+  </div>
+` : ""}
 
   </div>
 
 </div>
 `;
-
     grid.appendChild(el);
   });
 }
+
 
 // CLICK SHARE
 document.addEventListener("click", async (e) => {
