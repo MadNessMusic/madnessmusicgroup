@@ -179,29 +179,7 @@
   filter: brightness(0.7) contrast(1.2);
 }
 
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
 
-  background: linear-gradient(
-    to bottom,
-    rgba(0,0,0,0.3), /* 🔥 antes 0.6 */
-    rgba(0,0,0,0.7)  /* 🔥 antes 0.9 */
-  );
-}
-
-.hero-overlay::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-
-  background: radial-gradient(
-    circle at center,
-    transparent 40%,
-    rgba(0,0,0,0.6)
-  );
-}
 
 .hero-content {
   position: relative;
