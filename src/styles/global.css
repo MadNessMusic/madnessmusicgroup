@@ -190,6 +190,83 @@ html.dark .logo-footer-light {
   max-width: none;
 }
 
+.label {
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: color-mix(in srgb, var(--color-base-content) 90%, transparent);
+  margin-bottom: 12px;
+}
+
+.input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgb(255 255 255 / 0.2);
+  padding: 12px 0;
+  font-size: 14px;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+.input::placeholder {
+  color: color-mix(in srgb, var(--color-base-content) 30%, transparent);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.chips.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.chip {
+  padding: 6px 12px;
+  border: 1px solid color-mix(in srgb, var(--color-base-content) 40%, transparent);
+  border-radius: 999px;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  transition: all 0.25s ease;
+}
+
+.chip:hover {
+  opacity: 1;
+  border-color: var(--color-accent);
+}
+
+.chip.active {
+  background: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
+  opacity: 1;
+}
+
+form {
+  width: 100%;
+  margin-bottom: 120px;
+}
+
+.form-section {
+  margin-bottom: 32px;
+}
+
+.hidden {
+  display: none;
+}
 /* ==============================
    HERO video (EDITORIAL)
    ============================== */
@@ -206,8 +283,8 @@ html.dark .logo-footer-light {
   height: 100%;
   object-fit: cover;
 
-  opacity: 0.58; /* 🔥 clave */
-  filter: brightness(0.7) contrast(1.1);
+  opacity: 0.68; /* 🔥 clave */
+  filter: brightness(1) contrast(1.2);
 }
 
 .hero-overlay {

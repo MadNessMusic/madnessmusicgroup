@@ -1,0 +1,433 @@
+---
+import Layout from "@/layouts/Layout.astro"
+import SlugNavbar from "@/components/SlugNavbar.astro"
+import Footer from "@/components/Footer.astro"
+---
+
+<Layout />
+<SlugNavbar title="Submit" />
+
+
+<section class="py-32 text-center max-w-2xl mx-auto px-6">
+
+  <span class="block text-xs uppercase tracking-[0.5em] text-base-content/40 mb-6">
+    Submit
+  </span>
+
+  <h1 class="font-heading text-5xl md:text-6xl mb-6 leading-tight">
+    Enviar música
+  </h1>
+
+  <p class="text-base md:text-lg text-base-content/70 leading-relaxed">
+    Seleccionamos proyectos con identidad. Si tu sonido encaja con nuestra línea, queremos escucharlo.
+  </p>
+
+</section>
+
+<section class="max-w-4xl mx-auto px-6 flex flex-col gap-12">
+<form
+  id="submitForm"
+  action="https://formspree.io/f/xnjbypyv"
+  method="POST"
+  class="max-w-xl mx-auto px-6 flex flex-col gap-12"
+>
+
+  <!-- 🧾 INFO -->
+  <div>
+    <label class="label">Nombre del artista</label>
+    <input 
+      name="artist" 
+      required 
+      class="input" 
+      placeholder="Nombre artístico"
+    />
+  </div>
+
+  <div>
+    <label class="label">Correo</label>
+    <input 
+      type="email" 
+      name="email" 
+      required 
+      class="input" 
+      placeholder="correo@ejemplo.com (donde podamos contactarte)"
+    />
+  </div>
+
+  <!-- 🎧 MÚSICA -->
+<div>
+  <label class="label">Link de Spotify</label>
+  <input 
+    id="spotifyInput"
+    name="spotify" 
+    required 
+    type="url"
+    pattern="https://open.spotify.com/.*"
+    class="input" 
+    placeholder="https://open.spotify.com/track/... o artist/..."
+  />
+</div>
+
+<div class="form-section">
+
+  <label class="label">Género</label>
+
+  <div class="chips" id="mainGenres">
+  <button type="button" class="chip">Urbano</button>
+  <button type="button" class="chip">Electrónico</button>
+  <button type="button" class="chip">Indie</button>
+  <button type="button" class="chip">Pop</button>
+  <button type="button" class="chip">Experimental</button>
+  <button type="button" class="chip">Hip-Hop</button>
+  <button type="button" class="chip">R&B</button>
+  <button type="button" class="chip">Rock</button>
+  <button type="button" class="chip">Jazz</button>
+  <button type="button" class="chip">Soul</button>
+  <button type="button" class="chip">Afro</button>
+  <button type="button" class="chip">Latino</button>
+  <button type="button" class="chip">Club</button>
+  <button type="button" class="chip">Ambient</button>
+</div>
+
+</div>
+
+<div class="form-section">
+
+  <label class="label opacity-50" id="subLabel">
+    Subgénero (elige primero un género)
+  </label>
+
+<div class="chips hidden" id="subGenres">
+
+  <!-- URBANO -->
+  <button class="chip sub" data-parent="Urbano">Reggaetón</button>
+  <button class="chip sub" data-parent="Urbano">Trap</button>
+  <button class="chip sub" data-parent="Urbano">Drill</button>
+  <button class="chip sub" data-parent="Urbano">Jersey Club</button>
+
+  <!-- ELECTRÓNICO -->
+  <button class="chip sub" data-parent="Electrónico">House</button>
+  <button class="chip sub" data-parent="Electrónico">Techno</button>
+  <button class="chip sub" data-parent="Electrónico">Trance</button>
+  <button class="chip sub" data-parent="Electrónico">Breakbeat</button>
+  <button class="chip sub" data-parent="Electrónico">Garage</button>
+  <button class="chip sub" data-parent="Electrónico">UK Bass</button>
+  <button class="chip sub" data-parent="Electrónico">Drum & Bass</button>
+  <button class="chip sub" data-parent="Electrónico">IDM</button>
+
+  <!-- INDIE -->
+  <button class="chip sub" data-parent="Indie">Alt Rock</button>
+  <button class="chip sub" data-parent="Indie">Dream Pop</button>
+  <button class="chip sub" data-parent="Indie">Lo-fi</button>
+
+  <!-- POP -->
+  <button class="chip sub" data-parent="Pop">Alt Pop</button>
+  <button class="chip sub" data-parent="Pop">Hyperpop</button>
+  <button class="chip sub" data-parent="Pop">Synthpop</button>
+
+  <!-- EXPERIMENTAL -->
+  <button class="chip sub" data-parent="Experimental">Noise</button>
+  <button class="chip sub" data-parent="Experimental">Avant-garde</button>
+  <button class="chip sub" data-parent="Experimental">Glitch</button>
+
+  <!-- HIP-HOP -->
+  <button class="chip sub" data-parent="Hip-Hop">Boom Bap</button>
+  <button class="chip sub" data-parent="Hip-Hop">Cloud Rap</button>
+  <button class="chip sub" data-parent="Hip-Hop">Underground</button>
+
+  <!-- R&B -->
+  <button class="chip sub" data-parent="R&B">Alt R&B</button>
+  <button class="chip sub" data-parent="R&B">Neo Soul</button>
+
+  <!-- ROCK -->
+  <button class="chip sub" data-parent="Rock">Post Punk</button>
+  <button class="chip sub" data-parent="Rock">Shoegaze</button>
+
+  <!-- JAZZ -->
+  <button class="chip sub" data-parent="Jazz">Jazz Fusion</button>
+  <button class="chip sub" data-parent="Jazz">Nu Jazz</button>
+
+  <!-- SOUL -->
+  <button class="chip sub" data-parent="Soul">Neo Soul</button>
+  <button class="chip sub" data-parent="Soul">Funk</button>
+
+  <!-- AFRO -->
+  <button class="chip sub" data-parent="Afro">Afrobeats</button>
+  <button class="chip sub" data-parent="Afro">Amapiano</button>
+
+  <!-- LATINO -->
+  <button class="chip sub" data-parent="Latino">Corridos</button>
+  <button class="chip sub" data-parent="Latino">Regional Mexicano</button>
+  <button class="chip sub" data-parent="Latino">Latin Pop</button>
+  <button class="chip sub" data-parent="Latino">Reggaeton Mexa</button>
+
+  <!-- CLUB -->
+  <button class="chip sub" data-parent="Club">Club</button>
+  <button class="chip sub" data-parent="Club">Hardgroove</button>
+  <button class="chip sub" data-parent="Club">Baile Funk</button>
+
+  <!-- AMBIENT -->
+  <button class="chip sub" data-parent="Ambient">Ambient</button>
+  <button class="chip sub" data-parent="Ambient">Drone</button>
+
+
+  </div>
+
+  <input type="hidden" name="genre" id="genreInput" />
+
+</div>
+
+  <!-- 🎨 PROYECTO -->
+  <div>
+    <label class="label">Cuéntanos sobre tu proyecto</label>
+    <textarea 
+      name="message" 
+      rows="4" 
+      class="input"
+      placeholder="Describe tu sonido, referencias o lo que hace único tu proyecto"
+    ></textarea>
+  </div>
+
+  <!-- 🌍 CONTEXTO -->
+  <div>
+    <label class="label">Ciudad / país</label>
+    <input 
+      name="location" 
+      class="input" 
+      placeholder="Monterrey, MX"
+    />
+  </div>
+
+  <div>
+    <label class="label">Instagram</label>
+    <input 
+      name="instagram" 
+      class="input" 
+      placeholder="@usuario"
+    />
+  </div>
+
+  <!-- ⚠️ DISCLAIMER -->
+  <p class="text-xs text-base-content/40 leading-relaxed max-w-md">
+    Recibimos muchos envíos. Solo contactamos proyectos alineados con nuestra línea curatorial.
+  </p>
+
+  <!-- 🚀 CTA -->
+  <button 
+    type="submit" 
+    class="btn-tactical px-6 py-3 self-start flex items-center gap-3"
+  >
+    <span class="btn-text">Enviar para revisión</span>
+
+    <span class="btn-loader hidden w-4 h-4 border-2 border-base-content/30 border-t-white rounded-full animate-spin"></span>
+  </button>
+
+</form>
+</section>
+
+<Footer />
+
+<script is:inline>
+document.addEventListener("DOMContentLoaded", () => {
+  const mainChips = document.querySelectorAll("#mainGenres .chip");
+  const subChips = document.querySelectorAll("#subGenres .chip");
+  const subContainer = document.getElementById("subGenres");
+  const subLabel = document.getElementById("subLabel");
+  const input = document.getElementById("genreInput");
+
+  let selectedMain = null;
+  let selectedSub = null;
+
+  // 🎧 MAIN GENRE
+  mainChips.forEach(chip => {
+    chip.addEventListener("click", () => {
+
+      // toggle OFF
+      if (chip.classList.contains("active")) {
+        chip.classList.remove("active");
+        selectedMain = null;
+
+        // reset subgéneros
+        selectedSub = null;
+        subContainer.classList.add("hidden");
+        subLabel.classList.add("opacity-50");
+        subLabel.textContent = "Subgénero (elige primero un género)";
+
+        subChips.forEach(c => c.classList.remove("active"));
+
+        updateInput();
+        return;
+      }
+
+      // seleccionar nuevo
+      mainChips.forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+
+      selectedMain = chip.textContent;
+
+      // mostrar subgéneros
+      subContainer.classList.remove("hidden");
+      subLabel.classList.remove("opacity-50");
+      subLabel.textContent = "Subgénero";
+
+      // reset sub
+      selectedSub = null;
+
+      subChips.forEach(c => {
+        c.classList.remove("active");
+
+        if (c.dataset.parent === selectedMain) {
+          c.style.display = "inline-flex";
+        } else {
+          c.style.display = "none";
+        }
+      });
+
+      updateInput();
+    });
+  });
+
+  // 🎛️ SUBGENRE
+  subChips.forEach(chip => {
+    chip.addEventListener("click", () => {
+
+      // toggle OFF
+      if (chip.classList.contains("active")) {
+        chip.classList.remove("active");
+        selectedSub = null;
+        updateInput();
+        return;
+      }
+
+      // seleccionar nuevo
+      subChips.forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+
+      selectedSub = chip.textContent;
+
+      updateInput();
+    });
+  });
+
+  function updateInput() {
+    if (!selectedMain) {
+      input.value = "";
+      return;
+    }
+
+    input.value = selectedSub
+      ? `${selectedMain} → ${selectedSub}`
+      : selectedMain;
+  }
+});
+
+async function detectGenres(type, id) {
+  try {
+    let genres = [];
+
+    if (type === "artist") {
+      const res = await fetch(`/api/spotify?type=artist&id=${id}`);
+      const data = await res.json();
+      genres = data.genres || [];
+    }
+
+    if (type === "track") {
+      const res = await fetch(`/api/spotify?type=track&id=${id}`);
+      const data = await res.json();
+
+      const artistId = data.artists?.[0]?.id;
+
+      if (artistId) {
+        const artistRes = await fetch(`/api/spotify?type=artist&id=${artistId}`);
+        const artistData = await artistRes.json();
+        genres = artistData.genres || [];
+      }
+    }
+
+    applyDetectedGenres(genres);
+
+  } catch (err) {
+    console.error("Spotify detect error", err);
+  }
+}
+
+async function detectGenres(type, id) {
+  try {
+    let genres = [];
+
+    if (type === "artist") {
+      const res = await fetch(`/api/spotify?type=artist&id=${id}`);
+      const data = await res.json();
+      genres = data.genres || [];
+    }
+
+    if (type === "track") {
+      const res = await fetch(`/api/spotify?type=track&id=${id}`);
+      const data = await res.json();
+
+      const artistId = data.artists?.[0]?.id;
+
+      if (artistId) {
+        const artistRes = await fetch(`/api/spotify?type=artist&id=${artistId}`);
+        const artistData = await artistRes.json();
+        genres = artistData.genres || [];
+      }
+    }
+
+    applyDetectedGenres(genres);
+
+  } catch (err) {
+    console.error("Spotify detect error", err);
+  }
+}
+
+function mapGenre(spotifyGenres) {
+  const map = {
+    "reggaeton": ["Urbano", "Reggaetón"],
+    "trap": ["Urbano", "Trap"],
+    "drill": ["Urbano", "Drill"],
+    "house": ["Electrónico", "House"],
+    "techno": ["Electrónico", "Techno"],
+    "indie": ["Indie", null],
+    "hyperpop": ["Pop", "Hyperpop"],
+    "alt pop": ["Pop", "Alt Pop"],
+    "ambient": ["Ambient", "Ambient"],
+    "afrobeats": ["Afro", "Afrobeats"],
+  };
+
+  for (const g of spotifyGenres) {
+    for (const key in map) {
+      if (g.toLowerCase().includes(key)) {
+        return map[key];
+      }
+    }
+  }
+
+  return null;
+}
+
+function applyDetectedGenres(genres) {
+  const mapped = mapGenre(genres);
+  if (!mapped) return;
+
+  const [main, sub] = mapped;
+
+  const mainChip = [...document.querySelectorAll("#mainGenres .chip")]
+    .find(c => c.textContent === main);
+
+  if (!mainChip) return;
+
+  mainChip.click(); // activa género
+
+  if (sub) {
+    setTimeout(() => {
+      const subChip = [...document.querySelectorAll("#subGenres .chip")]
+        .find(c => c.textContent === sub);
+
+      if (subChip) subChip.click();
+    }, 100);
+  }
+
+  reorderChips(main, sub);
+}
+</script>
