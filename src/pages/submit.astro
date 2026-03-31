@@ -27,7 +27,7 @@ import Footer from "@/components/Footer.astro"
 <section class="max-w-4xl mx-auto px-6 flex flex-col gap-12">
 <form
   id="submitForm"
-  action="https://formspree.io/f/xnjbypyv"
+  action="https://formspree.io/f/xlgonveo"
   method="POST"
   class="max-w-xl mx-auto px-6 flex flex-col gap-12"
 >
@@ -72,7 +72,7 @@ import Footer from "@/components/Footer.astro"
 
   <label class="label">Género</label>
 
-  <div class="chips" id="mainGenres">
+<div class="chips" id="mainGenres">
   <button type="button" class="chip">Urbano</button>
   <button type="button" class="chip">Electrónico</button>
   <button type="button" class="chip">Indie</button>
@@ -87,6 +87,8 @@ import Footer from "@/components/Footer.astro"
   <button type="button" class="chip">Latino</button>
   <button type="button" class="chip">Club</button>
   <button type="button" class="chip">Ambient</button>
+  <button type="button" class="chip">Folk</button>
+  <button type="button" class="chip">Global</button>
 </div>
 
 </div>
@@ -100,78 +102,97 @@ import Footer from "@/components/Footer.astro"
 <div class="chips hidden" id="subGenres">
 
   <!-- URBANO -->
-  <button class="chip sub" data-parent="Urbano">Reggaetón</button>
-  <button class="chip sub" data-parent="Urbano">Trap</button>
-  <button class="chip sub" data-parent="Urbano">Drill</button>
-  <button class="chip sub" data-parent="Urbano">Jersey Club</button>
+  <button type="button" class="chip sub" data-parent="Urbano">Reggaetón</button>
+  <button type="button" class="chip sub" data-parent="Urbano">Trap</button>
+  <button type="button" class="chip sub" data-parent="Urbano">Drill</button>
+  <button type="button" class="chip sub" data-parent="Urbano">Jersey Club</button>
+  <button type="button" class="chip sub" data-parent="Urbano">Dembow</button>
 
   <!-- ELECTRÓNICO -->
-  <button class="chip sub" data-parent="Electrónico">House</button>
-  <button class="chip sub" data-parent="Electrónico">Techno</button>
-  <button class="chip sub" data-parent="Electrónico">Trance</button>
-  <button class="chip sub" data-parent="Electrónico">Breakbeat</button>
-  <button class="chip sub" data-parent="Electrónico">Garage</button>
-  <button class="chip sub" data-parent="Electrónico">UK Bass</button>
-  <button class="chip sub" data-parent="Electrónico">Drum & Bass</button>
-  <button class="chip sub" data-parent="Electrónico">IDM</button>
+  <button type="button" class="chip sub" data-parent="Electrónico">House</button>
+  <button type="button" class="chip sub" data-parent="Electrónico">Techno</button>
+  <button type="button" class="chip sub" data-parent="Electrónico">Trance</button>
+  <button type="button" class="chip sub" data-parent="Electrónico">Breakbeat</button>
+  <button type="button" class="chip sub" data-parent="Electrónico">Garage</button>
+  <button type="button" class="chip sub" data-parent="Electrónico">UK Bass</button>
+  <button type="button" class="chip sub" data-parent="Electrónico">Drum & Bass</button>
+  <button type="button" class="chip sub" data-parent="Electrónico">IDM</button>
+  <button type="button" class="chip sub" data-parent="Electrónico">Hard Techno</button>
+  <button type="button" class="chip sub" data-parent="Electrónico">Minimal</button>
 
   <!-- INDIE -->
-  <button class="chip sub" data-parent="Indie">Alt Rock</button>
-  <button class="chip sub" data-parent="Indie">Dream Pop</button>
-  <button class="chip sub" data-parent="Indie">Lo-fi</button>
+  <button type="button" class="chip sub" data-parent="Indie">Alt Rock</button>
+  <button type="button" class="chip sub" data-parent="Indie">Dream Pop</button>
+  <button type="button" class="chip sub" data-parent="Indie">Lo-fi</button>
+  <button type="button" class="chip sub" data-parent="Indie">Indie Folk</button>
 
   <!-- POP -->
-  <button class="chip sub" data-parent="Pop">Alt Pop</button>
-  <button class="chip sub" data-parent="Pop">Hyperpop</button>
-  <button class="chip sub" data-parent="Pop">Synthpop</button>
+  <button type="button" class="chip sub" data-parent="Pop">Alt Pop</button>
+  <button type="button" class="chip sub" data-parent="Pop">Hyperpop</button>
+  <button type="button" class="chip sub" data-parent="Pop">Synthpop</button>
+  <button type="button" class="chip sub" data-parent="Pop">Dance Pop</button>
 
   <!-- EXPERIMENTAL -->
-  <button class="chip sub" data-parent="Experimental">Noise</button>
-  <button class="chip sub" data-parent="Experimental">Avant-garde</button>
-  <button class="chip sub" data-parent="Experimental">Glitch</button>
+  <button type="button" class="chip sub" data-parent="Experimental">Noise</button>
+  <button type="button" class="chip sub" data-parent="Experimental">Avant-garde</button>
+  <button type="button" class="chip sub" data-parent="Experimental">Glitch</button>
+  <button type="button" class="chip sub" data-parent="Experimental">Deconstructed Club</button>
 
   <!-- HIP-HOP -->
-  <button class="chip sub" data-parent="Hip-Hop">Boom Bap</button>
-  <button class="chip sub" data-parent="Hip-Hop">Cloud Rap</button>
-  <button class="chip sub" data-parent="Hip-Hop">Underground</button>
+  <button type="button" class="chip sub" data-parent="Hip-Hop">Boom Bap</button>
+  <button type="button" class="chip sub" data-parent="Hip-Hop">Cloud Rap</button>
+  <button type="button" class="chip sub" data-parent="Hip-Hop">Underground</button>
+  <button type="button" class="chip sub" data-parent="Hip-Hop">Conscious Rap</button>
 
   <!-- R&B -->
-  <button class="chip sub" data-parent="R&B">Alt R&B</button>
-  <button class="chip sub" data-parent="R&B">Neo Soul</button>
+  <button type="button" class="chip sub" data-parent="R&B">Alt R&B</button>
+  <button type="button" class="chip sub" data-parent="R&B">Neo Soul</button>
+  <button type="button" class="chip sub" data-parent="R&B">Contemporary R&B</button>
 
   <!-- ROCK -->
-  <button class="chip sub" data-parent="Rock">Post Punk</button>
-  <button class="chip sub" data-parent="Rock">Shoegaze</button>
+  <button type="button" class="chip sub" data-parent="Rock">Post Punk</button>
+  <button type="button" class="chip sub" data-parent="Rock">Shoegaze</button>
+  <button type="button" class="chip sub" data-parent="Rock">Garage Rock</button>
 
   <!-- JAZZ -->
-  <button class="chip sub" data-parent="Jazz">Jazz Fusion</button>
-  <button class="chip sub" data-parent="Jazz">Nu Jazz</button>
+  <button type="button" class="chip sub" data-parent="Jazz">Jazz Fusion</button>
+  <button type="button" class="chip sub" data-parent="Jazz">Nu Jazz</button>
+  <button type="button" class="chip sub" data-parent="Jazz">Lo-fi Jazz</button>
 
   <!-- SOUL -->
-  <button class="chip sub" data-parent="Soul">Neo Soul</button>
-  <button class="chip sub" data-parent="Soul">Funk</button>
+  <button type="button" class="chip sub" data-parent="Soul">Neo Soul</button>
+  <button type="button" class="chip sub" data-parent="Soul">Funk</button>
 
   <!-- AFRO -->
-  <button class="chip sub" data-parent="Afro">Afrobeats</button>
-  <button class="chip sub" data-parent="Afro">Amapiano</button>
+  <button type="button" class="chip sub" data-parent="Afro">Afrobeats</button>
+  <button type="button" class="chip sub" data-parent="Afro">Amapiano</button>
 
   <!-- LATINO -->
-  <button class="chip sub" data-parent="Latino">Corridos</button>
-  <button class="chip sub" data-parent="Latino">Regional Mexicano</button>
-  <button class="chip sub" data-parent="Latino">Latin Pop</button>
-  <button class="chip sub" data-parent="Latino">Reggaeton Mexa</button>
+  <button type="button" class="chip sub" data-parent="Latino">Corridos</button>
+  <button type="button" class="chip sub" data-parent="Latino">Regional Mexicano</button>
+  <button type="button" class="chip sub" data-parent="Latino">Latin Pop</button>
+  <button type="button" class="chip sub" data-parent="Latino">Reggaeton Mexa</button>
 
   <!-- CLUB -->
-  <button class="chip sub" data-parent="Club">Club</button>
-  <button class="chip sub" data-parent="Club">Hardgroove</button>
-  <button class="chip sub" data-parent="Club">Baile Funk</button>
+  <button type="button" class="chip sub" data-parent="Club">Club</button>
+  <button type="button" class="chip sub" data-parent="Club">Hardgroove</button>
+  <button type="button" class="chip sub" data-parent="Club">Baile Funk</button>
+  <button type="button" class="chip sub" data-parent="Club">Ghetto Tech</button>
 
   <!-- AMBIENT -->
-  <button class="chip sub" data-parent="Ambient">Ambient</button>
-  <button class="chip sub" data-parent="Ambient">Drone</button>
+  <button type="button" class="chip sub" data-parent="Ambient">Ambient</button>
+  <button type="button" class="chip sub" data-parent="Ambient">Drone</button>
+  <button type="button" class="chip sub" data-parent="Ambient">Soundscape</button>
 
+  <!-- FOLK -->
+  <button type="button" class="chip sub" data-parent="Folk">Indie Folk</button>
+  <button type="button" class="chip sub" data-parent="Folk">Acoustic</button>
 
-  </div>
+  <!-- GLOBAL -->
+  <button type="button" class="chip sub" data-parent="Global">World</button>
+  <button type="button" class="chip sub" data-parent="Global">Fusion</button>
+
+</div>
 
   <input type="hidden" name="genre" id="genreInput" />
 
@@ -321,113 +342,4 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-async function detectGenres(type, id) {
-  try {
-    let genres = [];
-
-    if (type === "artist") {
-      const res = await fetch(`/api/spotify?type=artist&id=${id}`);
-      const data = await res.json();
-      genres = data.genres || [];
-    }
-
-    if (type === "track") {
-      const res = await fetch(`/api/spotify?type=track&id=${id}`);
-      const data = await res.json();
-
-      const artistId = data.artists?.[0]?.id;
-
-      if (artistId) {
-        const artistRes = await fetch(`/api/spotify?type=artist&id=${artistId}`);
-        const artistData = await artistRes.json();
-        genres = artistData.genres || [];
-      }
-    }
-
-    applyDetectedGenres(genres);
-
-  } catch (err) {
-    console.error("Spotify detect error", err);
-  }
-}
-
-async function detectGenres(type, id) {
-  try {
-    let genres = [];
-
-    if (type === "artist") {
-      const res = await fetch(`/api/spotify?type=artist&id=${id}`);
-      const data = await res.json();
-      genres = data.genres || [];
-    }
-
-    if (type === "track") {
-      const res = await fetch(`/api/spotify?type=track&id=${id}`);
-      const data = await res.json();
-
-      const artistId = data.artists?.[0]?.id;
-
-      if (artistId) {
-        const artistRes = await fetch(`/api/spotify?type=artist&id=${artistId}`);
-        const artistData = await artistRes.json();
-        genres = artistData.genres || [];
-      }
-    }
-
-    applyDetectedGenres(genres);
-
-  } catch (err) {
-    console.error("Spotify detect error", err);
-  }
-}
-
-function mapGenre(spotifyGenres) {
-  const map = {
-    "reggaeton": ["Urbano", "Reggaetón"],
-    "trap": ["Urbano", "Trap"],
-    "drill": ["Urbano", "Drill"],
-    "house": ["Electrónico", "House"],
-    "techno": ["Electrónico", "Techno"],
-    "indie": ["Indie", null],
-    "hyperpop": ["Pop", "Hyperpop"],
-    "alt pop": ["Pop", "Alt Pop"],
-    "ambient": ["Ambient", "Ambient"],
-    "afrobeats": ["Afro", "Afrobeats"],
-  };
-
-  for (const g of spotifyGenres) {
-    for (const key in map) {
-      if (g.toLowerCase().includes(key)) {
-        return map[key];
-      }
-    }
-  }
-
-  return null;
-}
-
-function applyDetectedGenres(genres) {
-  const mapped = mapGenre(genres);
-  if (!mapped) return;
-
-  const [main, sub] = mapped;
-
-  const mainChip = [...document.querySelectorAll("#mainGenres .chip")]
-    .find(c => c.textContent === main);
-
-  if (!mainChip) return;
-
-  mainChip.click(); // activa género
-
-  if (sub) {
-    setTimeout(() => {
-      const subChip = [...document.querySelectorAll("#subGenres .chip")]
-        .find(c => c.textContent === sub);
-
-      if (subChip) subChip.click();
-    }, 100);
-  }
-
-  reorderChips(main, sub);
-}
 </script>
