@@ -29,7 +29,7 @@ import Footer from "@/components/Footer.astro"
   id="submitForm"
   action="https://formspree.io/f/xlgonveo"
   method="POST"
-  class="max-w-xl mx-auto px-6 flex flex-col gap-12"
+  class="max-w-4xl mx-auto px-6 flex flex-col gap-12"
 >
 
   <!-- 🧾 INFO -->
@@ -70,7 +70,7 @@ import Footer from "@/components/Footer.astro"
 
 <div class="form-section">
 
-  <label class="label">Género</label>
+  <label class="label">Género (elige uno)</label>
 
 <div class="chips" id="mainGenres">
   <button type="button" class="chip">Urbano</button>
@@ -95,7 +95,7 @@ import Footer from "@/components/Footer.astro"
 
 <div class="form-section">
 
-  <label class="label opacity-50" id="subLabel">
+  <label class="label hidden" id="subLabel">
     Subgénero (elige primero un género)
   </label>
 
@@ -271,7 +271,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // reset subgéneros
         selectedSub = null;
         subContainer.classList.add("hidden");
-        subLabel.classList.add("opacity-50");
+        subLabel.classList.add("hidden");
         subLabel.textContent = "Subgénero (elige primero un género)";
 
         subChips.forEach(c => c.classList.remove("active"));
@@ -288,7 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // mostrar subgéneros
       subContainer.classList.remove("hidden");
-      subLabel.classList.remove("opacity-50");
+      subLabel.classList.remove("hidden");
       subLabel.textContent = "Subgénero";
 
       // reset sub

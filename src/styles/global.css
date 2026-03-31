@@ -203,7 +203,7 @@ html.dark .logo-footer-light {
   width: 100%;
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgb(255 255 255 / 0.2);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-base-content) 20%, transparent);
   padding: 12px 0;
   font-size: 14px;
   color: inherit;
@@ -234,7 +234,7 @@ html.dark .logo-footer-light {
 
 .chip {
   padding: 6px 12px;
-  border: 1px solid color-mix(in srgb, var(--color-base-content) 40%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-base-content) 80%, transparent);
   border-radius: 999px;
   font-size: 10px;
   letter-spacing: 0.15em;
@@ -257,11 +257,11 @@ html.dark .logo-footer-light {
 
 form {
   width: 100%;
-  margin-bottom: 120px;
+  margin-bottom: 40px;
 }
 
 .form-section {
-  margin-bottom: 32px;
+  margin-bottom: 0px;
 }
 
 .hidden {
