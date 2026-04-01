@@ -183,40 +183,33 @@ document.addEventListener("DOMContentLoaded", () => {
     if (text) text.textContent = "Enviando…";
     if (loader) loader.classList.remove("hidden");
 
-    try {
-      const res = await fetch(form.action, {
-        method: "POST",
-        body: new FormData(form),
-        mode: "no-cors",
-      });
+   try {
+  await fetch(form.action, {
+    method: "POST",
+    body: new FormData(form),
+    mode: "no-cors",
+  });
 
-      if (!res.ok) throw new Error("Error en envío");
+  form.reset();
 
-      // 🧹 limpiar inputs
-      form.reset();
+  if (text) text.textContent = "Enviado ✓";
 
-      // ✅ feedback
-      if (text) text.textContent = "Enviado ✓";
+  if (loader) loader.classList.add("hidden");
 
-      // 🔄 ocultar loader
-      if (loader) loader.classList.add("hidden");
+  setTimeout(() => {
+    window.location.href = "/gracias?type=contact";
+  }, 700);
 
-      // 🚀 redirigir
-      setTimeout(() => {
-        window.location.href = "/gracias?type=contact";
-      }, 700);
+} catch (err) {
+  console.error(err);
 
-    } catch (err) {
-      console.error(err);
+  if (text) text.textContent = "Error, intenta de nuevo";
 
-      // ❌ error UI
-      if (text) text.textContent = "Error, intenta de nuevo";
+  button.disabled = false;
+  button.classList.remove("opacity-70");
 
-      button.disabled = false;
-      button.classList.remove("opacity-70");
-
-      if (loader) loader.classList.add("hidden");
-    }
+  if (loader) loader.classList.add("hidden");
+}
   });
 });
 </script>
