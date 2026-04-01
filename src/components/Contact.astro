@@ -183,33 +183,40 @@ document.addEventListener("DOMContentLoaded", () => {
     if (text) text.textContent = "Enviando…";
     if (loader) loader.classList.remove("hidden");
 
-   try {
-  await fetch(form.action, {
-    method: "POST",
-    body: new FormData(form),
-    mode: "no-cors",
-  });
+    try {
+      const res = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" },
+      });
 
-  form.reset();
+      if (!res.ok) throw new Error("Error en envío");
 
-  if (text) text.textContent = "Enviado ✓";
+      // 🧹 limpiar inputs
+      form.reset();
 
-  if (loader) loader.classList.add("hidden");
+      // ✅ feedback
+      if (text) text.textContent = "Enviado ✓";
 
-  setTimeout(() => {
-    window.location.href = "/gracias?type=contact";
-  }, 700);
+      // 🔄 ocultar loader
+      if (loader) loader.classList.add("hidden");
 
-} catch (err) {
-  console.error(err);
+      // 🚀 redirigir
+      setTimeout(() => {
+        window.location.href = "/gracias?type=contact";
+      }, 700);
 
-  if (text) text.textContent = "Error, intenta de nuevo";
+    } catch (err) {
+      console.error(err);
 
-  button.disabled = false;
-  button.classList.remove("opacity-70");
+      // ❌ error UI
+      if (text) text.textContent = "Error, intenta de nuevo";
 
-  if (loader) loader.classList.add("hidden");
-}
+      button.disabled = false;
+      button.classList.remove("opacity-70");
+
+      if (loader) loader.classList.add("hidden");
+    }
   });
 });
 </script>
