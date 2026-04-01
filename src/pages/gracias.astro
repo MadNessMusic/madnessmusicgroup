@@ -2,13 +2,16 @@
 import Layout from "@/layouts/Layout.astro";
 import SlugNavbar from "@/components/SlugNavbar.astro";
 import Footer from "@/components/Footer.astro";
+
+const type = Astro.url.searchParams.get("type");
 ---
 
 <Layout title="Gracias">
   <SlugNavbar />
 
-  <section class="relative min-h-screen flex items-center justify-center px-6 overflow-hidden">
-
+<section class={`relative min-h-screen flex items-center justify-center px-6 overflow-hidden ${
+  type === "submit" ? "bg-linear-to-b from-transparent to-black/80" : ""
+}`}>
     <!-- 🌑 overlay sutil -->
     <div class="absolute inset-0 pointer-events-none
       bg-linear-to-b 
@@ -21,18 +24,20 @@ import Footer from "@/components/Footer.astro";
 
       <!-- 🔥 etiqueta -->
       <span class="block text-xs uppercase tracking-[0.5em] text-base-content/40 mb-6">
-        Contacto
+        {type === "submit" ? "Submit" : "Contacto"}
       </span>
 
       <!-- 💣 headline -->
       <h1 class="font-heading text-5xl md:text-6xl mb-6 leading-tight">
-        Mensaje enviado
+        {type === "submit" ? "Música recibida" : "Mensaje enviado"}
       </h1>
 
       <!-- ✨ texto -->
       <p class="text-base md:text-lg text-base-content/70 leading-relaxed mb-10">
-        Gracias por escribirnos. Hemos recibido tu mensaje y te responderemos
-        lo antes posible.
+        {type === "submit"
+          ? "Gracias por compartir tu proyecto. Revisamos cada envío cuidadosamente y te contactaremos si encaja con nuestra línea."
+          : "Gracias por escribirnos. Hemos recibido tu mensaje y te responderemos lo antes posible."
+        }
       </p>
 
       <!-- 🚀 botón -->
@@ -40,7 +45,7 @@ import Footer from "@/components/Footer.astro";
         href="/" 
         class="btn-tactical inline-flex items-center gap-3 px-6 py-3 hover:scale-[1.02] transition-all"
       >
-        Regresar al sitio
+        {type === "submit" ? "Volver al sitio" : "Regresar al sitio"}
       </a>
 
     </div>

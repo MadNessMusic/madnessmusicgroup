@@ -342,4 +342,46 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+// 🛠️ FORM SUBMISSION
+
+const form = document.getElementById("submitForm");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const button = form.querySelector("button");
+  const text = button?.querySelector(".btn-text");
+  const loader = button?.querySelector(".btn-loader");
+
+  if (button.disabled) return;
+
+  button.disabled = true;
+
+  if (text) text.textContent = "Enviando…";
+  if (loader) loader.classList.remove("hidden");
+
+  try {
+    const res = await fetch(form.action, {
+      method: "POST",
+      body: new FormData(form),
+      headers: { Accept: "application/json" },
+    });
+
+    if (!res.ok) throw new Error();
+
+    form.reset();
+
+    if (text) text.textContent = "Enviado ✓";
+
+    setTimeout(() => {
+      window.location.href = "/gracias?type=submit";
+    }, 700);
+
+  } catch (err) {
+    if (text) text.textContent = "Error, intenta de nuevo";
+    button.disabled = false;
+    loader.classList.add("hidden");
+  }
+});
+
 </script>
