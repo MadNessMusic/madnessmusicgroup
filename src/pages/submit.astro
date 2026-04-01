@@ -27,7 +27,6 @@ import Footer from "@/components/Footer.astro"
 <section class="max-w-4xl mx-auto px-6 flex flex-col gap-12">
 <form
   id="submitForm"
-  onsubmit="return false"
   class="max-w-4xl mx-auto px-6 flex flex-col gap-12"
 >
 
@@ -343,62 +342,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </script>
 
-<script type="module" is:inline>
-import { createClient } from "https://esm.sh/@supabase/supabase-js";
-
-const supabase = createClient(
-  import.meta.env.SUPABASE_URL,
-  import.meta.env.SUPABASE_KEY
-);
-
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("submitForm");
-  if (!form) return;
-
-  const button = form.querySelector("button");
-  const text = button?.querySelector(".btn-text");
-  const loader = button?.querySelector(".btn-loader");
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    if (button.disabled) return;
-
-    button.disabled = true;
-
-    if (text) text.textContent = "Enviando…";
-    if (loader) loader.classList.remove("hidden");
-
-    const data = {
-      artist: form.artist.value,
-      email: form.email.value,
-      spotify: form.spotify.value,
-      genre: document.getElementById("genreInput").value,
-      message: form.message.value,
-      location: form.location.value,
-      instagram: form.instagram.value,
-    };
-
-    const { error } = await supabase
-      .from("submissions")
-      .insert([data]);
-
-    if (!error) {
-      form.reset();
-
-      if (text) text.textContent = "Enviado ✓";
-
-      setTimeout(() => {
-        window.location.href = "/gracias?type=submit";
-      }, 700);
-
-    } else {
-      console.error(error);
-
-      if (text) text.textContent = "Error, intenta de nuevo";
-      button.disabled = false;
-      loader.classList.add("hidden");
-    }
-  });
-});
-</script>
+<script type="module" src="/src/scripts/submit.js"></script>
