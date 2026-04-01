@@ -9,7 +9,8 @@ const pathname = Astro.url.pathname;
 
 const minimalNavbar =
   pathname.startsWith("/archive") ||
-  pathname.startsWith("/playlists");
+  pathname.startsWith("/playlists") ||
+  pathname.startsWith("/submit");
 
 const navLinks = minimalNavbar
   ? siteConfig.navLinks.filter((l) => l.href === "/")
@@ -57,9 +58,11 @@ const navLinks = minimalNavbar
     {link.label}
   </a>
 ))}
+
     </nav>
 
     <div class="flex items-center gap-3">
+
       <DarkModeToggle />
 
       <button
