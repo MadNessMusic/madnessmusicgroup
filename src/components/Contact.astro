@@ -188,7 +188,6 @@ document.addEventListener("DOMContentLoaded", () => {
         method: "POST",
         body: new FormData(form),
         mode: "no-cors",
-        headers: { Accept: "application/json" },
       });
 
       if (!res.ok) throw new Error("Error en envío");
