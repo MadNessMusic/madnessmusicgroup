@@ -1,10 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
-
-// 🔐 variables desde Astro (Vercel env)
-const supabase = createClient(
-  import.meta.env.PUBLIC_SUPABASE_URL,
-  import.meta.env.PUBLIC_SUPABASE_ANON_KEY
-);
+import { supabase } from "/src/lib/supabase";
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("submitForm");
@@ -20,14 +14,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (button.disabled) return;
 
-    // 🔄 estado loading
+    // loading state
     button.disabled = true;
     button.classList.add("opacity-70");
 
     if (text) text.textContent = "Enviando…";
     if (loader) loader.classList.remove("hidden");
 
-    // 📦 data
     const data = {
       artist: form.artist.value,
       email: form.email.value,
@@ -47,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (error) throw error;
 
-      // ✅ success
       form.reset();
 
       if (text) text.textContent = "Enviado ✓";
