@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
       artist: form.artist.value,
       email: form.email.value,
       spotify: form.spotify.value,
-      genre: document.getElementById("genreInput").value,
+      genre: document.getElementById("genreInput")?.value || null,
       message: form.message.value,
       location: form.location.value,
       instagram: form.instagram.value,

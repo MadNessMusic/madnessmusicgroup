@@ -13,6 +13,18 @@ export const releases: Release[] = [
     cover: "",
   },
   {
+    id: "release-rancher jolly-recho-pixi-bberry",
+    spotifyAlbumId: "4JQWIjr7QhE5lsK8TaV34u",
+    source: "supported",
+    cover: "",
+  },
+  {
+    id: "release-t haces wey-feely-zavala produce-astral madafaka",
+    spotifyAlbumId: "0J2k0xqA11EF1KahdNwiAR",
+    source: "supported",
+    cover: "",
+  },
+  {
     id: "release-baskiat-volver a empezar",
     spotifyAlbumId: "0PGmnOC5erWJw8ii0s4WQG",
     source: "supported",
