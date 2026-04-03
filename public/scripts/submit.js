@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const loader = button?.querySelector(".btn-loader");
 
   form.addEventListener("submit", async (e) => {
+    console.log("SUBMIT DETECTADO 🔥");
     e.preventDefault();
 
     if (button.disabled) return;
