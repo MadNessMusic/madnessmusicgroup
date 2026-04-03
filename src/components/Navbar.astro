@@ -9,8 +9,7 @@ const pathname = Astro.url.pathname;
 
 const minimalNavbar =
   pathname.startsWith("/archive") ||
-  pathname.startsWith("/playlists") ||
-  pathname.startsWith("/submit");
+  pathname.startsWith("/playlists");
 
 const navLinks = minimalNavbar
   ? siteConfig.navLinks.filter((l) => l.href === "/")
