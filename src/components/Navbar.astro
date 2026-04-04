@@ -113,30 +113,33 @@ const navLinks = minimalNavbar
   // =========================
   // ACTIVE LINK (SCROLL)
   // =========================
-  const sections = document.querySelectorAll("section[id]");
+  const sections = document.querySelectorAll("[id]");
   const navItems = document.querySelectorAll(".nav-link");
 
-  function setActiveLink() {
-    let current = "";
+ function setActiveLink() {
+  let current = "";
 
-    sections.forEach((section) => {
-      const rect = section.getBoundingClientRect();
+  const scrollY = window.scrollY;
 
-      if (rect.top <= 120 && rect.bottom >= 120) {
-        current = section.id;
-      }
-    });
+  sections.forEach((section) => {
+    const offset = section.offsetTop - 150;
+    const height = section.offsetHeight;
 
-    navItems.forEach((link) => {
-      const section = link.dataset.section;
+    if (scrollY >= offset && scrollY < offset + height) {
+      current = section.id;
+    }
+  });
 
-      if (section === current) {
-        link.classList.add("text-accent");
-      } else {
-        link.classList.remove("text-accent");
-      }
-    });
-  }
+  navItems.forEach((link) => {
+    const section = link.dataset.section;
+
+    if (section === current) {
+      link.classList.add("text-accent");
+    } else {
+      link.classList.remove("text-accent");
+    }
+  });
+}
 
   window.addEventListener("scroll", setActiveLink);
   window.addEventListener("load", setActiveLink);
