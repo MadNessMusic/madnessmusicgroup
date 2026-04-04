@@ -15,54 +15,38 @@ const minimalNavbar = minimalRoutes.some((route) =>
 const navLinks = minimalNavbar
   ? siteConfig.navLinks.slice(0, 1)
   : siteConfig.navLinks;
-
 ---
 
 <header class="glass-nav w-full">
   <div class="max-w-350 mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+    
+    <!-- LOGO -->
     <div class="flex items-center gap-5">
       <a href="/" class="flex items-center gap-5 group">
         <div class="logo-nav-wrap">
-          <img
-            src={logoDark.src}
-            alt="MadNess Music Group logo"
-            class="logo-nav logo-nav-dark"
-            loading="eager"
-          />
-
-          <img
-            src={logoLight.src}
-            alt="MadNess Music Group logo"
-            class="logo-nav logo-nav-light"
-            loading="eager"
-          />
-        </div>
-
-        <div class="flex flex-col justify-center">
-
+          <img src={logoDark.src} class="logo-nav logo-nav-dark" />
+          <img src={logoLight.src} class="logo-nav logo-nav-light" />
         </div>
       </a>
     </div>
 
-    <nav class=" hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-widest text-base-content">
+    <!-- DESKTOP NAV -->
+    <nav class="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-widest text-base-content">
       
-{navLinks.map((link) => (
-<a
-  href={link.href}
-  class={`transition-colors ${
-    pathname === link.href
-      ? "text-accent"
-      : "hover:text-accent text-base-content"
-  }`}
->
-    {link.label}
-  </a>
-))}
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          data-section={link.href.replace("/#", "")}
+          class="nav-link transition-colors hover:text-accent"
+        >
+          {link.label}
+        </a>
+      ))}
 
     </nav>
 
+    <!-- RIGHT -->
     <div class="flex items-center gap-3">
-
       <DarkModeToggle />
 
       <button
@@ -71,47 +55,36 @@ const navLinks = minimalNavbar
         aria-label="Open menu"
         aria-expanded="false"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-6 h-6"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <line x1="3" y1="6" x2="21" y2="6" />
-          <line x1="3" y1="12" x2="21" y2="12" />
-          <line x1="3" y1="18" x2="21" y2="18" />
-        </svg>
+        ☰
       </button>
     </div>
   </div>
 
+  <!-- MOBILE MENU -->
   <div
     id="mobile-menu"
     class="md:hidden overflow-hidden border-t border-base-content/10 bg-base-100/95 backdrop-blur-md transition-all duration-300 max-h-0"
   >
-
     <nav class="flex flex-col py-4 px-4 sm:px-6 space-y-3 text-xs font-bold uppercase tracking-widest">
-{navLinks.map((link) => (
-  <a
-    href={link.href}
-    class={`transition-colors py-2 ${
-      pathname === link.href
-        ? "text-accent"
-        : "hover:text-accent"
-    }`}
-  >
-    {link.label}
-  </a>
-))}
+      
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          data-section={link.href.replace("/#", "")}
+          class="nav-link py-2 transition-colors hover:text-accent"
+        >
+          {link.label}
+        </a>
+      ))}
+
     </nav>
   </div>
 </header>
 
 <script is:inline>
+  // =========================
+  // MOBILE MENU
+  // =========================
   const menuBtn = document.getElementById("mobile-menu-btn");
   const mobileMenu = document.getElementById("mobile-menu");
 
@@ -123,11 +96,9 @@ const navLinks = minimalNavbar
 
       menuBtn.setAttribute("aria-expanded", String(open));
 
-      if (open) {
-        mobileMenu.style.maxHeight = `${mobileMenu.scrollHeight}px`;
-      } else {
-        mobileMenu.style.maxHeight = "0px";
-      }
+      mobileMenu.style.maxHeight = open
+        ? mobileMenu.scrollHeight + "px"
+        : "0px";
     });
 
     mobileMenu.querySelectorAll("a").forEach((link) => {
@@ -138,4 +109,35 @@ const navLinks = minimalNavbar
       });
     });
   }
+
+  // =========================
+  // ACTIVE LINK (SCROLL)
+  // =========================
+  const sections = document.querySelectorAll("section[id]");
+  const navItems = document.querySelectorAll(".nav-link");
+
+  function setActiveLink() {
+    let current = "";
+
+    sections.forEach((section) => {
+      const rect = section.getBoundingClientRect();
+
+      if (rect.top <= 120 && rect.bottom >= 120) {
+        current = section.id;
+      }
+    });
+
+    navItems.forEach((link) => {
+      const section = link.dataset.section;
+
+      if (section === current) {
+        link.classList.add("text-accent");
+      } else {
+        link.classList.remove("text-accent");
+      }
+    });
+  }
+
+  window.addEventListener("scroll", setActiveLink);
+  window.addEventListener("load", setActiveLink);
 </script>
