@@ -454,7 +454,7 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
     <!-- 🔥 CAROUSEL WRAPPER -->
     <div class="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
 
-      {presaves.map((release: { url: string | URL | null | undefined; image: string | null | undefined; title: unknown; artist: unknown; }) => (
+      {presaves.map((release) => (
 
         <a
           href={release.url}
