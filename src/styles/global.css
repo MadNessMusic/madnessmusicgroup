@@ -352,6 +352,16 @@ html:not(.dark) .hero-video video {
   overflow: hidden;
   height: 100vh;
 }
+
+/* 🔥 hide scrollbar cross-browser */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 /* ==============================
    HERO LOGO (EDITORIAL)
    ============================== */
