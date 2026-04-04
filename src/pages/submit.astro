@@ -95,11 +95,11 @@ import Footer from "@/components/Footer.astro"
 
 <div class="form-section">
 
-  <label class="label hidden" id="subLabel">
+  <label class="label hidden-custom" id="subLabel">
     Subgénero (elige primero un género)
   </label>
 
-<div class="chips hidden" id="subGenres">
+<div class="chips hidden-custom" id="subGenres">
 
   <!-- URBANO -->
   <button type="button" class="chip sub" data-parent="Urbano">Reggaetón</button>
@@ -240,7 +240,7 @@ import Footer from "@/components/Footer.astro"
   >
     <span class="btn-text">Enviar para revisión</span>
 
-    <span class="btn-loader hidden w-4 h-4 border-2 border-base-content/30 border-t-white rounded-full animate-spin"></span>
+    <span class="btn-loader hidden-custom w-4 h-4 border-2 border-base-content/30 border-t-white rounded-full animate-spin"></span>
   </button>
 
 </form>
@@ -270,8 +270,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // reset subgéneros
         selectedSub = null;
-        subContainer.classList.add("hidden");
-        subLabel.classList.add("hidden");
+        subContainer.classList.add("hidden-custom");
+        subLabel.classList.add("hidden-custom");
         subLabel.textContent = "Subgénero (elige primero un género)";
 
         subChips.forEach(c => c.classList.remove("active"));
@@ -287,8 +287,8 @@ document.addEventListener("DOMContentLoaded", () => {
       selectedMain = chip.textContent;
 
       // mostrar subgéneros
-      subContainer.classList.remove("hidden");
-      subLabel.classList.remove("hidden");
+      subContainer.classList.remove("hidden-custom");
+      subLabel.classList.remove("hidden-custom");
       subLabel.textContent = "Subgénero";
 
       // reset sub
