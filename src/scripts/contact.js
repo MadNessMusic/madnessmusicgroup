@@ -1,4 +1,4 @@
-import { supabase } from "/src/lib/supabase";
+import { supabase } from "../lib/supabase";
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("contactForm");
@@ -8,6 +8,36 @@ document.addEventListener("DOMContentLoaded", () => {
   const text = button?.querySelector(".btn-text");
   const loader = button?.querySelector(".btn-loader");
 
+  const inputs = form.querySelectorAll(
+    'input[name="name"], input[name="email"], textarea[name="message"]'
+  );
+
+  // 🔒 iniciar deshabilitado
+  button.disabled = true;
+  button.classList.add("opacity-50", "cursor-not-allowed");
+
+  function validateForm() {
+    let valid = true;
+
+    inputs.forEach((input) => {
+      if (!input.value.trim()) valid = false;
+    });
+
+    button.disabled = !valid;
+
+    if (valid) {
+      button.classList.remove("opacity-50", "cursor-not-allowed");
+    } else {
+      button.classList.add("opacity-50", "cursor-not-allowed");
+    }
+  }
+
+  // 🔍 escuchar cambios
+  inputs.forEach((input) => {
+    input.addEventListener("input", validateForm);
+  });
+
+  // 🚀 submit
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -26,7 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     try {
-      // 💾 guardar en supabase
       const { error } = await supabase
         .from("contact_messages")
         .insert([data]);
@@ -42,11 +71,13 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 700);
 
     } catch (err) {
-      console.error(err);
+      console.error("SUPABASE ERROR:", err);
 
-      if (text) text.textContent = "Error";
+      if (text) text.textContent = "Error, intenta de nuevo";
+
       button.disabled = false;
       button.classList.remove("opacity-70");
+
       loader?.classList.add("hidden");
     }
   });
