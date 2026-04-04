@@ -1,4 +1,6 @@
-import { supabase } from "../lib/supabase";
+console.log("CONTACT JS CARGADO 🚀");
+
+import { supabase } from "/src/lib/supabase";
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("contactForm");
@@ -8,13 +10,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const text = button?.querySelector(".btn-text");
   const loader = button?.querySelector(".btn-loader");
 
+  // 🔒 deshabilitado al inicio
+  button.disabled = true;
+  button.classList.add("opacity-50", "cursor-not-allowed");
+
   const inputs = form.querySelectorAll(
     'input[name="name"], input[name="email"], textarea[name="message"]'
   );
-
-  // 🔒 iniciar deshabilitado
-  button.disabled = true;
-  button.classList.add("opacity-50", "cursor-not-allowed");
 
   function validateForm() {
     let valid = true;
@@ -23,22 +25,22 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!input.value.trim()) valid = false;
     });
 
-    button.disabled = !valid;
-
     if (valid) {
+      button.disabled = false;
       button.classList.remove("opacity-50", "cursor-not-allowed");
     } else {
+      button.disabled = true;
       button.classList.add("opacity-50", "cursor-not-allowed");
     }
   }
 
-  // 🔍 escuchar cambios
   inputs.forEach((input) => {
     input.addEventListener("input", validateForm);
   });
 
-  // 🚀 submit
+  // 🚀 SUBMIT (igual que submit.js)
   form.addEventListener("submit", async (e) => {
+    console.log("CONTACT SUBMIT 🔥");
     e.preventDefault();
 
     if (button.disabled) return;
@@ -55,6 +57,8 @@ document.addEventListener("DOMContentLoaded", () => {
       message: form.message.value,
     };
 
+    console.log("DATA:", data);
+
     try {
       const { error } = await supabase
         .from("contact_messages")
@@ -70,14 +74,14 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "/gracias?type=contact";
       }, 700);
 
-    } catch (err) {
-      console.error("SUPABASE ERROR:", err);
+    } catch (error) {
+      console.error("SUPABASE ERROR:", error);
 
-      if (text) text.textContent = "Error, intenta de nuevo";
+      if (text) text.textContent = "Error";
+      alert(error.message || "Error al enviar");
 
       button.disabled = false;
       button.classList.remove("opacity-70");
-
       loader?.classList.add("hidden");
     }
   });
