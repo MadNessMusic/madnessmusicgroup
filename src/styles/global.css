@@ -601,38 +601,38 @@ transform:scale(.8);
   gap: 48px;
 }
 
-.highlights-wrapper {
+.radar-wrapper {
   max-width: 1600px;   /* 🔴 CLAVE */
   margin: 0 auto;
   padding: 0 24px;
 }
 
-.highlights {
+.radar {
   display: flex;
   gap: 32px;
   align-items: stretch;
 }
 
-.highlight-main {
+.radar-main {
   flex: 2;
   display: flex;
   flex-direction: column;
 }
 
-.highlight-side {
+.radar-side {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 32px;
 }
 
-.highlight-image {
+.radar-image {
   flex: 1;
   border-radius: 18px;
   overflow: hidden;
 }
 
-.highlight-image img {
+.radar-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;

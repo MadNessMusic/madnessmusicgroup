@@ -20,9 +20,10 @@ export const siteConfig = {
 
   navLinks: [
     { href: "/", label: "Inicio" },
-    { href: "/#highlights", label: "Destacados" }, // 🔥 FIX
+    { href: "/#radar", label: "Radar" },
     { href: "/archive", label: "Archivo" },
     { href: "/playlists", label: "Playlists" },
-    { href: "/#contact", label: "Contacto" }, // 🔥 FIX
+    { href: "/#about", label: "Acerca de" },
+    { href: "/#contact", label: "Contacto" },
   ],
 };
