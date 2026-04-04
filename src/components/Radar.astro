@@ -615,13 +615,13 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
 </section>
 
 <script is:inline>
-  const container = document.getElementById("presave-carousel");
-  const next = document.getElementById("next-presave");
-  const prev = document.getElementById("prev-presave");
+  window.addEventListener("load", () => {
+    const container = document.getElementById("presave-carousel");
+    const next = document.getElementById("next-presave");
+    const prev = document.getElementById("prev-presave");
 
-  const scrollAmount = 320;
+    if (!container) return;
 
-  if (container) {
     let autoScroll;
     let originalWidth = 0;
 
@@ -633,7 +633,6 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
       autoScroll = setInterval(() => {
         container.scrollLeft += 0.4;
 
-        // 🔥 loop infinito real
         if (container.scrollLeft >= originalWidth) {
           container.scrollLeft -= originalWidth;
         }
@@ -644,37 +643,34 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
       clearInterval(autoScroll);
     }
 
-    // 🔥 esperar a que renderice bien
+    // 🔥 esperar render completo REAL
     setTimeout(() => {
       calculateWidth();
       startAutoScroll();
-    }, 300);
+    }, 500);
 
-    // 🎯 botones
+    // botones
     if (next && prev) {
       next.addEventListener("click", () => {
         stopAutoScroll();
-        container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+        container.scrollBy({ left: 320, behavior: "smooth" });
         setTimeout(startAutoScroll, 800);
       });
 
       prev.addEventListener("click", () => {
         stopAutoScroll();
-        container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+        container.scrollBy({ left: -320, behavior: "smooth" });
         setTimeout(startAutoScroll, 800);
       });
     }
 
-    // 🧠 UX PRO
+    // UX
     container.addEventListener("mouseenter", stopAutoScroll);
     container.addEventListener("mouseleave", startAutoScroll);
 
     container.addEventListener("touchstart", stopAutoScroll);
     container.addEventListener("touchend", startAutoScroll);
 
-    // 🔄 recalcular en resize
-    window.addEventListener("resize", () => {
-      calculateWidth();
-    });
-  }
+    window.addEventListener("resize", calculateWidth);
+  });
 </script>
