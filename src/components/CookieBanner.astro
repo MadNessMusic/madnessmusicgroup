@@ -3,7 +3,7 @@
 ---
 <div
   id="cookie-banner"
-  class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-2xl z-999 opacity-0 translate-y-10 pointer-events-none transition-all duration-700"
+  class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-2xl z-999 hidden opacity-0 translate-y-10 pointer-events-none transition-all duration-700"
 >
   <div class="relative overflow-hidden rounded-2xl border border-white/10 bg-black/80 backdrop-blur-2xl p-6 shadow-2xl">
 
@@ -50,10 +50,13 @@
   const consent = localStorage.getItem("cookies-consent");
 
 function showBanner() {
-  banner.classList.remove("opacity-0", "translate-y-10", "pointer-events-none");
-  banner.classList.add("opacity-100", "translate-y-0");
+  banner.classList.remove("hidden"); // 👈 clave
 
-  // ✅ animación sin romper transform
+  requestAnimationFrame(() => {
+    banner.classList.remove("opacity-0", "translate-y-10", "pointer-events-none");
+    banner.classList.add("opacity-100", "translate-y-0");
+  });
+
   banner.animate(
     [
       { transform: "scale(0.98)", opacity: 0.8 },
@@ -75,7 +78,8 @@ function hideBanner() {
 
   setTimeout(() => {
     banner.classList.add("opacity-0", "translate-y-10", "pointer-events-none");
-  }, 180);
+    banner.classList.add("hidden"); // 👈 esto lo elimina visualmente
+  }, 200);
 }
 
   // ✅ SOLO si no hay consentimiento
