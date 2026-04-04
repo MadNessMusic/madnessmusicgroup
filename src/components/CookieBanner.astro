@@ -1,0 +1,56 @@
+---
+// sin props por ahora
+---
+
+<div
+  id="cookie-banner"
+  class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-xl z-50 hidden"
+>
+  <div class="bg-base-200/90 backdrop-blur-xl border border-base-content/10 rounded-2xl p-5 flex flex-col md:flex-row items-start md:items-center gap-4 shadow-xl">
+
+    <p class="text-xs text-base-content/70 leading-relaxed">
+      Utilizamos cookies para mejorar tu experiencia. Al continuar navegando,
+      aceptas nuestro 
+      <a href="/privacidad" class="underline hover:text-accent">aviso de privacidad</a>.
+    </p>
+
+    <div class="flex gap-3 ml-auto">
+      <button
+        id="cookie-decline"
+        class="text-xs opacity-60 hover:opacity-100 transition"
+      >
+        Rechazar
+      </button>
+
+      <button
+        id="cookie-accept"
+        class="btn-tactical px-4 py-2 text-xs"
+      >
+        Aceptar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script is:inline>
+  const banner = document.getElementById("cookie-banner");
+  const acceptBtn = document.getElementById("cookie-accept");
+  const declineBtn = document.getElementById("cookie-decline");
+
+  const consent = localStorage.getItem("cookies-consent");
+
+  if (!consent) {
+    banner.classList.remove("hidden");
+  }
+
+  acceptBtn?.addEventListener("click", () => {
+    localStorage.setItem("cookies-consent", "accepted");
+    banner.classList.add("hidden");
+  });
+
+  declineBtn?.addEventListener("click", () => {
+    localStorage.setItem("cookies-consent", "declined");
+    banner.classList.add("hidden");
+  });
+</script>
