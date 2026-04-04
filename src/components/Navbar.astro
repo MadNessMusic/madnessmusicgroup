@@ -35,10 +35,10 @@ const navLinks = minimalNavbar
       
       {navLinks.map((link) => (
         <a
-          href={link.href}
-          data-section={link.href.replace("/#", "")}
-          class="nav-link transition-colors hover:text-accent"
-        >
+  href={link.href}
+  data-section={link.href.includes("#") ? link.href.split("#")[1] : ""}
+  class="nav-link transition-colors hover:text-accent"
+>
           {link.label}
         </a>
       ))}
@@ -109,38 +109,41 @@ const navLinks = minimalNavbar
       });
     });
   }
+</script>
 
-  // =========================
-  // ACTIVE LINK (SCROLL)
-  // =========================
-  const sections = document.querySelectorAll("[id]");
+<script is:inline>
   const navItems = document.querySelectorAll(".nav-link");
 
- function setActiveLink() {
-  let current = "";
+  // 🔥 detectar secciones correctamente
+  const sections = [...document.querySelectorAll("section[id]")];
 
-  const scrollY = window.scrollY;
+  if (sections.length === 0) {
+    console.warn("NO SE ENCONTRARON SECCIONES 👀");
+  }
 
-  sections.forEach((section) => {
-    const offset = section.offsetTop - 150;
-    const height = section.offsetHeight;
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
 
-    if (scrollY >= offset && scrollY < offset + height) {
-      current = section.id;
+          navItems.forEach((link) => {
+            const section = link.dataset.section;
+
+            if (section === id) {
+              link.classList.add("text-accent");
+            } else {
+              link.classList.remove("text-accent");
+            }
+          });
+        }
+      });
+    },
+    {
+      rootMargin: "-40% 0px -40% 0px", // 🔥 centro de pantalla
+      threshold: 0,
     }
-  });
+  );
 
-  navItems.forEach((link) => {
-    const section = link.dataset.section;
-
-    if (section === current) {
-      link.classList.add("text-accent");
-    } else {
-      link.classList.remove("text-accent");
-    }
-  });
-}
-
-  window.addEventListener("scroll", setActiveLink);
-  window.addEventListener("load", setActiveLink);
+  sections.forEach((section) => observer.observe(section));
 </script>
