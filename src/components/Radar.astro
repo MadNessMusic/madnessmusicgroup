@@ -475,7 +475,6 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
     <!-- WRAPPER -->
     <div class="relative">
 
-      {/* 🔥 SOLO muestra controles si hay suficientes */}
       {presaves.length > 3 && (
         <div class="hidden md:flex justify-end gap-3 mb-6">
 
@@ -499,67 +498,113 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
       <!-- CAROUSEL -->
       <div
         id="presave-carousel"
-        class="flex gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 scrollbar-hide"
+        class="flex gap-6 md:gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 scrollbar-hide"
       >
 
-        {presaves.map((release) => (
+       {[...presaves, ...presaves].map((release) => (
 
-          <a
-            href={release.url}
-            target="_blank"
-            class="
-              group 
-              shrink-0 
-              snap-start
-              min-w-[65%] sm:min-w-[45%] md:min-w-55 lg:min-w-60
-              max-w-60
-            "
+  <a
+    href={release.url}
+    target="_blank"
+    class="
+      group 
+      shrink-0 
+      snap-start
+      min-w-[75%] sm:min-w-[55%] md:min-w-65 lg:min-w-70
+      max-w-70
+    "
+  >
+
+    <div class="relative aspect-square rounded-xl overflow-hidden">
+
+      <img
+        src={release.image}
+        class="w-full h-full object-cover transition duration-700 group-hover:scale-110"
+      />
+
+      <!-- 🔥 BADGE -->
+      <div class="absolute top-3 left-3 z-10">
+        {release.source === "madness" ? (
+          <span class="text-[9px] uppercase tracking-widest bg-accent text-black px-2 py-1 rounded">
+            MadNess
+          </span>
+        ) : (
+          <span class="text-[9px] uppercase tracking-widest bg-white/10 text-white px-2 py-1 rounded backdrop-blur">
+            Supported
+          </span>
+        )}
+      </div>
+
+      <!-- 🔥 GLOW -->
+      <div
+        class={`
+          absolute inset-0 opacity-0 group-hover:opacity-100 blur-xl transition duration-500
+          ${
+            release.source === "madness"
+              ? "bg-accent/30"
+              : "bg-white/10"
+          }
+        `}
+      ></div>
+
+      <!-- OVERLAY -->
+      <div class="absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-4">
+
+        <div class="flex items-center gap-2">
+
+          <div
+            class={`
+              w-8 h-8 rounded-full flex items-center justify-center text-xs shadow
+              ${
+                release.source === "madness"
+                  ? "bg-accent text-black"
+                  : "bg-white/80 text-black"
+              }
+            `}
           >
+            +
+          </div>
 
-            <div class="relative aspect-square rounded-xl overflow-hidden">
+          <span class="text-[9px] tracking-widest uppercase">
+            Pre-save
+          </span>
 
-              <img
-                src={release.image}
-                class="w-full h-full object-cover transition duration-700 group-hover:scale-110"
-              />
+        </div>
 
-              <!-- glow dinámico -->
-              <div class="absolute inset-0 opacity-0 group-hover:opacity-100 bg-accent/20 blur-xl transition duration-500"></div>
+      </div>
 
-              <!-- overlay -->
-              <div class="absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-4">
+    </div>
 
-                <div class="flex items-center gap-2">
+    <!-- INFO -->
+    <div class="mt-3 space-y-1">
 
-                  <div class="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-black text-xs shadow">
-                    +
-                  </div>
+      <p class="font-anton text-sm leading-tight">
+        {release.title}
+      </p>
 
-                  <span class="text-[9px] tracking-widest uppercase">
-                    Pre-save
-                  </span>
+      <p class="text-xs opacity-60">
+        {release.artist}
+      </p>
 
-                </div>
+      <!-- 🔥 LABEL -->
+      <p
+        class={`
+          text-[9px] uppercase tracking-widest
+          ${
+            release.source === "madness"
+              ? "text-accent"
+              : "text-white/30"
+          }
+        `}
+      >
+        {release.source === "madness" ? "MadNess Release" : "Supported"}
+      </p>
 
-              </div>
+    </div>
 
-            </div>
+  </a>
 
-            <div class="mt-3 space-y-1">
-
-              <p class="font-anton text-sm leading-tight">
-                {release.title}
-              </p>
-
-              <p class="text-xs opacity-60">
-                {release.artist}
-              </p>
-
-            </div>
-
-          </a>
-
-        ))}
+))}
 
       </div>
 
@@ -567,23 +612,69 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
 
   </div>
 )}
+</section>
 
 <script is:inline>
   const container = document.getElementById("presave-carousel");
   const next = document.getElementById("next-presave");
   const prev = document.getElementById("prev-presave");
 
-  const scrollAmount = 260;
+  const scrollAmount = 320;
 
-  if (container && next && prev) {
+  if (container) {
+    let autoScroll;
+    let originalWidth = 0;
 
-    next.addEventListener("click", () => {
-      container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    function calculateWidth() {
+      originalWidth = container.scrollWidth / 2;
+    }
+
+    function startAutoScroll() {
+      autoScroll = setInterval(() => {
+        container.scrollLeft += 0.4;
+
+        // 🔥 loop infinito real
+        if (container.scrollLeft >= originalWidth) {
+          container.scrollLeft -= originalWidth;
+        }
+      }, 16);
+    }
+
+    function stopAutoScroll() {
+      clearInterval(autoScroll);
+    }
+
+    // 🔥 esperar a que renderice bien
+    setTimeout(() => {
+      calculateWidth();
+      startAutoScroll();
+    }, 300);
+
+    // 🎯 botones
+    if (next && prev) {
+      next.addEventListener("click", () => {
+        stopAutoScroll();
+        container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+        setTimeout(startAutoScroll, 800);
+      });
+
+      prev.addEventListener("click", () => {
+        stopAutoScroll();
+        container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+        setTimeout(startAutoScroll, 800);
+      });
+    }
+
+    // 🧠 UX PRO
+    container.addEventListener("mouseenter", stopAutoScroll);
+    container.addEventListener("mouseleave", startAutoScroll);
+
+    container.addEventListener("touchstart", stopAutoScroll);
+    container.addEventListener("touchend", startAutoScroll);
+
+    // 🔄 recalcular en resize
+    window.addEventListener("resize", () => {
+      calculateWidth();
     });
-
-    prev.addEventListener("click", () => {
-      container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-    });
-
   }
 </script>
