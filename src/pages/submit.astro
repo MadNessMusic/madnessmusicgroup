@@ -342,6 +342,64 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+const form = document.getElementById("submitForm");
+const submitBtn = form.querySelector("button");
+
+// 🔒 iniciar deshabilitado
+submitBtn.disabled = true;
+submitBtn.classList.add("opacity-50", "cursor-not-allowed");
+
+// inputs a validar
+const inputs = form.querySelectorAll(
+  'input[name="artist"], input[name="email"], input[name="spotify"], textarea[name="message"], input[name="location"], input[name="instagram"]'
+);
+
+const genreInput = document.getElementById("genreInput");
+
+// 🔍 función de validación
+function validateForm() {
+  let valid = true;
+
+  // validar inputs normales
+  inputs.forEach((input) => {
+    if (!input.value.trim()) {
+      valid = false;
+    }
+  });
+
+  // validar género (chips)
+  if (!genreInput.value.trim()) {
+    valid = false;
+  }
+
+  // estado botón
+  if (valid) {
+    submitBtn.disabled = false;
+    submitBtn.classList.remove("opacity-50", "cursor-not-allowed");
+  } else {
+    submitBtn.disabled = true;
+    submitBtn.classList.add("opacity-50", "cursor-not-allowed");
+  }
+}
+
+// escuchar inputs
+inputs.forEach((input) => {
+  input.addEventListener("input", validateForm);
+});
+
+// escuchar cambios de chips
+function updateInput() {
+  if (!selectedMain) {
+    input.value = "";
+  } else {
+    input.value = selectedSub
+      ? `${selectedMain} → ${selectedSub}`
+      : selectedMain;
+  }
+
+  validateForm(); // 🔥 CLAVE
+}
+
 </script>
 
 <script>
