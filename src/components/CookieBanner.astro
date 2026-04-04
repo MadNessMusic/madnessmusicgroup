@@ -1,35 +1,44 @@
 ---
 // sin props por ahora
 ---
-
 <div
   id="cookie-banner"
-  class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-xl z-50 hidden"
+  class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-2xl z-999 opacity-0 translate-y-10 pointer-events-none transition-all duration-700"
 >
-  <div class="bg-base-200/90 backdrop-blur-xl border border-base-content/10 rounded-2xl p-5 flex flex-col md:flex-row items-start md:items-center gap-4 shadow-xl">
+  <div class="relative overflow-hidden rounded-2xl border border-white/10 bg-black/80 backdrop-blur-2xl p-6 shadow-2xl">
 
-    <p class="text-xs text-base-content/70 leading-relaxed">
-      Utilizamos cookies para mejorar tu experiencia. Al continuar navegando,
-      aceptas nuestro 
-      <a href="/privacidad" class="underline hover:text-accent">aviso de privacidad</a>.
-    </p>
+    <!-- glow -->
+    <div class="absolute inset-0 opacity-20 bg-linear-to-r from-accent via-transparent to-accent blur-2xl"></div>
 
-    <div class="flex gap-3 ml-auto">
-      <button
-        id="cookie-decline"
-        class="text-xs opacity-60 hover:opacity-100 transition"
-      >
-        Rechazar
-      </button>
+    <div class="relative flex flex-col md:flex-row items-start md:items-center gap-5">
 
-      <button
-        id="cookie-accept"
-        class="btn-tactical px-4 py-2 text-xs"
-      >
-        Aceptar
-      </button>
+      <!-- texto -->
+      <p class="text-sm text-white/80 leading-relaxed max-w-lg">
+        Utilizamos cookies para mejorar tu experiencia y analizar el uso del sitio.
+        Consulta nuestro 
+        <a href="/privacidad" class="underline hover:text-accent transition">
+          aviso de privacidad
+        </a>.
+      </p>
+
+      <!-- botones -->
+      <div class="flex gap-3 ml-auto">
+        <button
+          id="cookie-decline"
+          class="text-xs uppercase tracking-widest opacity-60 hover:opacity-100 transition"
+        >
+          Rechazar
+        </button>
+
+        <button
+          id="cookie-accept"
+          class="px-5 py-2 text-xs uppercase tracking-widest bg-white text-black rounded-lg hover:scale-105 transition"
+        >
+          Aceptar
+        </button>
+      </div>
+
     </div>
-
   </div>
 </div>
 
@@ -40,17 +49,43 @@
 
   const consent = localStorage.getItem("cookies-consent");
 
+  function showBanner() {
+    banner.classList.remove("opacity-0", "translate-y-10", "pointer-events-none");
+    banner.classList.add("opacity-100", "translate-y-0");
+  }
+
+  function hideBanner() {
+    banner.classList.add("opacity-0", "translate-y-10");
+    setTimeout(() => {
+      banner.classList.add("pointer-events-none");
+    }, 400);
+  }
+
   if (!consent) {
-    banner.classList.remove("hidden");
+    setTimeout(showBanner, 600); // 🔥 entrada suave
   }
 
   acceptBtn?.addEventListener("click", () => {
     localStorage.setItem("cookies-consent", "accepted");
-    banner.classList.add("hidden");
+    hideBanner();
   });
 
   declineBtn?.addEventListener("click", () => {
     localStorage.setItem("cookies-consent", "declined");
-    banner.classList.add("hidden");
+    hideBanner();
   });
+
+  setTimeout(() => {
+  showBanner();
+  banner.animate(
+    [
+      { transform: "translateX(-50%) translateY(0)" },
+      { transform: "translateX(-48%) translateY(0)" },
+      { transform: "translateX(-52%) translateY(0)" },
+      { transform: "translateX(-50%) translateY(0)" },
+    ],
+    { duration: 300 }
+  );
+}, 600);
+
 </script>
