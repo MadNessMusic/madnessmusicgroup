@@ -429,13 +429,10 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
 
 </div>
 
-
-    <div class="relative my-24">
-      <div class="h-px w-full bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
-    </div>
-
-    <!-- ROW 3 -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mt-16 mb-30">
+<!-- DIVIDER -->
+<div class="relative my-24">
+  <div class="h-px w-full bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
+</div>
 
 <!-- ========================= -->
 <!-- UPCOMING / PRESAVES -->
@@ -455,15 +452,19 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
       </span>
     </div>
 
-    <!-- CAROUSEL CONTAINER -->
+    <!-- CAROUSEL -->
     <div class="relative">
 
+      <!-- FADE EDGES -->
+      <div class="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-black to-transparent z-10"></div>
+      <div class="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-black to-transparent z-10"></div>
+
       <!-- BOTONES -->
-      <button id="prev-presave" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/60 backdrop-blur px-3 py-2 rounded-full">
+      <button id="prev-presave" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/60 backdrop-blur px-3 py-2 rounded-full">
         ←
       </button>
 
-      <button id="next-presave" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/60 backdrop-blur px-3 py-2 rounded-full">
+      <button id="next-presave" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/60 backdrop-blur px-3 py-2 rounded-full">
         →
       </button>
 
@@ -478,7 +479,7 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
           <a
             href={release.url}
             target="_blank"
-            class="group min-w-65 max-w-65 snap-start shrink-0"
+            class="group min-w-[260px] max-w-[260px] snap-start shrink-0"
           >
 
             <div class="relative aspect-square rounded-2xl overflow-hidden">
@@ -525,9 +526,13 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
   </div>
 )}
 
+<!-- ========================= -->
 <!-- DISCOVER -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-32">
+<!-- ========================= -->
 
+<div class="mb-32">
+
+  <!-- HEADER -->
   <div class="flex items-center justify-between mb-10">
     <h2 class="text-3xl font-anton">
       Discover
@@ -538,6 +543,7 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
     </span>
   </div>
 
+  <!-- GRID -->
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
 
     <!-- PLAYLIST -->
@@ -607,7 +613,7 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
   const next = document.getElementById("next-presave");
   const prev = document.getElementById("prev-presave");
 
-  const scrollAmount = 300;
+  const scrollAmount = 320;
 
   next?.addEventListener("click", () => {
     container.scrollBy({ left: scrollAmount, behavior: "smooth" });
