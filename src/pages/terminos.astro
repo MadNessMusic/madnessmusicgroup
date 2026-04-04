@@ -1,0 +1,62 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import { siteConfig } from "../data/siteConfig";
+---
+
+<Layout title="Términos y Condiciones">
+  <Navbar />
+
+  <section class="max-w-3xl mx-auto py-24 px-6">
+    <h1 class="text-4xl mb-10">Términos y Condiciones</h1>
+
+    <p class="mb-6">
+      Al acceder y utilizar este sitio web, aceptas los presentes términos y condiciones
+      establecidos por {siteConfig.legal.company}.
+    </p>
+
+    <h2 class="mt-10 mb-4 text-xl">Uso del sitio</h2>
+    <p class="opacity-70 mb-6">
+      Este sitio tiene como finalidad la promoción, curaduría y difusión de contenido musical.
+      El usuario se compromete a hacer un uso adecuado del mismo.
+    </p>
+
+    <h2 class="mt-10 mb-4 text-xl">Envío de material</h2>
+    <p class="opacity-70 mb-6">
+      Al enviar música o información a través del sitio, declaras que tienes los derechos necesarios
+      sobre dicho contenido. {siteConfig.legal.company} no se hace responsable por infracciones de terceros.
+    </p>
+
+    <h2 class="mt-10 mb-4 text-xl">Propiedad intelectual</h2>
+    <p class="opacity-70 mb-6">
+      Todo el contenido mostrado en el sitio pertenece a sus respectivos autores.
+      Se utiliza con fines informativos, editoriales y promocionales.
+    </p>
+
+    <h2 class="mt-10 mb-4 text-xl">Limitación de responsabilidad</h2>
+    <p class="opacity-70 mb-6">
+      {siteConfig.legal.company} no garantiza resultados específicos derivados del uso del sitio,
+      incluyendo la aceptación de envíos musicales o colaboraciones.
+    </p>
+
+    <h2 class="mt-10 mb-4 text-xl">Disponibilidad del servicio</h2>
+    <p class="opacity-70 mb-6">
+      Nos reservamos el derecho de modificar, suspender o discontinuar el sitio en cualquier momento
+      sin previo aviso.
+    </p>
+
+    <h2 class="mt-10 mb-4 text-xl">Modificaciones</h2>
+    <p class="opacity-70 mb-6">
+      Estos términos pueden actualizarse en cualquier momento. Se recomienda revisarlos periódicamente.
+    </p>
+
+    <h2 class="mt-10 mb-4 text-xl">Contacto</h2>
+    <p class="opacity-70">
+      Para dudas o aclaraciones, contáctanos en:
+      {siteConfig.legal.email}
+    </p>
+  </section>
+
+  <Footer />
+</Layout>

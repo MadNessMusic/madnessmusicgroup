@@ -1,0 +1,68 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import { siteConfig } from "../data/siteConfig";
+---
+
+<Layout title="Aviso de Privacidad">
+  <Navbar />
+
+  <section class="max-w-3xl mx-auto py-24 px-6">
+    <h1 class="text-4xl mb-10">Aviso de Privacidad</h1>
+
+    <p class="mb-6">
+      {siteConfig.legal.company}, con domicilio en {siteConfig.legal.location},
+      es responsable del tratamiento de los datos personales que nos proporciones a través de este sitio web.
+    </p>
+
+    <h2 class="mt-10 mb-4 text-xl">Datos personales que recopilamos</h2>
+    <p class="opacity-70 mb-6">
+      Podemos recopilar información como nombre, correo electrónico, enlaces a plataformas musicales,
+      redes sociales y cualquier información adicional que decidas compartir mediante formularios.
+    </p>
+
+    <h2 class="mt-10 mb-4 text-xl">Finalidad del tratamiento</h2>
+    <p class="opacity-70 mb-6">
+      Tus datos serán utilizados para:
+    </p>
+    <ul class="opacity-70 mb-6 list-disc pl-6 space-y-2">
+      <li>Evaluar material musical enviado</li>
+      <li>Contactarte en relación a tu envío o consulta</li>
+      <li>Fines editoriales y de curaduría musical</li>
+      <li>Mejorar nuestros servicios y contenido</li>
+    </ul>
+
+    <h2 class="mt-10 mb-4 text-xl">Uso de la información</h2>
+    <p class="opacity-70 mb-6">
+      No compartimos, vendemos ni distribuimos tu información personal a terceros sin tu consentimiento,
+      salvo cuando sea requerido por ley.
+    </p>
+
+    <h2 class="mt-10 mb-4 text-xl">Almacenamiento y seguridad</h2>
+    <p class="opacity-70 mb-6">
+      Implementamos medidas razonables de seguridad para proteger tu información. Sin embargo,
+      ningún sistema es completamente seguro, por lo que no podemos garantizar seguridad absoluta.
+    </p>
+
+    <h2 class="mt-10 mb-4 text-xl">Derechos del usuario</h2>
+    <p class="opacity-70 mb-6">
+      Puedes solicitar el acceso, corrección o eliminación de tus datos personales en cualquier momento
+      enviando un correo a {siteConfig.legal.email}.
+    </p>
+
+    <h2 class="mt-10 mb-4 text-xl">Cambios a este aviso</h2>
+    <p class="opacity-70 mb-6">
+      Nos reservamos el derecho de modificar este aviso de privacidad en cualquier momento.
+      Las actualizaciones se publicarán en esta misma página.
+    </p>
+
+    <h2 class="mt-10 mb-4 text-xl">Contacto</h2>
+    <p class="opacity-70">
+      Para cualquier duda relacionada con este aviso, puedes escribir a:
+      {siteConfig.legal.email}
+    </p>
+  </section>
+
+  <Footer />
+</Layout>

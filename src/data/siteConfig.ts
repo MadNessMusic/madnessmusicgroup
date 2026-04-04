@@ -23,7 +23,14 @@ export const siteConfig = {
     { href: "/#radar", label: "Radar" },
     { href: "/archive", label: "Archivo" },
     { href: "/playlists", label: "Playlists" },
-    { href: "/#about", label: "Acerca de" },
     { href: "/#contact", label: "Contacto" },
+    { href: "/#about", label: "Acerca de" },
+    
   ],
+  
+  legal: {
+  email: "contact@madnessmusicgroup.com",
+  company: "MadNess Music Group",
+  location: "Saltillo, Coahuila, México",
+},
 };

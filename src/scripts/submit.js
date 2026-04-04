@@ -8,9 +8,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const text = button?.querySelector(".btn-text");
   const loader = button?.querySelector(".btn-loader");
 
+  // 🔥 checkbox legal
+  const termsCheckbox = form.querySelector('input[type="checkbox"]');
+
   form.addEventListener("submit", async (e) => {
     console.log("SUBMIT DETECTADO 🔥");
     e.preventDefault();
+
+    // 🔒 VALIDACIÓN EXTRA (seguridad)
+    if (!termsCheckbox?.checked) {
+      alert("Debes aceptar los términos y el aviso de privacidad");
+      return;
+    }
 
     if (button.disabled) return;
 
@@ -29,6 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
       message: form.message.value,
       location: form.location.value,
       instagram: form.instagram.value,
+
+      // 🔥 opcional pro (te recomiendo)
+      accepted_terms: true,
+      submitted_at: new Date().toISOString(),
     };
 
     console.log("DATA:", data);

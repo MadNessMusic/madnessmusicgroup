@@ -89,8 +89,21 @@ import { siteConfig } from "../data/siteConfig";
       {siteConfig.copyright}
     </div>
 
+    
+
     <div class="text-center md:text-right max-w-md">
       {siteConfig.disclaimer}
     </div>
+
+    <div class="flex flex-col md:flex-row gap-3 items-center">
+
+  <div>{siteConfig.copyright}</div>
+
+  <div class="flex gap-4">
+    <a href="/privacidad" class="hover:text-accent">Privacidad</a>
+    <a href="/terminos" class="hover:text-accent">Términos</a>
+  </div>
+
+</div>
   </div>
 </footer>

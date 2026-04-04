@@ -10,21 +10,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const text = button?.querySelector(".btn-text");
   const loader = button?.querySelector(".btn-loader");
 
-  // 🔒 deshabilitado al inicio
-  button.disabled = true;
-  button.classList.add("opacity-50", "cursor-not-allowed");
-
   const inputs = form.querySelectorAll(
     'input[name="name"], input[name="email"], textarea[name="message"]'
   );
 
+  // 🔥 checkbox legal
+  const termsCheckbox = form.querySelector('input[type="checkbox"]');
+
+  // 🔒 estado inicial
+  button.disabled = true;
+  button.classList.add("opacity-50", "cursor-not-allowed");
+
+  // ✅ VALIDACIÓN
   function validateForm() {
     let valid = true;
 
+    // inputs
     inputs.forEach((input) => {
       if (!input.value.trim()) valid = false;
     });
 
+    // 🔥 checkbox
+    if (!termsCheckbox.checked) valid = false;
+
+    // botón
     if (valid) {
       button.disabled = false;
       button.classList.remove("opacity-50", "cursor-not-allowed");
@@ -34,17 +43,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // 👂 listeners
   inputs.forEach((input) => {
     input.addEventListener("input", validateForm);
   });
 
-  // 🚀 SUBMIT (igual que submit.js)
+  termsCheckbox.addEventListener("change", validateForm);
+
+  // 🚀 SUBMIT
   form.addEventListener("submit", async (e) => {
     console.log("CONTACT SUBMIT 🔥");
     e.preventDefault();
 
+    // 🔒 seguridad extra
+    if (!termsCheckbox.checked) {
+      alert("Debes aceptar los términos y el aviso de privacidad");
+      return;
+    }
+
     if (button.disabled) return;
 
+    // loading
     button.disabled = true;
     button.classList.add("opacity-70");
 
@@ -55,6 +74,10 @@ document.addEventListener("DOMContentLoaded", () => {
       name: form.name.value,
       email: form.email.value,
       message: form.message.value,
+
+      // 🔥 PRO
+      accepted_terms: true,
+      submitted_at: new Date().toISOString(),
     };
 
     console.log("DATA:", data);
@@ -85,4 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
       loader?.classList.add("hidden");
     }
   });
+
+  // init
+  validateForm();
 });

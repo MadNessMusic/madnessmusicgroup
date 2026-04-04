@@ -10,7 +10,7 @@ import Footer from "@/components/Footer.astro"
 <Navbar />
 
 
-<section class="py-15 text-center max-w-2xl mx-auto px-6">
+<section class="py-10 text-center max-w-2xl mx-auto px-6">
 
   <span class="block text-xs uppercase tracking-[0.5em] text-base-content/40 mb-6">
     Submit
@@ -233,6 +233,21 @@ import Footer from "@/components/Footer.astro"
     Recibimos muchos envíos. Solo contactamos proyectos alineados con nuestra línea curatorial.
   </p>
 
+<label class="text-xs opacity-60 flex gap-2 mt-4 items-start">
+  <input type="checkbox" required class="mt-1" />
+
+  <span>
+    Acepto los 
+    <a href="/terminos" target="_blank" class="underline hover:text-accent">
+      términos y condiciones
+    </a>
+    y el 
+    <a href="/privacidad" target="_blank" class="underline hover:text-accent">
+      aviso de privacidad
+    </a>
+  </span>
+</label>
+
   <!-- 🚀 CTA -->
   <button 
   id="btn-submit"
@@ -251,61 +266,67 @@ import Footer from "@/components/Footer.astro"
 
 <script is:inline>
 document.addEventListener("DOMContentLoaded", () => {
+
+  const form = document.getElementById("submitForm");
+  if (!form) return;
+
+  const submitBtn = form.querySelector("#btn-submit");
+  const inputs = form.querySelectorAll(
+    'input[name="artist"], input[name="email"], input[name="spotify"], textarea[name="message"], input[name="location"], input[name="instagram"]'
+  );
+
+  const genreInput = document.getElementById("genreInput");
+  const termsCheckbox = form.querySelector('input[type="checkbox"]');
+
   const mainChips = document.querySelectorAll("#mainGenres .chip");
   const subChips = document.querySelectorAll("#subGenres .chip");
   const subContainer = document.getElementById("subGenres");
   const subLabel = document.getElementById("subLabel");
-  const input = document.getElementById("genreInput");
 
   let selectedMain = null;
   let selectedSub = null;
+
+  // 🔒 iniciar deshabilitado
+  submitBtn.disabled = true;
+  submitBtn.classList.add("opacity-50", "cursor-not-allowed");
 
   // 🎧 MAIN GENRE
   mainChips.forEach(chip => {
     chip.addEventListener("click", () => {
 
-      // toggle OFF
       if (chip.classList.contains("active")) {
         chip.classList.remove("active");
         selectedMain = null;
 
-        // reset subgéneros
         selectedSub = null;
         subContainer.classList.add("hidden-custom");
         subLabel.classList.add("hidden-custom");
-        subLabel.textContent = "Subgénero (elige primero un género)";
 
         subChips.forEach(c => c.classList.remove("active"));
 
         updateInput();
+        validateForm();
         return;
       }
 
-      // seleccionar nuevo
       mainChips.forEach(c => c.classList.remove("active"));
       chip.classList.add("active");
 
       selectedMain = chip.textContent;
 
-      // mostrar subgéneros
       subContainer.classList.remove("hidden-custom");
       subLabel.classList.remove("hidden-custom");
-      subLabel.textContent = "Subgénero";
 
-      // reset sub
       selectedSub = null;
 
       subChips.forEach(c => {
         c.classList.remove("active");
-
-        if (c.dataset.parent === selectedMain) {
-          c.style.display = "inline-flex";
-        } else {
-          c.style.display = "none";
-        }
+        c.style.display =
+          c.dataset.parent === selectedMain ? "inline-flex" : "none";
       });
 
       updateInput();
+      validateForm();
     });
   });
 
@@ -313,86 +334,78 @@ document.addEventListener("DOMContentLoaded", () => {
   subChips.forEach(chip => {
     chip.addEventListener("click", () => {
 
-      // toggle OFF
       if (chip.classList.contains("active")) {
         chip.classList.remove("active");
         selectedSub = null;
         updateInput();
+        validateForm();
         return;
       }
 
-      // seleccionar nuevo
       subChips.forEach(c => c.classList.remove("active"));
       chip.classList.add("active");
 
       selectedSub = chip.textContent;
 
       updateInput();
+      validateForm();
     });
-
-    const form = document.getElementById("submitForm");
-const submitBtn = form.querySelector("#btn-submit");
-
-// 🔒 iniciar deshabilitado
-submitBtn.disabled = true;
-submitBtn.classList.add("opacity-50", "cursor-not-allowed");
-
-// inputs a validar
-const inputs = form.querySelectorAll(
-  'input[name="artist"], input[name="email"], input[name="spotify"], textarea[name="message"], input[name="location"], input[name="instagram"]'
-);
-
-const genreInput = document.getElementById("genreInput");
-
-// 🔍 función de validación
-function validateForm() {
-  let valid = true;
-
-  // validar inputs normales
-  inputs.forEach((input) => {
-    if (!input.value.trim()) {
-      valid = false;
-    }
   });
 
-  // validar género (chips)
-  if (!genreInput.value.trim()) {
-    valid = false;
-  }
-
-  // estado botón
-  if (valid) {
-    submitBtn.disabled = false;
-    submitBtn.classList.remove("opacity-50", "cursor-not-allowed");
-  } else {
-    submitBtn.disabled = true;
-    submitBtn.classList.add("opacity-50", "cursor-not-allowed");
-  }
-}
-
-// escuchar inputs
-inputs.forEach((input) => {
-  input.addEventListener("input", validateForm);
-});
-
-
-  });
-
+  // 🔍 actualizar input hidden
   function updateInput() {
     if (!selectedMain) {
-      input.value = "";
+      genreInput.value = "";
       return;
     }
 
-    input.value = selectedSub
+    genreInput.value = selectedSub
       ? `${selectedMain} → ${selectedSub}`
       : selectedMain;
   }
-   validateForm(); 
+
+  // ✅ VALIDACIÓN COMPLETA
+  function validateForm() {
+    let valid = true;
+
+    // inputs
+    inputs.forEach((input) => {
+      if (!input.value.trim()) {
+        valid = false;
+      }
+    });
+
+    // género
+    if (!genreInput.value.trim()) {
+      valid = false;
+    }
+
+    // 🔥 checkbox legal
+    if (!termsCheckbox.checked) {
+      valid = false;
+    }
+
+    // estado botón
+    if (valid) {
+      submitBtn.disabled = false;
+      submitBtn.classList.remove("opacity-50", "cursor-not-allowed");
+    } else {
+      submitBtn.disabled = true;
+      submitBtn.classList.add("opacity-50", "cursor-not-allowed");
+    }
+  }
+
+  // 👂 listeners inputs
+  inputs.forEach((input) => {
+    input.addEventListener("input", validateForm);
+  });
+
+  // 👂 checkbox
+  termsCheckbox.addEventListener("change", validateForm);
+
+  // init
+  validateForm();
 });
-
-
-
 </script>
 
 <script>
