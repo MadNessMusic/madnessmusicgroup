@@ -235,7 +235,18 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
     </div>
 
 <!-- ROW 1 · MADNESS RELEASES -->
-    <h2 class="text-3xl font-anton mt-10 mb-8 tracking-wide text-base-content/90">MadNess Releases</h3>
+    <div class="flex items-center justify-between mt-10 mb-8">
+  <h2 class="text-3xl font-anton tracking-wide text-base-content/90">
+    MadNess Releases
+  </h2>
+
+  <a
+    href="/archive"
+    class="text-xs uppercase tracking-widest opacity-40 hover:opacity-100 transition"
+  >
+    Ver más →
+  </a>
+</div>
 
 <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
 
@@ -336,9 +347,18 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
 </div>
 
 <!-- ROW 2 · Supported RELEASES -->
-<h2 class="text-2xl font-anton mt-24 mb-8 tracking-tight text-base-content/80">
-  Supported
-</h2>
+<div class="flex items-center justify-between mt-24 mb-8">
+  <h2 class="text-2xl font-anton tracking-tight text-base-content/80">
+    Supported
+  </h2>
+
+  <a
+    href="/archive"
+    class="text-xs uppercase tracking-widest opacity-40 hover:opacity-100 transition"
+  >
+    Ver más →
+  </a>
+</div>
 
 <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-20">
 
@@ -452,26 +472,32 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
       </span>
     </div>
 
-    <!-- CAROUSEL -->
+    <!-- WRAPPER -->
     <div class="relative">
 
-      <!-- FADE EDGES -->
-      <div class="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-black to-transparent z-10"></div>
-      <div class="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-black to-transparent z-10"></div>
+      <!-- CONTROLES FUERA -->
+      <div class="flex justify-end gap-3 mb-4">
 
-      <!-- BOTONES -->
-      <button id="prev-presave" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/60 backdrop-blur px-3 py-2 rounded-full">
-        ←
-      </button>
+        <button
+          id="prev-presave"
+          class="px-3 py-2 text-xs bg-white/10 hover:bg-white/20 rounded-lg transition"
+        >
+          ←
+        </button>
 
-      <button id="next-presave" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/60 backdrop-blur px-3 py-2 rounded-full">
-        →
-      </button>
+        <button
+          id="next-presave"
+          class="px-3 py-2 text-xs bg-white/10 hover:bg-white/20 rounded-lg transition"
+        >
+          →
+        </button>
 
-      <!-- SCROLLER -->
+      </div>
+
+      <!-- CAROUSEL -->
       <div
         id="presave-carousel"
-        class="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 scrollbar-hide"
+        class="flex gap-5 overflow-x-auto scroll-smooth pb-2 scrollbar-hide"
       >
 
         {presaves.map((release) => (
@@ -479,27 +505,24 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
           <a
             href={release.url}
             target="_blank"
-            class="group min-w-[260px] max-w-[260px] snap-start shrink-0"
+            class="group min-w-[180px] max-w-[180px] shrink-0"
           >
 
-            <div class="relative aspect-square rounded-2xl overflow-hidden">
+            <div class="relative aspect-square rounded-xl overflow-hidden">
 
               <img
                 src={release.image}
                 class="w-full h-full object-cover transition duration-700 group-hover:scale-110"
               />
 
-              <!-- glow -->
-              <div class="absolute inset-0 opacity-0 group-hover:opacity-100 bg-accent/30 blur-xl transition"></div>
-
               <!-- overlay -->
-              <div class="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-5">
+              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-4">
 
-                <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-black text-sm">
+                <div class="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-black text-xs">
                   +
                 </div>
 
-                <span class="text-[10px] tracking-widest uppercase mt-2">
+                <span class="text-[9px] tracking-widest uppercase mt-2">
                   Pre-save
                 </span>
 
@@ -507,11 +530,11 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
 
             </div>
 
-            <p class="mt-4 font-anton text-base">
+            <p class="mt-3 font-anton text-sm leading-tight">
               {release.title}
             </p>
 
-            <p class="text-sm opacity-60">
+            <p class="text-xs opacity-60">
               {release.artist}
             </p>
 
@@ -526,94 +549,15 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
   </div>
 )}
 
-<!-- ========================= -->
-<!-- DISCOVER -->
-<!-- ========================= -->
-
-<div class="mb-32">
-
-  <!-- HEADER -->
-  <div class="flex items-center justify-between mb-10">
-    <h2 class="text-3xl font-anton">
-      Discover
-    </h2>
-
-    <span class="text-xs uppercase tracking-widest opacity-40">
-      Explore
-    </span>
-  </div>
-
-  <!-- GRID -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
-
-    <!-- PLAYLIST -->
-    {featuredPlaylist && (
-      <a
-        href={`https://open.spotify.com/playlist/${featuredPlaylist.spotifyId}`}
-        class="group relative rounded-2xl overflow-hidden aspect-square"
-      >
-
-        <img
-          src={featuredPlaylist.image}
-          class="w-full h-full object-cover transition duration-700 group-hover:scale-110"
-        />
-
-        <div class="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent"></div>
-
-        <div class="absolute bottom-0 p-6">
-          <span class="text-xs uppercase tracking-widest opacity-60">
-            Playlist
-          </span>
-
-          <h3 class="font-anton text-2xl mt-2">
-            {featuredPlaylist.title}
-          </h3>
-
-          <p class="text-sm opacity-60">
-            {featuredPlaylist.description}
-          </p>
-        </div>
-
-      </a>
-    )}
-
-    <!-- ARCHIVE -->
-    <a href="/archive" class="group relative rounded-2xl overflow-hidden aspect-square">
-
-      <img
-        src="/images/archive/archive-cover.png"
-        class="w-full h-full object-cover transition duration-700 group-hover:scale-110"
-      />
-
-      <div class="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent"></div>
-
-      <div class="absolute bottom-0 p-6">
-        <span class="text-xs uppercase tracking-widest opacity-60">
-          Archive
-        </span>
-
-        <h3 class="font-anton text-2xl mt-2">
-          Explora el catálogo
-        </h3>
-
-        <p class="text-sm opacity-60">
-          Joyas pasadas que siguen vigentes.
-        </p>
-      </div>
-
-    </a>
-
-  </div>
-
-</div>
 </section>
 
 <script is:inline>
   const container = document.getElementById("presave-carousel");
+  
   const next = document.getElementById("next-presave");
   const prev = document.getElementById("prev-presave");
 
-  const scrollAmount = 320;
+  const scrollAmount = 220;
 
   next?.addEventListener("click", () => {
     container.scrollBy({ left: scrollAmount, behavior: "smooth" });
