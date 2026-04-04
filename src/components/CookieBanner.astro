@@ -1,6 +1,12 @@
 ---
-// sin props por ahora
+const backdrop = document.getElementById("cookie-backdrop");
 ---
+
+<div
+  id="cookie-backdrop"
+  class="fixed inset-0 z-998 backdrop-blur-lg bg-black/40 opacity-0 pointer-events-none transition-all duration-500"
+></div>
+
 <div
   id="cookie-banner"
   class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-2xl z-999 hidden opacity-0 translate-y-10 pointer-events-none transition-all duration-700"
@@ -50,11 +56,14 @@
   const consent = localStorage.getItem("cookies-consent");
 
 function showBanner() {
-  banner.classList.remove("hidden"); // 👈 clave
+  banner.classList.remove("hidden");
 
   requestAnimationFrame(() => {
     banner.classList.remove("opacity-0", "translate-y-10", "pointer-events-none");
     banner.classList.add("opacity-100", "translate-y-0");
+
+    backdrop.classList.remove("opacity-0", "pointer-events-none");
+    backdrop.classList.add("opacity-100");
   });
 
   banner.animate(
@@ -76,9 +85,12 @@ function hideBanner() {
     { duration: 200, easing: "ease-in" }
   );
 
+  backdrop.classList.remove("opacity-100");
+  backdrop.classList.add("opacity-0");
+
   setTimeout(() => {
-    banner.classList.add("opacity-0", "translate-y-10", "pointer-events-none");
-    banner.classList.add("hidden"); // 👈 esto lo elimina visualmente
+    banner.classList.add("opacity-0", "translate-y-10", "pointer-events-none", "hidden");
+    backdrop.classList.add("pointer-events-none");
   }, 200);
 }
 
