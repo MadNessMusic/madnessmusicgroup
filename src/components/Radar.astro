@@ -248,24 +248,24 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
         class="relative block rounded-2xl overflow-hidden aspect-square"
       >
 
-        {/* 🔥 GLOW LAYER */}
+        /* 🔥 GLOW LAYER */
         <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 bg-accent/10 blur-xl"></div>
 
-        {/* 🔥 BADGE */}
+        /* 🔥 BADGE */
         {index === 0 && (
           <div class="absolute top-3 left-3 text-[10px] tracking-widest uppercase bg-accent text-black px-3 py-1 rounded-md z-10">
             NEW
           </div>
         )}
 
-        {/* IMAGE */}
+        /* IMAGE */
         <img
           src={release.image}
           alt={release.title}
           class="w-full h-full object-cover transition duration-700 group-hover:scale-110"
         />
 
-        {/* 🔥 OVERLAY PRO */}
+        /* 🔥 OVERLAY PRO */
         <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-5">
 
           <div class="flex items-center gap-3">
@@ -364,14 +364,14 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
           </div>
         )}
 
-        {/* IMAGE */}
+        /* IMAGE */
         <img
           src={release.image}
           alt={release.title}
           class="w-full h-full object-cover transition duration-700 group-hover:scale-105"
         />
 
-        {/* OVERLAY MÁS SUAVE */}
+        /* OVERLAY MÁS SUAVE */
         <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-4">
 
           <div class="flex items-center gap-2">
@@ -389,7 +389,7 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
 
       </a>
 
-      {/* INFO */}
+      /* INFO */
       <div class="mt-3 space-y-1">
 
         <p class="font-anton text-sm tracking-tight leading-tight">
@@ -400,7 +400,7 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
           {release.artist}
         </p>
 
-        {/* META */}
+        /* META */
         <div class="flex items-center gap-2 text-[9px] tracking-widest uppercase mt-1">
 
           <span class="text-accent/70">
@@ -419,7 +419,7 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
           {formatReleaseDate(release.releaseDate, release.releasePrecision)}
         </p>
 
-        {/* 🔥 CRÉDITOS (PRO) */}
+        /* 🔥 CRÉDITOS (PRO) */
         {(release.copyrights ?? []).length > 0 && (
           <div class="pt-2 mt-2 border-t border-base-content/10 space-y-1">
 
