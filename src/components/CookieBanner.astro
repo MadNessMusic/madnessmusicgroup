@@ -52,17 +52,30 @@
   function showBanner() {
     banner.classList.remove("opacity-0", "translate-y-10", "pointer-events-none");
     banner.classList.add("opacity-100", "translate-y-0");
+
+    // 🔥 animación shake SOLO aquí
+    banner.animate(
+      [
+        { transform: "translateX(-50%) translateY(0)" },
+        { transform: "translateX(-48%) translateY(0)" },
+        { transform: "translateX(-52%) translateY(0)" },
+        { transform: "translateX(-50%) translateY(0)" },
+      ],
+      { duration: 300 }
+    );
   }
 
   function hideBanner() {
     banner.classList.add("opacity-0", "translate-y-10");
+
     setTimeout(() => {
       banner.classList.add("pointer-events-none");
     }, 400);
   }
 
+  // ✅ SOLO si no hay consentimiento
   if (!consent) {
-    setTimeout(showBanner, 600); // 🔥 entrada suave
+    setTimeout(showBanner, 600);
   }
 
   acceptBtn?.addEventListener("click", () => {
@@ -74,18 +87,4 @@
     localStorage.setItem("cookies-consent", "declined");
     hideBanner();
   });
-
-  setTimeout(() => {
-  showBanner();
-  banner.animate(
-    [
-      { transform: "translateX(-50%) translateY(0)" },
-      { transform: "translateX(-48%) translateY(0)" },
-      { transform: "translateX(-52%) translateY(0)" },
-      { transform: "translateX(-50%) translateY(0)" },
-    ],
-    { duration: 300 }
-  );
-}, 600);
-
 </script>
