@@ -1,5 +1,5 @@
 ---
-const backdrop = document.getElementById("cookie-backdrop");
+
 ---
 
 <div
@@ -52,11 +52,14 @@ const backdrop = document.getElementById("cookie-backdrop");
   const banner = document.getElementById("cookie-banner");
   const acceptBtn = document.getElementById("cookie-accept");
   const declineBtn = document.getElementById("cookie-decline");
+  const backdrop = document.getElementById("cookie-backdrop");
 
   const consent = localStorage.getItem("cookies-consent");
 
 function showBanner() {
   banner.classList.remove("hidden");
+
+  document.body.classList.add("no-scroll"); // 🔥 LOCK
 
   requestAnimationFrame(() => {
     banner.classList.remove("opacity-0", "translate-y-10", "pointer-events-none");
@@ -87,6 +90,8 @@ function hideBanner() {
 
   backdrop.classList.remove("opacity-100");
   backdrop.classList.add("opacity-0");
+
+  document.body.classList.remove("no-scroll"); // 🔥 UNLOCK
 
   setTimeout(() => {
     banner.classList.add("opacity-0", "translate-y-10", "pointer-events-none", "hidden");

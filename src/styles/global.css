@@ -347,6 +347,11 @@ html:not(.dark) .hero-video video {
   z-index: 10;
 }
 
+/* 🔒 lock scroll */
+.no-scroll {
+  overflow: hidden;
+  height: 100vh;
+}
 /* ==============================
    HERO LOGO (EDITORIAL)
    ============================== */
