@@ -329,21 +329,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       updateInput();
     });
-  });
 
-  function updateInput() {
-    if (!selectedMain) {
-      input.value = "";
-      return;
-    }
-
-    input.value = selectedSub
-      ? `${selectedMain} → ${selectedSub}`
-      : selectedMain;
-  }
-});
-
-const form = document.getElementById("submitForm");
+    const form = document.getElementById("submitForm");
 const submitBtn = form.querySelector("#btn-submit");
 
 // 🔒 iniciar deshabilitado
@@ -388,18 +375,23 @@ inputs.forEach((input) => {
   input.addEventListener("input", validateForm);
 });
 
-// escuchar cambios de chips
-function updateInput() {
-  if (!selectedMain) {
-    input.value = "";
-  } else {
+
+  });
+
+  function updateInput() {
+    if (!selectedMain) {
+      input.value = "";
+      return;
+    }
+
     input.value = selectedSub
       ? `${selectedMain} → ${selectedSub}`
       : selectedMain;
   }
+   validateForm(); 
+});
 
-  validateForm(); // 🔥 CLAVE
-}
+
 
 </script>
 

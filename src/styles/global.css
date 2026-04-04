@@ -148,6 +148,12 @@ html.dark .logo-footer-light {
   height: 88px;
 }
 
+button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 @media (min-width: 1024px) {
   .logo-nav-wrap {
     width: 104px;
