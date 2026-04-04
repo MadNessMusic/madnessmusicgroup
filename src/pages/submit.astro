@@ -235,6 +235,7 @@ import Footer from "@/components/Footer.astro"
 
   <!-- 🚀 CTA -->
   <button 
+  id="btn-submit"
     type="submit" 
     class="btn-tactical px-6 py-3 self-start flex items-center gap-3"
   >
@@ -343,7 +344,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 const form = document.getElementById("submitForm");
-const submitBtn = form.querySelector("button");
+const submitBtn = form.querySelector("#btn-submit");
 
 // 🔒 iniciar deshabilitado
 submitBtn.disabled = true;
