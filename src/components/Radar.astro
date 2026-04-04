@@ -622,55 +622,65 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
 
     if (!container) return;
 
-    let autoScroll;
+    let animationId;
+    let speed = 0.4;
     let originalWidth = 0;
+    let isPaused = false;
 
-    function calculateWidth() {
+    function calculate() {
       originalWidth = container.scrollWidth / 2;
     }
 
-    function startAutoScroll() {
-      autoScroll = setInterval(() => {
-        container.scrollLeft += 0.4;
+    function loop() {
+      if (!isPaused) {
+        container.scrollLeft += speed;
 
         if (container.scrollLeft >= originalWidth) {
           container.scrollLeft -= originalWidth;
         }
-      }, 16);
+      }
+
+      animationId = requestAnimationFrame(loop);
     }
 
-    function stopAutoScroll() {
-      clearInterval(autoScroll);
+    function start() {
+      cancelAnimationFrame(animationId);
+      isPaused = false;
+      loop();
     }
 
-    // 🔥 esperar render completo REAL
+    function stop() {
+      isPaused = true;
+    }
+
+    // 🔥 INIT (espera real)
     setTimeout(() => {
-      calculateWidth();
-      startAutoScroll();
-    }, 500);
+      calculate();
+      start();
+    }, 600);
 
-    // botones
+    // 🎯 botones
     if (next && prev) {
       next.addEventListener("click", () => {
-        stopAutoScroll();
+        stop();
         container.scrollBy({ left: 320, behavior: "smooth" });
-        setTimeout(startAutoScroll, 800);
+        setTimeout(start, 800);
       });
 
       prev.addEventListener("click", () => {
-        stopAutoScroll();
+        stop();
         container.scrollBy({ left: -320, behavior: "smooth" });
-        setTimeout(startAutoScroll, 800);
+        setTimeout(start, 800);
       });
     }
 
-    // UX
-    container.addEventListener("mouseenter", stopAutoScroll);
-    container.addEventListener("mouseleave", startAutoScroll);
+    // 🧠 UX
+    container.addEventListener("mouseenter", stop);
+    container.addEventListener("mouseleave", start);
 
-    container.addEventListener("touchstart", stopAutoScroll);
-    container.addEventListener("touchend", startAutoScroll);
+    container.addEventListener("touchstart", stop);
+    container.addEventListener("touchend", start);
 
-    window.addEventListener("resize", calculateWidth);
+    window.addEventListener("resize", calculate);
   });
 </script>
