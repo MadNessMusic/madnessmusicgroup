@@ -18,6 +18,13 @@ async function enrich(playlist: Playlist): Promise<Playlist> {
   try {
     const spotify = await getSpotifyPlaylist(playlist.spotifyId);
 
+    if (!spotify) {
+      return {
+        ...playlist,
+        image: playlist.cover,
+      };
+    }
+
     return {
       ...playlist,
       title: spotify.name ?? playlist.title,

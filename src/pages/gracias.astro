@@ -1,13 +1,13 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import SlugNavbar from "@/components/SlugNavbar.astro";
+import Navbar from "@/components/Navbar.astro";
 import Footer from "@/components/Footer.astro";
 
 const type = Astro.url.searchParams.get("type");
 ---
 
 <Layout title="Gracias">
-  <SlugNavbar />
+<Navbar />
 
 <section class={`relative min-h-screen flex items-center justify-center px-6 overflow-hidden ${
   type === "submit" ? "bg-linear-to-b from-transparent to-black/80" : ""
