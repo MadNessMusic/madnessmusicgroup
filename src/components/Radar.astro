@@ -233,8 +233,8 @@ const supportedReleases = allReleases
 Una selección de lanzamientos recientes de MadNess Music Group junto a proyectos que están en nuestro radar dentro de la escena actual.      </p>
     </div>
 
-    <!-- ROW 1 · RELEASES -->
-    <h2 class="text-xl font-anton mt-20 mb-6">MadNess Releases</h3>
+<!-- ROW 1 · MADNESS RELEASES -->
+    <h2 class="text-3xl font-anton mt-10 mb-8 tracking-wide text-base-content/90">MadNess Releases</h3>
 
 <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
 
@@ -284,7 +284,7 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
 
       </a>
 
-      {/* 🔥 INFO */}
+      /* 🔥 INFO */
       <div class="mt-4 space-y-1">
 
         <p class="font-anton text-lg tracking-tight leading-tight">
@@ -295,7 +295,7 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
           {release.artist}
         </p>
 
-        {/* META */}
+        /* META */
         <div class="mt-2 flex items-center gap-2 text-[10px] tracking-widest uppercase">
 
           <span class="text-accent/80">
@@ -320,7 +320,7 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
           {formatReleaseDate(release.releaseDate, release.releasePrecision)}
         </p>
 
-        {/* COPYRIGHTS */}
+        /* COPYRIGHTS */
         {(release.copyrights ?? []).length > 0 && (
           <div class="pt-2 mt-2 border-t border-base-content/10 space-y-1">
             {(release.copyrights ?? []).map((c) => (
@@ -339,8 +339,9 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
   ))}
 
 </div>
-    <!-- ROW 1 · Supported RELEASES -->
-<h2 class="text-2xl font-anton mt-24 mb-8 tracking-tight text-base-content/70">
+
+<!-- ROW 2 · Supported RELEASES -->
+<h2 class="text-2xl font-anton mt-24 mb-8 tracking-tight text-base-content/80">
   Supported
 </h2>
 
@@ -348,7 +349,7 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
 
   {supportedReleases.map((release, index) => (
 
-    <div class="group relative transition duration-300 hover:-translate-y-1 hover:scale-[1.01] opacity-80 hover:opacity-100">
+    <div class="group relative transition duration-300 hover:-translate-y-1 hover:scale-[1.02]">
 
       <a
         href={release.url}
@@ -356,9 +357,9 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
         class="relative block rounded-xl overflow-hidden aspect-square"
       >
 
-        {/* 🔥 MÁS SUTIL */}
+        /* BADGE MÁS EDITORIAL */
         {index === 0 && (
-          <div class="absolute top-3 left-3 text-[9px] tracking-widest uppercase bg-white/10 text-white px-2 py-1 rounded backdrop-blur-sm z-10">
+          <div class="absolute top-3 left-3 text-[9px] tracking-widest uppercase bg-accent/80 text-black px-2 py-1 rounded z-10">
             Latest
           </div>
         )}
@@ -367,19 +368,19 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
         <img
           src={release.image}
           alt={release.title}
-          class="w-full h-full object-cover transition duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0"
+          class="w-full h-full object-cover transition duration-700 group-hover:scale-105"
         />
 
-        {/* OVERLAY MÁS LIGHT */}
-        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-4">
+        {/* OVERLAY MÁS SUAVE */}
+        <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-4">
 
           <div class="flex items-center gap-2">
 
-            <div class="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-black text-xs shadow">
+            <div class="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-black text-xs shadow">
               ▶
             </div>
 
-            <span class="text-[9px] tracking-widest uppercase text-white/70">
+            <span class="text-[9px] tracking-widest uppercase text-white/80">
               Play
             </span>
 
@@ -388,30 +389,49 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
 
       </a>
 
-      {/* INFO MÁS MINIMAL */}
+      {/* INFO */}
       <div class="mt-3 space-y-1">
 
-        <p class="font-anton text-sm tracking-tight leading-tight text-white/90">
+        <p class="font-anton text-sm tracking-tight leading-tight">
           {release.title}
         </p>
 
-        <p class="text-xs text-white/50">
+        <p class="text-xs text-base-content/60">
           {release.artist}
         </p>
 
-        <div class="flex items-center gap-2 text-[9px] tracking-widest uppercase">
+        {/* META */}
+        <div class="flex items-center gap-2 text-[9px] tracking-widest uppercase mt-1">
 
-          <span class="text-white/40">
+          <span class="text-accent/70">
             {release.type}
           </span>
 
-          <span class="w-1 h-1 rounded-full bg-white/20"></span>
+          <span class="w-1 h-1 rounded-full bg-accent/40"></span>
 
-          <span class="text-white/30">
+          <span class="text-base-content/40">
             Supported
           </span>
 
         </div>
+
+        <p class="text-[10px] tracking-widest uppercase opacity-30">
+          {formatReleaseDate(release.releaseDate, release.releasePrecision)}
+        </p>
+
+        {/* 🔥 CRÉDITOS (PRO) */}
+        {(release.copyrights ?? []).length > 0 && (
+          <div class="pt-2 mt-2 border-t border-base-content/10 space-y-1">
+
+            {(release.copyrights ?? []).map((c) => (
+              <p class="text-[9px] tracking-wide uppercase text-base-content/30 leading-tight">
+                {c.type === "P" ? "℗" : "©"}{" "}
+                {c.text.replace(/[©℗]/g, "")}
+              </p>
+            ))}
+
+          </div>
+        )}
 
       </div>
 
@@ -420,6 +440,8 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
   ))}
 
 </div>
+
+    {/* PRÓXIMAMENTE */}
 
     <div class="relative my-24">
       <div class="h-px w-full bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
