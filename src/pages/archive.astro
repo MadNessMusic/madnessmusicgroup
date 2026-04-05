@@ -106,7 +106,6 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
   overflow-y-auto
   shadow-2xl
   flex flex-col
-  relative
 ">
 
     <!-- IMAGE PREVIEW -->
@@ -757,23 +756,18 @@ if (ratio === "9:16") {
 
 ctx.drawImage(img, x, y, size, size);
 
-  // 🔥 TEXTO VERTICAL
-ctx.save();
+// 🔥 LISTEN NOW (solo vertical 9:16)
+if (ratio === "9:16") {
+  ctx.font = "900 28px sans-serif";
+  ctx.fillStyle = "rgba(255,255,255,0.4)";
+  ctx.textAlign = "left";
 
-// mover origen al lado izquierdo del cover
-ctx.translate(x - 40, y + size); 
-
-// rotar -90 grados
-ctx.rotate(-Math.PI / 2);
-
-// estilo
-ctx.font = "900 60px sans-serif";
-ctx.fillStyle = "rgba(255, 107, 61,0.35)"; // color vibrante con opacidad
-
-// dibujar
-drawSpacedText(ctx, "LISTEN NOW", 0, 0, 25);
-
-ctx.restore();
+  ctx.fillText(
+    "LISTEN NOW",
+    padding,
+    y + size + 80
+  );
+}
 
   // TEXT
   const padding = ratio === "9:16" ? 100 : 100;
@@ -788,7 +782,7 @@ ctx.font = ratio === "9:16"
 let titleY;
 
 if (ratio === "9:16") {
-  titleY = y + size + 180; // debajo del cover
+  titleY = y + size + 230; // debajo del cover
 } else {
   titleY = 1000;
 }
@@ -804,7 +798,7 @@ const lastY = wrapText(
 
 
     ctx.font = "25px sans-serif";
-ctx.fillStyle = "rgba(255,255,255,0.7)";
+ctx.fillStyle = "rgba(255, 107, 61, 0.6)";
 ctx.fillText("www.madnessmusicgroup.com", padding, canvas.height - 65);
 
 // ARTISTA
