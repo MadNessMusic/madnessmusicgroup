@@ -114,18 +114,32 @@ const allReleases: ReleaseView[] = (await fetchReleases()).sort(
   class="w-full max-h-[60vh] object-contain rounded-xl mb-4 mx-auto" 
 />
 
-    <div class="flex gap-3 mb-5 px-1">
-  <button class="style-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm transition cursor-pointer hover:bg-neutral-700" data-style="vibrant">Vibrant</button>
-  <button class="style-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm transition cursor-pointer hover:bg-neutral-700" data-style="dark">Dark</button>
-  <button class="style-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm transition cursor-pointer hover:bg-neutral-700" data-style="minimal">Minimal</button>
+<div class="flex gap-3 mb-5 px-1">
+  <button class="style-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm hover:bg-neutral-700" data-style="vibrant">
+    🎨 Vibrant
+    <span class="block text-[10px] opacity-50">Color dinámico</span>
+  </button>
+
+  <button class="style-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm hover:bg-neutral-700" data-style="dark">
+    🌑 Dark
+    <span class="block text-[10px] opacity-50">Más contraste</span>
+  </button>
+
+  <button class="style-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm hover:bg-neutral-700" data-style="minimal">
+    ⚪ Minimal
+    <span class="block text-[10px] opacity-50">Limpio y neutro</span>
+  </button>
 </div>
 
 <div class="flex gap-3 mb-4 px-1">
   <button class="ratio-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm hover:bg-neutral-700" data-ratio="4:5">
-    Post 4:5
+    📲 Post 4:5
+    <span class="block text-[10px] opacity-50">Feed Instagram</span>
   </button>
+
   <button class="ratio-btn px-4 py-2 rounded-xl bg-neutral-800 text-sm hover:bg-neutral-700" data-ratio="9:16">
-    Story 9:16
+    📱 Story 9:16
+    <span class="block text-[10px] opacity-50">Stories / Reels</span>
   </button>
 </div>
 
@@ -769,7 +783,22 @@ ctx.restore();
   : "900 47px sans-serif";
   ctx.fillStyle = "white";
 
-  const lastY = wrapText(ctx, title, padding, 1000, canvas.width - padding * 2, 60);
+let titleY;
+
+if (ratio === "9:16") {
+  titleY = y + size + 120; // debajo del cover
+} else {
+  titleY = 1000;
+}
+
+const lastY = wrapText(
+  ctx,
+  title,
+  padding,
+  titleY,
+  canvas.width - padding * 2,
+  ratio === "9:16" ? 70 : 60
+);
 
 
     ctx.font = "25px sans-serif";
@@ -777,12 +806,12 @@ ctx.fillStyle = "rgba(255,255,255,0.7)";
 ctx.fillText("www.madnessmusicgroup.com", padding, canvas.height - 65);
 
 // ARTISTA
-  ctx.font = "40px sans-serif";
-  ctx.fillStyle = "rgba(255,255,255,0.6)";
-  ctx.fillText(
+ctx.font = ratio === "9:16" ? "50px sans-serif" : "40px sans-serif";
+
+ctx.fillText(
   artist,
   padding,
-  ratio === "19:6" ? lastY + 60 : lastY + 85
+  lastY + (ratio === "9:16" ? 90 : 85)
 );
 
   // 🔥 COPYRIGHTS (PRO LEVEL)
@@ -790,7 +819,7 @@ if (window.currentReleaseCopyrights?.length) {
   ctx.font = "20px sans-serif";
   ctx.fillStyle = "rgba(255,255,255,0.4)";
 
-  let startY = ratio === "19:6" ? lastY + 100 : lastY + 130;
+  let startY = ratio === "9:16" ? lastY + 100 : lastY + 140;
   window.currentReleaseCopyrights.forEach((c) => {
     const text = `${c.type === "P" ? "℗" : "©"} ${c.text.replace(/[©℗]/g, "")}`;
 
