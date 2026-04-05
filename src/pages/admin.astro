@@ -1,4 +1,6 @@
 ---
+import Layout from "@/layouts/Layout.astro";
+
 const password = "madness123"; // cámbialo
 const url = new URL(Astro.request.url);
 const isAuth = url.searchParams.get("key") === password;
@@ -7,6 +9,8 @@ if (!isAuth) {
   return Astro.redirect("/");
 }
 ---
+
+<Layout />
 
 <section class="p-10 max-w-xl mx-auto">
   <h1 class="text-2xl mb-6">Admin Panel</h1>
