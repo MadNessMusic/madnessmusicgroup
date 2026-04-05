@@ -6,7 +6,7 @@ import { siteConfig } from "../data/siteConfig";
 
 const pathname = Astro.url.pathname;
 
-const minimalRoutes = ["/archive", "/playlists", "/gracias", "/submit"];
+const minimalRoutes = ["/about","/archive", "/playlists", "/gracias", "/submit"];
 
 const minimalNavbar = minimalRoutes.some((route) =>
   pathname.startsWith(route)
