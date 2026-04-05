@@ -746,7 +746,7 @@ let size, x, y;
 if (ratio === "9:16") {
   size = 700;
   x = (canvas.width - size) / 2;
-  y = 250;
+  y = 180;
 } else {
   size = 720;
   x = (canvas.width - size) / 2;
@@ -778,15 +778,15 @@ ctx.restore();
   ctx.textAlign = "left";
 
   // TÍTULO
-  ctx.font = ratio === "19:6"
-  ? "900 60px sans-serif"
+ctx.font = ratio === "9:16"
+  ? "900 70px sans-serif"
   : "900 47px sans-serif";
   ctx.fillStyle = "white";
 
 let titleY;
 
 if (ratio === "9:16") {
-  titleY = y + size + 120; // debajo del cover
+  titleY = y + size + 180; // debajo del cover
 } else {
   titleY = 1000;
 }
@@ -819,7 +819,7 @@ if (window.currentReleaseCopyrights?.length) {
   ctx.font = "20px sans-serif";
   ctx.fillStyle = "rgba(255,255,255,0.4)";
 
-  let startY = ratio === "9:16" ? lastY + 100 : lastY + 140;
+  let startY = ratio === "9:16" ? lastY + 160 : lastY + 140;
   window.currentReleaseCopyrights.forEach((c) => {
     const text = `${c.type === "P" ? "℗" : "©"} ${c.text.replace(/[©℗]/g, "")}`;
 
