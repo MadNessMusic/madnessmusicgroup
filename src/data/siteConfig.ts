@@ -2,7 +2,7 @@ export const siteConfig = {
   siteName: "MadNess Music Group",
 
   siteDescription:
-    "MadNess Music Group es un sello independiente con sede en Saltillo, Coahuila, Mexico. Fundada en 2026, se dedica a descubrir y promover talento musical emergente en distintos géneros. Nuestra misión es apoyar a los artistas en su desarrollo creativo y llevar su música a audiencias globales, ofreciendo una plataforma moderna para la distribución y promoción musical.",
+    "MadNess Music Group es un sello independiente y plataforma curatorial con sede en Saltillo, Coahuila, México, enfocada en el desarrollo y proyección de música contemporánea. Colaboramos con artistas seleccionados para la creación, lanzamiento y distribución de sus proyectos, acompañando su crecimiento creativo y estratégico dentro de la industria. De forma paralela, desarrollamos un archivo curatorial donde documentamos y damos visibilidad a propuestas externas que consideramos relevantes dentro del panorama actual. MadNess Music Group opera como un espacio de desarrollo artístico y criterio curatorial; por lo tanto, no todo el contenido presentado en la plataforma forma parte directa del sello.",
 
   siteUrl: "https://www.madnessmusicgroup.com",
 
