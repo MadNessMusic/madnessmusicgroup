@@ -24,7 +24,7 @@ export const siteConfig = {
     { href: "/archive", label: "Archivo" },
     { href: "/playlists", label: "Playlists" },
     { href: "/#contact", label: "Contacto" },
-    { href: "/#about", label: "Acerca de" },
+    { href: "/about", label: "Acerca de" },
     
   ],
   
