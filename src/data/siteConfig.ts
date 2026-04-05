@@ -2,7 +2,7 @@ export const siteConfig = {
   siteName: "MadNess Music Group",
 
   siteDescription:
-    "MadNess Music Group es un sello independiente y plataforma curatorial con sede en Saltillo, Coahuila, México, enfocada en el desarrollo y proyección de música contemporánea. Colaboramos con artistas seleccionados para la creación, lanzamiento y distribución de sus proyectos, acompañando su crecimiento creativo y estratégico dentro de la industria. De forma paralela, desarrollamos un archivo curatorial donde documentamos y damos visibilidad a propuestas externas que consideramos relevantes dentro del panorama actual. MadNess Music Group opera como un espacio de desarrollo artístico y criterio curatorial; por lo tanto, no todo el contenido presentado en la plataforma forma parte directa del sello.",
+    "Sello independiente y plataforma curatorial de música contemporánea. No todo el contenido forma parte del sello.",
 
   siteUrl: "https://www.madnessmusicgroup.com",
 
