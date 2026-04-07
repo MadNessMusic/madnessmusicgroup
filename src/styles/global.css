@@ -337,6 +337,14 @@ html:not(.dark) .hero-overlay::after {
   );
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 html:not(.dark) .hero-video video {
   opacity: 0.68;
   filter: brightness(1.2) contrast(1.4);

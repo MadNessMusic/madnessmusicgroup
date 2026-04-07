@@ -502,7 +502,7 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
         class="flex gap-6 md:gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 scrollbar-hide"
       >
 
-       {(presaves.length > 1 ? [...presaves, ...presaves] : presaves).map((release) => (
+       {presaves.map((release) => (
 
   <a
     href={release.url}
@@ -684,4 +684,41 @@ Una selección de lanzamientos recientes de MadNess Music Group junto a proyecto
 
     window.addEventListener("resize", calculate);
   });
+</script>
+
+<script is:inline>
+  const carousel = document.getElementById("presave-carousel");
+
+  if (carousel) {
+    let speed = 0.3;
+    let isHovering = false;
+
+    // 🖱 hover control
+    carousel.addEventListener("mouseenter", () => {
+      isHovering = true;
+    });
+
+    carousel.addEventListener("mouseleave", () => {
+      isHovering = false;
+    });
+
+    function autoScroll() {
+      // 🔥 solo se mueve si NO estás encima
+      if (!isHovering) {
+        carousel.scrollLeft += speed;
+      }
+
+      // 🔁 loop infinito real
+      if (carousel.scrollLeft >= carousel.scrollWidth - carousel.clientWidth) {
+        carousel.scrollLeft = 0;
+      }
+
+      requestAnimationFrame(autoScroll);
+    }
+
+    // 🚀 solo si hay suficientes items
+    if (carousel.children.length > 3) {
+      autoScroll();
+    }
+  }
 </script>
