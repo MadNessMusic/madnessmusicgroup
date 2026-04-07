@@ -782,7 +782,7 @@ ctx.font = ratio === "9:16"
 let titleY;
 
 if (ratio === "9:16") {
-  titleY = y + size + 230; // debajo del cover
+  titleY = y + size + 180; // debajo del cover
 } else {
   titleY = 1000;
 }
@@ -798,7 +798,7 @@ const lastY = wrapText(
 
 
     ctx.font = "25px sans-serif";
-ctx.fillStyle = "rgba(255, 107, 61, 0.6)";
+ctx.fillStyle = "rgba(255,255,255,0.7)";
 ctx.fillText("www.madnessmusicgroup.com", padding, canvas.height - 65);
 
 // ARTISTA
@@ -898,11 +898,26 @@ function setActiveStyle(style) {
   active.classList.add("bg-accent", "text-white");
 }
 
- document.addEventListener("click", async (e) => {
+document.addEventListener("click", async (e) => {
   const btn = e.target.closest(".ratio-btn");
   if (!btn) return;
 
+  // 🔥 SI NO HAY DATA, NO HAGAS NADA
+  if (!originalImage || !currentTitle) {
+    console.warn("No hay data aún 🚫");
+    return;
+  }
+
   currentRatio = btn.dataset.ratio;
+
+  // 🔥 UI ACTIVE STATE (faltaba esto)
+  document.querySelectorAll(".ratio-btn").forEach(b => {
+    b.classList.remove("bg-white", "text-black");
+    b.classList.add("bg-neutral-800");
+  });
+
+  btn.classList.remove("bg-neutral-800");
+  btn.classList.add("bg-white", "text-black");
 
   const result = await generateCard({
     image: originalImage,
