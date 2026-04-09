@@ -13,5 +13,12 @@ export const presaves = [
     url: "https://hypeddit.com/rubileany/moshimoshi",
     source: "supported",
   },
+  {
+    title: "ELLA",
+    artist: "Roger Plex, Tavz, AV3N",
+    image: "/images/presaves/presave-ella.png",
+    url: "https://hypeddit.com/rogerplex-tavz-av3n/ella1",
+    source: "supported",
+  },
 
 ];
