@@ -11,6 +11,12 @@ export const releases: Release[] = [
     spotifyAlbumId: "5r2tgpw6u7UOFOkC3ee5WL",
     source: "madness",
     cover: "",
+  }, 
+  {
+    id: "release-moshimoshi-rubirosa playboy-oh leany",
+    spotifyAlbumId: "2MJ6RYZImkdndqKQRKT4Cc",
+    source: "supported",
+    cover: "",
   },
   {
     id: "release-rancher jolly-recho-pixi-bberry",
