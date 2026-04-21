@@ -31,26 +31,8 @@ export const releases: Release[] = [
     cover: "",
   },
   {
-    id: "release-baskiat-volver a empezar",
-    spotifyAlbumId: "0PGmnOC5erWJw8ii0s4WQG",
-    source: "supported",
-    cover: "",
-  },
-  {
-    id: "release-rexx-legally",
-    spotifyAlbumId: "4a4gi4zJPboFcefHJZwYBw",
-    source: "supported",
-    cover: "",
-  },
-  {
     id: "release-llegaste-darty",
     spotifyAlbumId: "72jTHYychNgKlAmlefYdvC",
-    source: "supported",
-    cover: "",
-  },
-  {
-    id: "release-perdido-happykid",
-    spotifyAlbumId: "0oViFO9weG2FkFh2LlZr4V",
     source: "supported",
     cover: "",
   },
@@ -121,18 +103,6 @@ export const releases: Release[] = [
     cover:"",
   },
   {
-    id:"release-coyote-coyote",
-    spotifyAlbumId: "6MwQIkZYCMWIWPLkBQIr8d",
-    source: "supported",
-    cover:"",
-  },
-  {
-    id:"release-arruinalo-mura-cinkocinko-samme",
-    spotifyAlbumId: "0l7sYzqDygKaCpQYMBKlaX",
-    source: "supported",
-    cover:"",
-  },
-  {
     id:"release-psicofonias-marcela verenice-attaboy",
     spotifyAlbumId: "3V8XkshmUEPPoNHdYHpw8E",
     source: "supported",
@@ -154,24 +124,6 @@ export const releases: Release[] = [
     id:"release-waterlu-madnesshauz-bberry",
     spotifyAlbumId: "3QnFpZx0Vu50IXLAc97Djo",
     source: "madness",
-    cover:"",
-  },
-  {
-    id:"release-me pone mal-noa",
-    spotifyAlbumId: "6Bsjc7wycqcODcBugwJ9xB",
-    source: "supported",
-    cover:"",
-  },
-  {
-    id:"release-mas que ayer-noa-rafa parra",
-    spotifyAlbumId: "3FBeam2Ytn19zoGjXccpGN",
-    source: "supported",
-    cover:"",
-  },
-  {
-    id:"release-tulum-noa-sunamy",
-    spotifyAlbumId: "1re6dI2Z0eA1BThXBrGNK7",
-    source: "supported",
     cover:"",
   },
   {
@@ -223,18 +175,6 @@ export const releases: Release[] = [
     cover:"",
   },
   {
-    id:"release-en la playita-noa-happy kid",
-    spotifyAlbumId: "07j9GvpM5RrykqyRq6KIL5",
-    source: "supported",
-    cover:"",
-  },
-  {
-    id:"release-salvadora-baskiat",
-    spotifyAlbumId: "3W8KqvnWtp3lSf7IODjo4j",
-    source: "supported",
-    cover:"",
-  },
-  {
     id:"release-cachiru-zavala produce-neru-labalacera",
     spotifyAlbumId: "5NaUz6j4XfqcnnffqIyRld",
     source: "supported",
@@ -273,6 +213,18 @@ export const releases: Release[] = [
   {
     id:"release-otico-lexxsb-telmar",
     spotifyAlbumId: "2e9TMD1D5dUUfEQcmdoXv5",
+    source: "supported",
+    cover:"",
+  },
+  {
+    id:"release-ella-av3n",
+    spotifyAlbumId: "6J5DT6gtVEPLyyrUVZZ3i8",
+    source: "supported",
+    cover:"",
+  },
+  {
+    id:"release-derretido en el fracaso",
+    spotifyAlbumId: "6NaDsFrWSuakkmQTnqJ4YD",
     source: "supported",
     cover:"",
   },
